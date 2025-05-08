@@ -8,10 +8,10 @@ const (
 )
 
 type OpenDoorRequest struct {
-	Type           int    `json:"type" validate:"required"`      //
-	RequestID      string `json:"requestId" validate:"required"` // oruulj ogno
-	UserCode       string `json:"userCode"`
-	LocalTimeStamp int64  `json:"localTimestamp"`
+	Type           OpenDoorType `json:"type" validate:"required"`      // 1: shopping, 2: replenishment
+	RequestID      string       `json:"requestId" validate:"required"` // oruulj ogno
+	UserCode       string       `json:"userCode"`
+	LocalTimeStamp int64        `json:"localTimestamp"`
 }
 
 type OpenDoorResponse struct {
