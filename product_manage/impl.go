@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	aifinitsdk "github.com/techpartners-asia/aifinitsdk"
 	aifinitsdk_constants "github.com/techpartners-asia/aifinitsdk/constants"
 	"resty.dev/v3"
@@ -23,6 +24,13 @@ func NewProductClient(client aifinitsdk.Client) *ProductClient {
 }
 
 func (c *ProductClient) GetProductList(page, limit int) (*ProductListResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"page":  page,
+			"limit": limit,
+		}).Debug("Getting product list")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -38,9 +46,20 @@ func (c *ProductClient) GetProductList(page, limit int) (*ProductListResponse, e
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": products,
+		}).Debug("Got product list successfully")
+	}
+
 	return products, nil
 }
+
 func (c *ProductClient) GetProductDetail(itemCode string) (*ProductDetailResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("item_code", itemCode).Debug("Getting product detail")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -56,10 +75,20 @@ func (c *ProductClient) GetProductDetail(itemCode string) (*ProductDetailRespons
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": product,
+		}).Debug("Got product detail successfully")
+	}
+
 	return product, nil
 }
 
 func (c *ProductClient) GetProductMutualExclusion(request *MutualExclusionRequest) (*MutualExclusionResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("request", request).Debug("Getting product mutual exclusion")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -73,6 +102,12 @@ func (c *ProductClient) GetProductMutualExclusion(request *MutualExclusionReques
 
 	if resp.IsError() {
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": mutualExclusion,
+		}).Debug("Got product mutual exclusion successfully")
 	}
 
 	return mutualExclusion, nil
@@ -89,6 +124,10 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 	}
 	if request.Product == nil {
 		return nil, fmt.Errorf("product cannot be nil")
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithField("request", request).Debug("Creating new product application")
 	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
@@ -134,10 +173,20 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": newProductApplication,
+		}).Debug("Created new product application successfully")
+	}
+
 	return newProductApplication, nil
 }
 
 func (c *ProductClient) ListProductApplication(params *ListProductApplicationParams) (*ListProductApplicationResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("params", params).Debug("Listing product applications")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -159,10 +208,20 @@ func (c *ProductClient) ListProductApplication(params *ListProductApplicationPar
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": listProductApplication,
+		}).Debug("Listed product applications successfully")
+	}
+
 	return listProductApplication, nil
 }
 
 func (c *ProductClient) DetailProductApplication(itemCode string) (*DetailProductApplicationResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("item_code", itemCode).Debug("Getting product application detail")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -178,10 +237,20 @@ func (c *ProductClient) DetailProductApplication(itemCode string) (*DetailProduc
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": detailProductApplication,
+		}).Debug("Got product application detail successfully")
+	}
+
 	return detailProductApplication, nil
 }
 
 func (c *ProductClient) UpdateProductApplication(request *UpdateProductApplicationRequest) (*UpdateProductApplicationResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("request", request).Debug("Updating product application")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -195,6 +264,12 @@ func (c *ProductClient) UpdateProductApplication(request *UpdateProductApplicati
 
 	if resp.IsError() {
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": updateProductApplication,
+		}).Debug("Updated product application successfully")
 	}
 
 	return updateProductApplication, nil

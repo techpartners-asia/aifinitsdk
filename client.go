@@ -6,15 +6,20 @@ import (
 	"fmt"
 )
 
+type Config struct {
+	Debug bool
+}
+
 type Client interface {
 	GetSignature(timestamp int64) (string, error)
+	IsDebug() bool
 }
 
 type client struct {
 	merchantCode string
 	secretKey    string
 	encryptUtil  *EncryptUtil
-	Token        *Token
+	Config       *Config
 }
 
 func New(credentials Crendetials) Client {
@@ -23,6 +28,21 @@ func New(credentials Crendetials) Client {
 		secretKey:    credentials.SecretKey,
 		encryptUtil:  NewEncryptUtil(credentials.MerchantCode, credentials.SecretKey),
 	}
+}
+
+func (c *client) SetConfig(config Config) {
+	c.Config = &config
+}
+
+func (c *client) IsDebug() bool {
+	if c.Config == nil {
+		return false
+	}
+	if c.Config.Debug {
+		return true
+	}
+
+	return false
 }
 
 func (c *client) GetSignature(timestamp int64) (string, error) {

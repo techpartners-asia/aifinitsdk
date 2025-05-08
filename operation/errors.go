@@ -2,6 +2,68 @@ package aifinitsdk_operation
 
 import "fmt"
 
+type DeleteGoodsError int
+
+const (
+	ErrDeleteGoodsSelfDealerNotExist     int = 40506
+	ErrDeleteGoodsUnknownGoods           int = 40507
+	ErrDeleteGoodsNoOperatingPermissions int = 40531
+)
+
+func (e DeleteGoodsError) Error() string {
+	return fmt.Sprintf("DeleteGoodsError: %d", e)
+}
+
+func ConvertDeleteGoodsError(code int, message string) error {
+	switch code {
+	case ErrDeleteGoodsSelfDealerNotExist:
+		return fmt.Errorf("DeleteGoodsSelfDealerNotExist: %d, message: %s", code, message)
+	case ErrDeleteGoodsUnknownGoods:
+		return fmt.Errorf("DeleteGoodsUnknownGoods: %d, message: %s", code, message)
+	case ErrDeleteGoodsNoOperatingPermissions:
+		return fmt.Errorf("DeleteGoodsNoOperatingPermissions: %d, message: %s", code, message)
+	default:
+		return fmt.Errorf("DeleteGoodsError: %d, message: %s", code, message)
+	}
+}
+
+type AddNewGoodsError int
+
+const (
+	ErrAddNewGoodsTooManyGoods           int = 10004
+	ErrAddNewGoodsDuplicateGoods         int = 40502
+	ErrAddNewGoodsMutuallyExclusiveGoods int = 40503
+	ErrAddNewGoodsDownloadedGoods        int = 40504
+	ErrAddNewGoodsSelfDealerNotExist     int = 40506
+	ErrAddNewGoodsUnknownGoods           int = 40507
+	ErrAddNewGoodsNoOperatingPermissions int = 40531
+)
+
+func (e AddNewGoodsError) Error() string {
+	return fmt.Sprintf("AddNewGoodsError: %d", e)
+}
+
+func ConvertAddNewGoodsError(code int, message string) error {
+	switch code {
+	case ErrAddNewGoodsTooManyGoods:
+		return fmt.Errorf("AddNewGoodsTooManyGoods: %d, message: %s", code, message)
+	case ErrAddNewGoodsDuplicateGoods:
+		return fmt.Errorf("AddNewGoodsDuplicateGoods: %d, message: %s", code, message)
+	case ErrAddNewGoodsMutuallyExclusiveGoods:
+		return fmt.Errorf("AddNewGoodsMutuallyExclusiveGoods: %d, message: %s", code, message)
+	case ErrAddNewGoodsDownloadedGoods:
+		return fmt.Errorf("AddNewGoodsDownloadedGoods: %d, message: %s", code, message)
+	case ErrAddNewGoodsSelfDealerNotExist:
+		return fmt.Errorf("AddNewGoodsSelfDealerNotExist: %d, message: %s", code, message)
+	case ErrAddNewGoodsUnknownGoods:
+		return fmt.Errorf("AddNewGoodsUnknownGoods: %d, message: %s", code, message)
+	case ErrAddNewGoodsNoOperatingPermissions:
+		return fmt.Errorf("AddNewGoodsNoOperatingPermissions: %d, message: %s", code, message)
+	default:
+		return fmt.Errorf("AddNewGoodsError: %d, message: %s", code, message)
+	}
+}
+
 type ProductPriceUpdateError int
 
 const (

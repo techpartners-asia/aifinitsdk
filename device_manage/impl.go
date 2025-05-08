@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	aifinitsdk "github.com/techpartners-asia/aifinitsdk"
 	aifinitsdk_constants "github.com/techpartners-asia/aifinitsdk/constants"
 	"resty.dev/v3"
@@ -25,6 +26,13 @@ func NewDeviceClient(client aifinitsdk.Client, code string) VendingMachineManage
 }
 
 func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"request": request,
+			"code":    c.code,
+		}).Debug("Updating vending machine")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -41,10 +49,20 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResp
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": result,
+		}).Debug("Updated vending machine successfully")
+	}
+
 	return &result, nil
 }
 
 func (c *vendingMachineManageClient) Detail() (*DetailResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("code", c.code).Debug("Getting vending machine details")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -62,15 +80,24 @@ func (c *vendingMachineManageClient) Detail() (*DetailResponse, error) {
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": result,
+		}).Debug("Got vending machine details successfully")
+	}
+
 	return &result, nil
 }
 
 func (c *vendingMachineManageClient) DeviceInfo() (*DeviceInfoResult, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("code", c.code).Debug("Getting device info")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(c.code)
 
 	var result DeviceInfoResult
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
@@ -84,10 +111,23 @@ func (c *vendingMachineManageClient) DeviceInfo() (*DeviceInfoResult, error) {
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": result,
+		}).Debug("Got device info successfully")
+	}
+
 	return &result, nil
 }
 
 func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest) (*PeopleFlowResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"request": request,
+			"code":    c.code,
+		}).Debug("Getting people flow data")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -104,10 +144,22 @@ func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest) (*Pe
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": result,
+		}).Debug("Got people flow data successfully")
+	}
+
 	return &result, nil
 }
 
 func (c *vendingMachineManageClient) List(request *ListRequest) (*ListResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"request": request,
+		}).Debug("Listing vending machines")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -127,9 +179,23 @@ func (c *vendingMachineManageClient) List(request *ListRequest) (*ListResponse, 
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
 
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": result,
+		}).Debug("Listed vending machines successfully")
+	}
+
 	return &result, nil
 }
+
 func (c *vendingMachineManageClient) Control(request *ControlRequest) (*ControlResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"request": request,
+			"code":    c.code,
+		}).Debug("Controlling vending machine")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -144,6 +210,12 @@ func (c *vendingMachineManageClient) Control(request *ControlRequest) (*ControlR
 
 	if resp.IsError() {
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": result,
+		}).Debug("Controlled vending machine successfully")
 	}
 
 	return &result, nil

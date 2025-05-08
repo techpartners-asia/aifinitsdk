@@ -1,6 +1,9 @@
 package aifinitsdk_operation
 
 type OperationClient interface {
+	AddNewGoods(request *AddNewGoodsRequest) (*AddNewGoodsResponse, error)
+	DeleteGoods(request *DeleteGoodsRequest) (*DeleteGoodsResponse, error)
+
 	GetSoldGoods() (*GetSoldGoodsResponse, error)
 	// zaragdsan baraanuudiig niitedni shinechlene
 	UpdateSoldGoods(request *UpdateSoldGoodsRequest) (*UpdateSoldGoodsResponse, error)

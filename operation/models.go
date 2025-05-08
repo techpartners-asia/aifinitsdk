@@ -114,3 +114,25 @@ type ProductPriceUpdateResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
 }
+
+type AddNewGood struct {
+	ItemCode      string `json:"itemCode"`
+	ActualPrice   int    `json:"actualPrice"`
+	OriginalPrice int    `json:"originalPrice"`
+}
+
+type AddNewGoodsRequest []AddNewGood
+
+type AddNewGoodsResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
+
+type DeleteGoodsRequest struct {
+	ItemCodes []string `json:"itemCodes"`
+}
+
+type DeleteGoodsResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
