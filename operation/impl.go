@@ -1,7 +1,11 @@
 package aifinitsdk_operation
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -294,22 +298,39 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 		return nil, err
 	}
 
-	var deleteGoodsResponse *DeleteGoodsResponse
-	resp, err := c.Resty.R().
-		SetHeader("Authorization", signature).
-		SetHeader("Content-Type", "application/json").
-		SetQueryParam("code", c.DeviceCode).
-		SetBody(map[string]interface{}{
-			"itemCodes": request.ItemCodes,
-		}).
-		SetResult(&deleteGoodsResponse).
-		Delete(aifinitsdk_constants.Del_DeleteGoods)
+	jsonBody, err := json.Marshal(request)
 	if err != nil {
 		return nil, err
 	}
 
-	if resp.IsError() {
-		return nil, ConvertDeleteGoodsError(resp.StatusCode(), resp.String())
+	url := fmt.Sprintf("%s?code=%s", aifinitsdk_constants.Del_DeleteGoods, c.DeviceCode)
+	req, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Authorization", signature)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode >= 400 {
+		return nil, ConvertDeleteGoodsError(resp.StatusCode, string(body))
+	}
+
+	var deleteGoodsResponse *DeleteGoodsResponse
+	if err := json.Unmarshal(body, &deleteGoodsResponse); err != nil {
+		return nil, err
 	}
 
 	if c.Client.IsDebug() {
