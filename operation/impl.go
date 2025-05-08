@@ -291,9 +291,13 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 	}
 
 	var deleteGoodsResponse *DeleteGoodsResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+	resp, err := c.Resty.R().
+		SetHeader("Authorization", signature).
+		SetHeader("Content-Type", "application/json").
 		SetQueryParam("code", c.DeviceCode).
-		SetBody(request).SetResult(&deleteGoodsResponse).Delete(aifinitsdk_constants.Del_DeleteGoods)
+		SetBody(request).
+		SetResult(&deleteGoodsResponse).
+		Delete(aifinitsdk_constants.Del_DeleteGoods)
 	if err != nil {
 		return nil, err
 	}
