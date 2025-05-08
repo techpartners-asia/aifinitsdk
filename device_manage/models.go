@@ -64,9 +64,9 @@ type ListResponse struct {
 }
 
 type PeopleFlowRequest struct {
-	Field          *string  `json:"field,omitempty"`
-	StartTimeStamp *int64   `json:"startTimestamp,omitempty"`
-	EndTimeStamp   *int64   `json:"endTimestamp,omitempty"`
+	Field          string   `json:"field,omitempty"`
+	StartTimeStamp int64    `json:"startTimestamp,omitempty"`
+	EndTimeStamp   int64    `json:"endTimestamp,omitempty"`
 	Codes          []string `json:"codes,omitempty"`
 }
 
@@ -100,15 +100,15 @@ type DetailData struct {
 }
 
 type UpdateRequest struct {
-	Name          *string `json:"name,omitempty"`
-	Code          *string `json:"code,omitempty"`
-	ScanCode      *string `json:"scanCode,omitempty"`
-	ContactNumber *string `json:"contactNumber,omitempty"`
-	Location      *string `json:"location,omitempty"`
-	Volume        *int    `json:"volume,omitempty"`
-	AdVolume      *int    `json:"adVolume,omitempty"`
-	Temp          *int    `json:"temp,omitempty"`
-	EngineOn      *int    `json:"engineOn,omitempty"`
+	Name          string `json:"name,omitempty"`
+	Code          string `json:"code,omitempty"`
+	ScanCode      string `json:"scanCode,omitempty"`
+	ContactNumber string `json:"contactNumber,omitempty"`
+	Location      string `json:"location,omitempty"`
+	Volume        int    `json:"volume,omitempty"`
+	AdVolume      int    `json:"adVolume,omitempty"`
+	Temp          int    `json:"temp,omitempty"`
+	EngineOn      int    `json:"engineOn,omitempty"`
 }
 
 type UpdateResponse struct {
@@ -117,10 +117,10 @@ type UpdateResponse struct {
 }
 
 type ControlRequest struct {
-	Volume   *int `json:"volume,omitempty"`
-	AdVolume *int `json:"adVolume,omitempty"`
-	Temp     *int `json:"temp,omitempty"`
-	EngineOn *int `json:"engineOn,omitempty"`
+	Volume   int `json:"volume,omitempty"`
+	AdVolume int `json:"adVolume,omitempty"`
+	Temp     int `json:"temp,omitempty"`
+	EngineOn int `json:"engineOn,omitempty"`
 }
 
 type ControlResponse struct {
