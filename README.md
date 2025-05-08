@@ -98,13 +98,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Support
-
-For support, please contact [support@aifinit.com](mailto:support@aifinit.com)
-
----
-
-<div align="center">
-Made with ❤️ by Aifinit Team
-</div> 
