@@ -299,7 +299,9 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 		SetHeader("Authorization", signature).
 		SetHeader("Content-Type", "application/json").
 		SetQueryParam("code", c.DeviceCode).
-		SetBody(request).
+		SetBody(map[string]interface{}{
+			"itemCodes": request.ItemCodes,
+		}).
 		SetResult(&deleteGoodsResponse).
 		Delete(aifinitsdk_constants.Del_DeleteGoods)
 	if err != nil {
