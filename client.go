@@ -3,7 +3,6 @@ package aifinitsdk
 import (
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 )
 
 type Config struct {
@@ -60,7 +59,6 @@ func (c *client) GetSignature(timestamp int64) (string, error) {
 		MerchantCode: c.merchantCode,
 		Timestamp:    timestamp,
 	}
-	fmt.Println(signature)
 
 	signJson, err := json.Marshal(signature)
 	if err != nil {
