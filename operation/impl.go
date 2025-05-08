@@ -18,9 +18,13 @@ type OperationClientImpl struct {
 }
 
 func NewOperationClientImpl(client aifinitsdk.Client, deviceCode string) *OperationClientImpl {
+	restyClient := resty.New()
+	if client.IsDebug() {
+		restyClient.SetDebug(true)
+	}
 	return &OperationClientImpl{
 		Client:     client,
-		Resty:      resty.New(),
+		Resty:      restyClient,
 		DeviceCode: deviceCode,
 	}
 }
@@ -295,9 +299,7 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 		SetHeader("Authorization", signature).
 		SetHeader("Content-Type", "application/json").
 		SetQueryParam("code", c.DeviceCode).
-		SetBody(map[string]any{
-			"itemCodes": request.ItemCodes,
-		}).
+		SetBody(request).
 		SetResult(&deleteGoodsResponse).
 		Delete(aifinitsdk_constants.Del_DeleteGoods)
 	if err != nil {
