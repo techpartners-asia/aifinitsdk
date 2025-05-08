@@ -73,7 +73,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest) (*OpenDoorRespo
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": openDoorResponse,
+			"response": fmt.Sprintf("%+v", openDoorResponse),
 		}).Debug("Door opened successfully")
 	}
 
@@ -104,7 +104,7 @@ func (c *OperationClientImpl) GetSoldGoods() (*GetSoldGoodsResponse, error) {
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": getSoldGoodsResponse,
+			"response": fmt.Sprintf("%+v", getSoldGoodsResponse),
 		}).Debug("Got sold goods successfully")
 	}
 
@@ -138,7 +138,7 @@ func (c *OperationClientImpl) UpdateSoldGoods(request *UpdateSoldGoodsRequest) (
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": updateSoldGoodsResponse,
+			"response": fmt.Sprintf("%+v", updateSoldGoodsResponse),
 		}).Debug("Updated sold goods successfully")
 	}
 
@@ -175,7 +175,7 @@ func (c *OperationClientImpl) SearchOpenDoor(request *SearchOpenDoorRequest) (*S
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": searchOpenDoorResponse,
+			"response": fmt.Sprintf("%+v", searchOpenDoorResponse),
 		}).Debug("Searched open door successfully")
 	}
 
@@ -212,7 +212,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest) (*Get
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": getOrderVideoResponse,
+			"response": fmt.Sprintf("%+v", getOrderVideoResponse),
 		}).Debug("Got order video successfully")
 	}
 
@@ -246,7 +246,7 @@ func (c *OperationClientImpl) ProductPriceUpdate(request *ProductPriceUpdateRequ
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": productPriceUpdateResponse,
+			"response": fmt.Sprintf("%+v", productPriceUpdateResponse),
 		}).Debug("Updated product price successfully")
 	}
 
@@ -280,7 +280,7 @@ func (c *OperationClientImpl) AddNewGoods(request *AddNewGoodsRequest) (*AddNewG
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": addNewGoodsResponse,
+			"response": fmt.Sprintf("%+v", addNewGoodsResponse),
 		}).Debug("Added new goods successfully")
 	}
 
@@ -337,7 +337,7 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": deleteGoodsResponse,
+			"response": fmt.Sprintf("%+v", deleteGoodsResponse),
 		}).Debug("Deleted goods successfully")
 	}
 

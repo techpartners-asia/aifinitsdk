@@ -56,7 +56,7 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResp
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": result,
+			"response": fmt.Sprintf("%+v", result),
 		}).Debug("Updated vending machine successfully")
 	}
 
@@ -87,7 +87,7 @@ func (c *vendingMachineManageClient) Detail() (*DetailResponse, error) {
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": result,
+			"response": fmt.Sprintf("%+v", result),
 		}).Debug("Got vending machine details successfully")
 	}
 
@@ -118,7 +118,7 @@ func (c *vendingMachineManageClient) DeviceInfo() (*DeviceInfoResult, error) {
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": result,
+			"response": fmt.Sprintf("%+v", result),
 		}).Debug("Got device info successfully")
 	}
 
@@ -151,7 +151,7 @@ func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest) (*Pe
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": result,
+			"response": fmt.Sprintf("%+v", result),
 		}).Debug("Got people flow data successfully")
 	}
 
@@ -186,7 +186,7 @@ func (c *vendingMachineManageClient) List(request *ListRequest) (*ListResponse, 
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": result,
+			"response": fmt.Sprintf("%+v", result),
 		}).Debug("Listed vending machines successfully")
 	}
 
@@ -219,7 +219,7 @@ func (c *vendingMachineManageClient) Control(request *ControlRequest) (*ControlR
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": result,
+			"response": fmt.Sprintf("%+v", result),
 		}).Debug("Controlled vending machine successfully")
 	}
 

@@ -53,7 +53,7 @@ func (c *ProductClient) GetProductList(page, limit int) (*ProductListResponse, e
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": products,
+			"response": fmt.Sprintf("%+v", products),
 		}).Debug("Got product list successfully")
 	}
 
@@ -82,7 +82,7 @@ func (c *ProductClient) GetProductDetail(itemCode string) (*ProductDetailRespons
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": product,
+			"response": fmt.Sprintf("%+v", product),
 		}).Debug("Got product detail successfully")
 	}
 
@@ -111,7 +111,7 @@ func (c *ProductClient) GetProductMutualExclusion(request *MutualExclusionReques
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": mutualExclusion,
+			"response": fmt.Sprintf("%+v", mutualExclusion),
 		}).Debug("Got product mutual exclusion successfully")
 	}
 
@@ -180,7 +180,7 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": newProductApplication,
+			"response": fmt.Sprintf("%+v", newProductApplication),
 		}).Debug("Created new product application successfully")
 	}
 
@@ -215,7 +215,7 @@ func (c *ProductClient) ListProductApplication(params *ListProductApplicationPar
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": listProductApplication,
+			"response": fmt.Sprintf("%+v", listProductApplication),
 		}).Debug("Listed product applications successfully")
 	}
 
@@ -244,7 +244,7 @@ func (c *ProductClient) DetailProductApplication(itemCode string) (*DetailProduc
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": detailProductApplication,
+			"response": fmt.Sprintf("%+v", detailProductApplication),
 		}).Debug("Got product application detail successfully")
 	}
 
@@ -273,7 +273,7 @@ func (c *ProductClient) UpdateProductApplication(request *UpdateProductApplicati
 
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"response": updateProductApplication,
+			"response": fmt.Sprintf("%+v", updateProductApplication),
 		}).Debug("Updated product application successfully")
 	}
 
