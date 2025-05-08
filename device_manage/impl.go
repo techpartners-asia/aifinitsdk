@@ -18,9 +18,14 @@ type vendingMachineManageClient struct {
 }
 
 func NewDeviceClient(client aifinitsdk.Client, code string) VendingMachineManageClient {
+	restyClient := resty.New()
+	if client.RestyDebug() {
+		restyClient.SetDebug(true)
+	}
+
 	return &vendingMachineManageClient{
 		Client: client,
-		Resty:  resty.New(),
+		Resty:  restyClient,
 		code:   code,
 	}
 }

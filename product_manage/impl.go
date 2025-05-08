@@ -17,9 +17,14 @@ type ProductClient struct {
 }
 
 func NewProductClient(client aifinitsdk.Client) *ProductClient {
+	restyClient := resty.New()
+	if client.RestyDebug() {
+		restyClient.SetDebug(true)
+	}
+
 	return &ProductClient{
 		Client: client,
-		Resty:  resty.New(),
+		Resty:  restyClient,
 	}
 }
 

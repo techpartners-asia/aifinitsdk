@@ -23,9 +23,11 @@ type OperationClientImpl struct {
 
 func NewOperationClientImpl(client aifinitsdk.Client, deviceCode string) *OperationClientImpl {
 	restyClient := resty.New()
-	if client.IsDebug() {
+
+	if client.RestyDebug() {
 		restyClient.SetDebug(true)
 	}
+
 	return &OperationClientImpl{
 		Client:     client,
 		Resty:      restyClient,

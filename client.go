@@ -7,12 +7,14 @@ import (
 )
 
 type Config struct {
-	Debug bool
+	Debug      bool
+	RestyDebug bool
 }
 
 type Client interface {
 	GetSignature(timestamp int64) (string, error)
 	IsDebug() bool
+	RestyDebug() bool
 	SetConfig(config Config)
 }
 
@@ -33,6 +35,13 @@ func New(credentials Crendetials) Client {
 
 func (c *client) SetConfig(config Config) {
 	c.Config = &config
+}
+
+func (c *client) RestyDebug() bool {
+	if c.Config == nil {
+		return false
+	}
+	return c.Config.RestyDebug
 }
 
 func (c *client) IsDebug() bool {
