@@ -8,10 +8,10 @@ const (
 )
 
 type OpenDoorRequest struct {
-	Type           OpenDoorType `json:"type" validate:"required"`      // 1: shopping, 2: replenishment
-	RequestID      string       `json:"requestId" validate:"required"` // oruulj ogno
-	UserCode       string       `json:"userCode"`
-	LocalTimeStamp int64        `json:"localTimestamp"`
+	Type           OpenDoorType `json:"type,omitempty" validate:"required"`      // 1: shopping, 2: replenishment
+	RequestID      string       `json:"requestId,omitempty" validate:"required"` // oruulj ogno
+	UserCode       string       `json:"userCode,omitempty"`
+	LocalTimeStamp int64        `json:"localTimestamp,omitempty"`
 }
 
 type OpenDoorResponse struct {
@@ -38,14 +38,14 @@ type GetSoldGoodsResponse struct {
 type UpdateSoldGoodsRequest []Good
 
 type SearchOpenDoorRequest struct {
-	Type      OpenDoorType `json:"type"`
-	RequestID string       `json:"requestId"`
+	Type      OpenDoorType `json:"type,omitempty"`
+	RequestID string       `json:"requestId,omitempty"`
 }
 
 type Order struct {
 	TradeRequestId  string `json:"tradeRequestId,omitempty"`
 	OrderCode       string `json:"orderCode,omitempty"`
-	VmCode          string `json:"vmCode"`
+	VmCode          string `json:"vmCode,omitempty"`
 	MachineId       int    `json:"machineId,omitempty"`
 	UserCode        string `json:"userCode,omitempty"`
 	HandleStatus    int    `json:"handleStatus,omitempty"`
@@ -65,10 +65,10 @@ type SearchOpenDoorResponse struct {
 }
 
 type ListOrderRequest struct {
-	BeginTime int64 `json:"beginTime"`
-	EndTime   int64 `json:"endTime"`
-	Page      int   `json:"page"`  //default 1
-	Limit     int   `json:"limit"` //default 10 max 50
+	BeginTime int64 `json:"beginTime,omitempty"`
+	EndTime   int64 `json:"endTime,omitempty"`
+	Page      int   `json:"page,omitempty"`  //default 1
+	Limit     int   `json:"limit,omitempty"` //default 10 max 50
 }
 
 type ListOrderResponse struct {
@@ -81,8 +81,8 @@ type ListOrderResponse struct {
 }
 
 type GetOrderVideoRequest struct {
-	RequestID string       `json:"requestId"`
-	Type      OpenDoorType `json:"type"`
+	RequestID string       `json:"requestId,omitempty"`
+	Type      OpenDoorType `json:"type,omitempty"`
 }
 
 type GetOrderVideoResponse struct {
@@ -106,8 +106,8 @@ const (
 )
 
 type ProductPriceUpdateRequest struct {
-	VmCodes []string `json:"vmCodes"`
-	Items   []Good   `json:"items"`
+	VmCodes []string `json:"vmCodes,omitempty"`
+	Items   []Good   `json:"items,omitempty"`
 }
 
 type ProductPriceUpdateResponse struct {
@@ -116,7 +116,7 @@ type ProductPriceUpdateResponse struct {
 }
 
 type AddNewGoodsRequest struct {
-	Items []Good
+	Items []Good `json:"items,omitempty"`
 }
 
 type AddNewGoodsResponse struct {
@@ -125,11 +125,11 @@ type AddNewGoodsResponse struct {
 }
 
 type DeleteGoodsRequest struct {
-	ItemCodes []string `json:"itemCodes"`
+	ItemCodes []string `json:"itemCodes,omitempty"`
 }
 
 type DeleteGoodsResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
-	Ok      *bool  `json:"ok"`
+	Ok      *bool  `json:"ok,omitempty"`
 }

@@ -44,7 +44,7 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResp
 	}
 
 	var result UpdateResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", c.code).SetBody(request).SetResult(&result).
 		Put(aifinitsdk_constants.Put_UpdateVendingMachineInfo)
 	if err != nil {
 		return nil, err
