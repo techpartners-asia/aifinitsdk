@@ -45,7 +45,7 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResp
 
 	var result UpdateResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).
-		Post(aifinitsdk_constants.Put_UpdateVendingMachineInfo)
+		Put(aifinitsdk_constants.Put_UpdateVendingMachineInfo)
 	if err != nil {
 		return nil, err
 	}
