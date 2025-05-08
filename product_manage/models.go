@@ -17,8 +17,8 @@ type NewProductApplication struct {
 	PhysicalImgFiles     []io.Reader `json:"-"` // physical image files IMPORTANT: at least 2 and bar code clearly visible
 	PhysicalImgFileNames []string    `json:"-"` // physical image file names IMPORTANT: at least 2 and bar code clearly visible
 
-	WeightFiles     []io.Reader `json:"-"` // docs: weight of pictures
-	WeightFileNames []string    `json:"-"` // docs: weight of pictures
+	WeightFile     io.Reader `json:"-"` // docs: weight of pictures
+	WeightFileName string    `json:"-"` // docs: weight of pictures
 }
 
 func (n *NewProductApplication) String() string {

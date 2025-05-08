@@ -106,7 +106,9 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 	}
 
 	for i, img := range request.Product.ImgFiles {
-		req = req.SetFileReader("file", request.Product.ImgFileNames[i], img)
+		if img != nil {
+			req = req.SetFileReader("file", request.Product.ImgFileNames[i], img)
+		}
 	}
 
 	if len(request.Product.PhysicalImgFiles) != len(request.Product.PhysicalImgFileNames) {
@@ -119,12 +121,8 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 		}
 	}
 
-	if len(request.Product.WeightFiles) != len(request.Product.WeightFileNames) {
-		return nil, fmt.Errorf("weight files and names must be the same length")
-	}
-
-	for i, weight := range request.Product.WeightFiles {
-		req = req.SetFileReader("weightFile", request.Product.WeightFileNames[i], weight)
+	if request.Product.WeightFile != nil {
+		req = req.SetFileReader("weightFile", request.Product.WeightFileName, request.Product.WeightFile)
 	}
 
 	resp, err := req.SetResult(&newProductApplication).Post(aifinitsdk_constants.Post_NewProductApplication)
