@@ -90,9 +90,6 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 	if request.Product == nil {
 		return nil, fmt.Errorf("product cannot be nil")
 	}
-	if request.Product.ImgUrl == "" {
-		return nil, fmt.Errorf("product image URL cannot be empty")
-	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
