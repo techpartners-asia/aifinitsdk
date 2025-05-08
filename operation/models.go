@@ -131,4 +131,5 @@ type DeleteGoodsRequest struct {
 type DeleteGoodsResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
+	Ok      *bool  `json:"ok"`
 }
