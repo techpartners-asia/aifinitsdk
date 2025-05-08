@@ -156,6 +156,36 @@ func main() {
         panic(err)
     }
 }
+
+### Debug Mode
+
+To enable debug mode and see detailed logs, you need to configure both the client and logrus. Here's how to do it:
+
+```go
+import (
+    "github.com/sirupsen/logrus"
+    "github.com/techpartners-asia/aifinitsdk"
+)
+
+func main() {
+    // Set logrus to debug level
+    logrus.SetLevel(logrus.DebugLevel)
+    
+    // Initialize client with credentials
+    credentials := aifinitsdk.Crendetials{
+        MerchantCode: os.Getenv("MERCHANT_CODE"),
+        SecretKey:    os.Getenv("SECRET_KEY"),
+    }
+    
+    client := aifinitsdk.New(credentials)
+    
+    // Enable debug mode for the client
+    client.SetConfig(aifinitsdk.Config{
+        Debug: true,
+    })
+    
+    // ... rest of your code
+}
 ```
 
 ## 📚 Core Components
