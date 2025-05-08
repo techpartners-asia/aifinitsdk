@@ -25,7 +25,7 @@ A powerful Go SDK for integrating with the Aifinit vending machine platform. Man
 ### Installation
 
 ```bash
-go get git.techpartners.asia/mtm/thirdparty/aifinitsdk
+go get github.com/techpartners-asia/aifinitsdk
 ```
 
 ### Basic Usage
@@ -37,7 +37,7 @@ import (
     "log"
     "time"
     
-    "git.techpartners.asia/mtm/thirdparty/aifinitsdk"
+    "github.com/techpartners-asia/aifinitsdk"
 )
 
 func main() {

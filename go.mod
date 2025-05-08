@@ -1,4 +1,4 @@
-module git.techpartners.asia/mtm/thirdparty/aifinitsdk
+module github.com/techpartners-asia/aifinitsdk
 
 go 1.24.0
 

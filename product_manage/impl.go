@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	aifinitsdk "git.techpartners.asia/mtm/thirdparty/aifinitsdk"
-	aifinitsdk_constants "git.techpartners.asia/mtm/thirdparty/aifinitsdk/constants"
+	aifinitsdk "github.com/techpartners-asia/aifinitsdk"
+	aifinitsdk_constants "github.com/techpartners-asia/aifinitsdk/constants"
 	"resty.dev/v3"
 )
 
