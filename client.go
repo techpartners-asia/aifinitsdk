@@ -13,6 +13,7 @@ type Config struct {
 type Client interface {
 	GetSignature(timestamp int64) (string, error)
 	IsDebug() bool
+	SetConfig(config Config)
 }
 
 type client struct {
