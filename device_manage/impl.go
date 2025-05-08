@@ -206,7 +206,7 @@ func (c *vendingMachineManageClient) Control(request *ControlRequest) (*ControlR
 	}
 
 	var result ControlResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("code", c.code).SetBody(request).SetResult(&result).
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", c.code).SetBody(request).SetResult(&result).
 		Put(aifinitsdk_constants.Put_VendingMachineDeviceControl)
 	if err != nil {
 		return nil, err
