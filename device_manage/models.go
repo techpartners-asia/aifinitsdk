@@ -104,6 +104,7 @@ type UpdateRequest struct {
 	Code          string `json:"code"`
 	ScanCode      string `json:"scanCode"`
 	ContactNumber string `json:"contactNumber"`
+	Location      string `json:"location"`
 	Volume        int    `json:"volume"`
 	AdVolume      int    `json:"adVolume"`
 	Temp          int    `json:"temp"`
