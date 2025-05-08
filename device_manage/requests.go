@@ -26,8 +26,8 @@ type UpdateRequest struct {
 }
 
 type ControlRequest struct {
-	Volume   int `json:"volume,omitempty"`
-	AdVolume int `json:"adVolume,omitempty"`
-	Temp     int `json:"temp,omitempty"`
-	EngineOn int `json:"engineOn,omitempty"`
+	Volume   int `json:"volume,omitempty"`   // 0 ~ 100
+	AdVolume int `json:"adVolume,omitempty"` // 0 ~ 100
+	Temp     int `json:"temp,omitempty"`     // -30 ~ 20
+	EngineOn int `json:"engineOn,omitempty"` // 0 | 1
 }
