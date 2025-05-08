@@ -2,6 +2,7 @@ package aifinitsdk_product
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	aifinitsdk "github.com/techpartners-asia/aifinitsdk"
@@ -83,6 +84,16 @@ func (c *ProductClient) GetProductMutualExclusion(request *MutualExclusionReques
 // files - physical map of the goods, at least 2 and the bar code clearly visible
 // weightFile - Weight of pictures
 func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequest) (*NewProductApplicationResponse, error) {
+	if request == nil {
+		return nil, fmt.Errorf("request cannot be nil")
+	}
+	if request.Product == nil {
+		return nil, fmt.Errorf("product cannot be nil")
+	}
+	if request.Product.ImgUrl == "" {
+		return nil, fmt.Errorf("product image URL cannot be empty")
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, err
@@ -91,13 +102,16 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 	var newProductApplication *NewProductApplicationResponse
 	req := c.Resty.R().
 		SetHeader("Authorization", signature).
-		SetMultipartFormData(map[string]string{
-			"item": request.Product.String(),
-		}).
-		SetFile("file", request.Product.ImgUrl)
+		SetMultipartField("item", "", "application/json", strings.NewReader(request.Product.String()))
+
+	if request.Product.ImgUrl != "" {
+		req = req.SetFile("file", request.Product.ImgUrl)
+	}
 
 	for _, img := range request.Product.ActualImgs {
-		req = req.SetFile("files", img)
+		if img != "" {
+			req = req.SetFile("files", img)
+		}
 	}
 
 	if request.Product.WeightFile != "" {
