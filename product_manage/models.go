@@ -2,7 +2,32 @@ package aifinitsdk_product
 
 import (
 	"encoding/json"
+	"io"
 )
+
+type NewProductApplication struct {
+	Name    string `json:"name"`
+	Price   int    `json:"price"`
+	Weight  int    `json:"weight"`
+	QrCodes string `json:"qrCodes"`
+
+	ImgFiles     []io.Reader `json:"-"` // product image files
+	ImgFileNames []string    `json:"-"` // product image file names
+
+	PhysicalImgFiles     []io.Reader `json:"-"` // physical image files IMPORTANT: at least 2 and bar code clearly visible
+	PhysicalImgFileNames []string    `json:"-"` // physical image file names IMPORTANT: at least 2 and bar code clearly visible
+
+	WeightFiles     []io.Reader `json:"-"` // docs: weight of pictures
+	WeightFileNames []string    `json:"-"` // docs: weight of pictures
+}
+
+func (n *NewProductApplication) String() string {
+	bytes, err := json.Marshal(n)
+	if err != nil {
+		return ""
+	}
+	return string(bytes)
+}
 
 type Product struct {
 	Id             int      `json:"id"`
@@ -78,7 +103,7 @@ type MutualExclusionResponse struct {
 }
 
 type NewProductApplicationRequest struct {
-	Product *Product `json:"item"`
+	Product *NewProductApplication `json:"item"`
 }
 
 type NewProductApplicationResponse struct {

@@ -101,18 +101,30 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 		SetHeader("Authorization", signature).
 		SetMultipartField("item", "", "application/json", strings.NewReader(request.Product.String()))
 
-	if request.Product.ImgUrl != "" {
-		req = req.SetFile("file", request.Product.ImgUrl)
+	if len(request.Product.ImgFiles) != len(request.Product.ImgFileNames) {
+		return nil, fmt.Errorf("image files and names must be the same length")
 	}
 
-	for _, img := range request.Product.ActualImgs {
-		if img != "" {
-			req = req.SetFile("files", img)
+	for i, img := range request.Product.ImgFiles {
+		req = req.SetFileReader("file", request.Product.ImgFileNames[i], img)
+	}
+
+	if len(request.Product.PhysicalImgFiles) != len(request.Product.PhysicalImgFileNames) {
+		return nil, fmt.Errorf("actual image files and names must be the same length")
+	}
+
+	for i, img := range request.Product.PhysicalImgFiles {
+		if img != nil {
+			req = req.SetFileReader("files", request.Product.PhysicalImgFileNames[i], img)
 		}
 	}
 
-	if request.Product.WeightFile != "" {
-		req = req.SetFile("weightFile", request.Product.WeightFile)
+	if len(request.Product.WeightFiles) != len(request.Product.WeightFileNames) {
+		return nil, fmt.Errorf("weight files and names must be the same length")
+	}
+
+	for i, weight := range request.Product.WeightFiles {
+		req = req.SetFileReader("weightFile", request.Product.WeightFileNames[i], weight)
 	}
 
 	resp, err := req.SetResult(&newProductApplication).Post(aifinitsdk_constants.Post_NewProductApplication)
