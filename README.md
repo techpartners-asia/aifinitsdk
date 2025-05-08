@@ -157,6 +157,8 @@ func main() {
     }
 }
 
+```
+
 ### Debug Mode
 
 To enable debug mode and see detailed logs, you need to configure both the client and logrus. Here's how to do it:
@@ -187,6 +189,7 @@ func main() {
     // ... rest of your code
 }
 ```
+
 
 ## 📚 Core Components
 
