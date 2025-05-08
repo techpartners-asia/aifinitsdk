@@ -81,7 +81,7 @@ func (c *ProductClient) GetProductMutualExclusion(request *MutualExclusionReques
 // item - product info, required
 // file - product images
 // files - physical map of the goods, at least 2 and the bar code clearly visible
-// weight-file - Weight of pictures
+// weightFile - Weight of pictures
 func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequest) (*NewProductApplicationResponse, error) {
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
@@ -89,7 +89,22 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 	}
 
 	var newProductApplication *NewProductApplicationResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&newProductApplication).Post(aifinitsdk_constants.Post_NewProductApplication)
+	req := c.Resty.R().
+		SetHeader("Authorization", signature).
+		SetMultipartFormData(map[string]string{
+			"item": request.Product.String(),
+		}).
+		SetFile("file", request.Product.ImgUrl)
+
+	for _, img := range request.Product.ActualImgs {
+		req = req.SetFile("files", img)
+	}
+
+	if request.Product.WeightFile != "" {
+		req = req.SetFile("weightFile", request.Product.WeightFile)
+	}
+
+	resp, err := req.SetResult(&newProductApplication).Post(aifinitsdk_constants.Post_NewProductApplication)
 	if err != nil {
 		return nil, err
 	}

@@ -1,5 +1,9 @@
 package aifinitsdk_product
 
+import (
+	"encoding/json"
+)
+
 type Product struct {
 	Id             int      `json:"id"`
 	Name           string   `json:"name"`
@@ -8,13 +12,22 @@ type Product struct {
 	WeightVariance int      `json:"weightVariance"`
 	ImgUrl         string   `json:"imgUrl"`
 	ItemCode       string   `json:"itemCode"`
-	CollType       int      `json:"collType"`
+	CollType       int      `json:"collType"` // collection type: 1- single, 2- multiple
 	UpdateTime     string   `json:"updateTime"`
 	CreateTime     string   `json:"createTime"`
 	Status         int      `json:"status"`
 	QrCodes        string   `json:"qrCodes"`
 	ItemCodes      []string `json:"itemCodes"`
 	ActualImgs     []string `json:"actualImgs"`
+	WeightFile     string   `json:"weightFile"`
+}
+
+func (p *Product) String() string {
+	bytes, err := json.Marshal(p)
+	if err != nil {
+		return ""
+	}
+	return string(bytes)
 }
 
 type ProductListResponse struct {
@@ -77,7 +90,7 @@ type NewProductApplicationResponse struct {
 type ListProductApplicationParams struct {
 	Page        int    `json:"page"`
 	PageSize    int    `json:"pageSize"`
-	ApplyStatus int    `json:"applyStatus"`
+	ApplyStatus int    `json:"applyStatus"` // 1: review, 2: pass, 3: reject
 	GoodsName   string `json:"goodsName"`
 	QrCodes     string `json:"qrCodes"`
 }
