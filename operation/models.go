@@ -115,7 +115,9 @@ type ProductPriceUpdateResponse struct {
 	Message string `json:"message"`
 }
 
-type AddNewGoodsRequest []Good
+type AddNewGoodsRequest struct {
+	Items []Good
+}
 
 type AddNewGoodsResponse struct {
 	Status  int    `json:"status"`

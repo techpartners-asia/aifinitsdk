@@ -259,7 +259,7 @@ func (c *OperationClientImpl) AddNewGoods(request *AddNewGoodsRequest) (*AddNewG
 	var addNewGoodsResponse *AddNewGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", c.DeviceCode).
-		SetBody(request).SetResult(&addNewGoodsResponse).Put(aifinitsdk_constants.Put_AddNewGoods)
+		SetBody(request.Items).SetResult(&addNewGoodsResponse).Put(aifinitsdk_constants.Put_AddNewGoods)
 	if err != nil {
 		return nil, err
 	}
@@ -295,7 +295,9 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 		SetHeader("Authorization", signature).
 		SetHeader("Content-Type", "application/json").
 		SetQueryParam("code", c.DeviceCode).
-		SetBody(request).
+		SetBody(map[string]any{
+			"itemCodes": request.ItemCodes,
+		}).
 		SetResult(&deleteGoodsResponse).
 		Delete(aifinitsdk_constants.Del_DeleteGoods)
 	if err != nil {
