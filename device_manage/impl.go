@@ -129,7 +129,6 @@ func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest) (*Pe
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
-			"code":    c.code,
 		}).Debug("Getting people flow data")
 	}
 
@@ -207,7 +206,7 @@ func (c *vendingMachineManageClient) Control(request *ControlRequest) (*ControlR
 	}
 
 	var result ControlResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetQueryParam("code", c.code).SetResult(&result).
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("code", c.code).SetBody(request).SetResult(&result).
 		Put(aifinitsdk_constants.Put_VendingMachineDeviceControl)
 	if err != nil {
 		return nil, err
