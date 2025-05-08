@@ -6,9 +6,10 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"resty.dev/v3"
+
 	aifinitsdk "github.com/techpartners-asia/aifinitsdk"
 	aifinitsdk_constants "github.com/techpartners-asia/aifinitsdk/constants"
-	"resty.dev/v3"
 )
 
 type vendingMachineManageClient struct {
@@ -107,7 +108,7 @@ func (c *vendingMachineManageClient) DeviceInfo() (*DeviceInfoResult, error) {
 	var result DeviceInfoResult
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
 		SetQueryParam("code", c.code).
-		Get(fmt.Sprintf("%s/facade/open/vending_machine/deviceInfo", aifinitsdk_constants.BaseURL))
+		Get(aifinitsdk_constants.Get_VendingMachineInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +175,7 @@ func (c *vendingMachineManageClient) List(request *ListRequest) (*ListResponse, 
 		SetQueryParam("page", strconv.Itoa(request.Page)).
 		SetQueryParam("limit", strconv.Itoa(request.Limit)).
 		SetQueryParam("nameOf", request.NameOf).
-		Get(fmt.Sprintf("%s/facade/open/vending_machine/infoPage", aifinitsdk_constants.BaseURL))
+		Get(aifinitsdk_constants.Get_VendingMachineList)
 	if err != nil {
 		return nil, err
 	}
