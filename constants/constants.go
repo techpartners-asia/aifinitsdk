@@ -25,10 +25,13 @@ const (
 )
 
 const (
-	Put_OpenDoor            = BaseURL + "/open/operation/vending_machine/open"
-	Get_SoldGoods           = BaseURL + "/facade/open/replenish/items"
-	Put_UpdateSoldGoods     = BaseURL + "/facade/open/replenish/items"
-	Del_DeleteGoods         = BaseURL + "/facade/open/replenish/items"
+	Put_OpenDoor = BaseURL + "/open/operation/vending_machine/open"
+
+	Put_AddNewGoods      = BaseURL + "/facade/open/replenish/items"
+	Get_SoldGoods        = BaseURL + "/facade/open/replenish/items"
+	Post_UpdateSoldGoods = BaseURL + "/facade/open/replenish/items"
+	Del_DeleteGoods      = BaseURL + "/facade/open/replenish/items"
+
 	Get_SearchOpenDoor      = BaseURL + "/open/operation/vending_machine/open"
 	Get_OrderVideo          = BaseURL + "/facade/open/order/video"
 	Post_ProductPriceUpdate = BaseURL + "/facade/open/replenish/replaceVmItemsPrice"

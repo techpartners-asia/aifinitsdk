@@ -115,13 +115,7 @@ type ProductPriceUpdateResponse struct {
 	Message string `json:"message"`
 }
 
-type AddNewGood struct {
-	ItemCode      string `json:"itemCode"`
-	ActualPrice   int    `json:"actualPrice"`
-	OriginalPrice int    `json:"originalPrice"`
-}
-
-type AddNewGoodsRequest []AddNewGood
+type AddNewGoodsRequest []Good
 
 type AddNewGoodsResponse struct {
 	Status  int    `json:"status"`

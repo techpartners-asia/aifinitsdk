@@ -117,7 +117,7 @@ func (c *OperationClientImpl) UpdateSoldGoods(request *UpdateSoldGoodsRequest) (
 	var updateSoldGoodsResponse *UpdateSoldGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", c.DeviceCode).
-		SetBody(request).SetResult(&updateSoldGoodsResponse).Put(aifinitsdk_constants.Put_UpdateSoldGoods)
+		SetBody(request).SetResult(&updateSoldGoodsResponse).Post(aifinitsdk_constants.Post_UpdateSoldGoods)
 	if err != nil {
 		return nil, err
 	}
@@ -241,6 +241,40 @@ func (c *OperationClientImpl) ProductPriceUpdate(request *ProductPriceUpdateRequ
 	}
 
 	return productPriceUpdateResponse, nil
+}
+
+func (c *OperationClientImpl) AddNewGoods(request *AddNewGoodsRequest) (*AddNewGoodsResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"request":     request,
+			"device_code": c.DeviceCode,
+		}).Debug("Adding new goods")
+	}
+
+	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
+	if err != nil {
+		return nil, err
+	}
+
+	var addNewGoodsResponse *AddNewGoodsResponse
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+		SetQueryParam("code", c.DeviceCode).
+		SetBody(request).SetResult(&addNewGoodsResponse).Put(aifinitsdk_constants.Put_AddNewGoods)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, ConvertAddNewGoodsError(resp.StatusCode(), resp.String())
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": addNewGoodsResponse,
+		}).Debug("Added new goods successfully")
+	}
+
+	return addNewGoodsResponse, nil
 }
 
 func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteGoodsResponse, error) {
