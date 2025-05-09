@@ -114,7 +114,7 @@ func (c *vendingMachineManageClient) DeviceInfo() (*DeviceInfoResult, error) {
 	var result DeviceInfoResult
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
 		SetQueryParam("code", c.code).
-		Get(aifinitsdk_constants.Get_VendingMachineInfo)
+		Get(aifinitsdk_constants.Get_VendingMachineDeviceInfo)
 	if err != nil {
 		return nil, err
 	}
