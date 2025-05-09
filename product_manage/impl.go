@@ -16,7 +16,7 @@ type ProductClient struct {
 	Resty  *resty.Client
 }
 
-func NewProductClient(client aifinitsdk.Client) *ProductClient {
+func NewProductClient(client aifinitsdk.Client) ProductManageClient {
 	restyClient := resty.New()
 	if client.RestyDebug() {
 		restyClient.SetDebug(true)
@@ -28,7 +28,11 @@ func NewProductClient(client aifinitsdk.Client) *ProductClient {
 	}
 }
 
-func (c *ProductClient) GetProductList(page, limit int) (*ProductListResponse, error) {
+func (c *ProductClient) LastInfo() (*LastInfoResponse, error) {
+	panic("unimplemented")
+}
+
+func (c *ProductClient) ProductList(page, limit int) (*ProductListResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"page":  page,
@@ -60,7 +64,7 @@ func (c *ProductClient) GetProductList(page, limit int) (*ProductListResponse, e
 	return products, nil
 }
 
-func (c *ProductClient) GetProductDetail(itemCode string) (*ProductDetailResponse, error) {
+func (c *ProductClient) ProductDetail(itemCode string) (*ProductDetailResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("item_code", itemCode).Debug("Getting product detail")
 	}
@@ -89,7 +93,7 @@ func (c *ProductClient) GetProductDetail(itemCode string) (*ProductDetailRespons
 	return product, nil
 }
 
-func (c *ProductClient) GetProductMutualExclusion(request *MutualExclusionRequest) (*MutualExclusionResponse, error) {
+func (c *ProductClient) MutualExclusion(request *MutualExclusionRequest) (*MutualExclusionResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("request", request).Debug("Getting product mutual exclusion")
 	}
@@ -251,7 +255,7 @@ func (c *ProductClient) DetailProductApplication(itemCode string) (*DetailProduc
 	return detailProductApplication, nil
 }
 
-func (c *ProductClient) UpdateProductApplication(request *UpdateProductApplicationRequest) (*UpdateProductApplicationResponse, error) {
+func (c *ProductClient) UpdateProductApplication(itemCode string, request *UpdateProductApplicationRequest) (*UpdateProductApplicationResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("request", request).Debug("Updating product application")
 	}
@@ -262,7 +266,7 @@ func (c *ProductClient) UpdateProductApplication(request *UpdateProductApplicati
 	}
 
 	var updateProductApplication *UpdateProductApplicationResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&updateProductApplication).Put(aifinitsdk_constants.Put_UpdateProductAppication)
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&updateProductApplication).Put(fmt.Sprintf(aifinitsdk_constants.Put_UpdateProductAppication, itemCode))
 	if err != nil {
 		return nil, err
 	}

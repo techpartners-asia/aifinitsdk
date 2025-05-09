@@ -21,7 +21,7 @@ type OperationClientImpl struct {
 	DeviceCode string
 }
 
-func NewOperationClientImpl(client aifinitsdk.Client, deviceCode string) *OperationClientImpl {
+func NewOperationClientImpl(client aifinitsdk.Client, deviceCode string) OperationClient {
 	restyClient := resty.New()
 
 	if client.RestyDebug() {
@@ -356,4 +356,14 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 	}
 
 	return deleteGoodsResponse, nil
+}
+
+// ListOrder implements OperationClient.
+func (c *OperationClientImpl) ListOrder(request *ListOrderRequest) (*ListOrderResponse, error) {
+	panic("unimplemented")
+}
+
+// SearchOpenDoorRequest implements OperationClient.
+func (c *OperationClientImpl) SearchOpenDoorRequest(request *SearchOpenDoorRequest) (*SearchOpenDoorResponse, error) {
+	panic("unimplemented")
 }
