@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/go-playground/validator"
 	"github.com/sirupsen/logrus"
 	"resty.dev/v3"
 
@@ -37,6 +38,11 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResp
 			"request": request,
 			"code":    c.code,
 		}).Debug("Updating vending machine")
+	}
+
+	validate := validator.New()
+	if err := validate.Struct(request); err != nil {
+		return nil, err
 	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())

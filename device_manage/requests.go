@@ -14,7 +14,7 @@ type PeopleFlowRequest struct {
 }
 
 type UpdateRequest struct {
-	Name          string `json:"name,omitempty"`
+	Name          string `json:"name,omitempty" validate:"required"`
 	Code          string `json:"code,omitempty"`
 	ScanCode      string `json:"scanCode,omitempty"`
 	ContactNumber string `json:"contactNumber,omitempty"`
