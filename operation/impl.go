@@ -59,6 +59,10 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest) (*OpenDoorRespo
 		SetQueryParam("code", c.DeviceCode).
 		SetResult(&openDoorResponse)
 
+	if request.Type != 0 {
+		req.SetQueryParam("type", fmt.Sprintf("%d", request.Type))
+	}
+
 	if request.LocalTimeStamp != 0 {
 		req.SetQueryParam("localTimestamp", fmt.Sprintf("%d", request.LocalTimeStamp))
 	}
