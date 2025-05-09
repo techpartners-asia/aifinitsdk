@@ -55,14 +55,24 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest) (*OpenDoorRespo
 	}
 
 	var openDoorResponse *OpenDoorResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+	req := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", c.DeviceCode).
-		SetQueryParams(map[string]string{
-			"type":           fmt.Sprintf("%d", request.Type),
-			"requestId":      request.RequestID,
-			"userCode":       request.UserCode,
-			"localTimestamp": fmt.Sprintf("%d", request.LocalTimeStamp),
-		}).SetResult(&openDoorResponse).Put(aifinitsdk_constants.Put_OpenDoor)
+		SetResult(&openDoorResponse)
+
+	if request.LocalTimeStamp != 0 {
+		req.SetQueryParam("localTimestamp", fmt.Sprintf("%d", request.LocalTimeStamp))
+	}
+
+	if request.UserCode != "" {
+		req.SetQueryParam("userCode", request.UserCode)
+	}
+
+	if request.RequestID != "" {
+		req.SetQueryParam("requestId", request.RequestID)
+	}
+
+	resp, err := req.Put(aifinitsdk_constants.Put_OpenDoor)
+
 	if err != nil {
 		return nil, err
 	}
