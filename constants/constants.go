@@ -36,3 +36,19 @@ const (
 	Get_OrderVideo          = BaseURL + "/facade/open/order/video"
 	Post_ProductPriceUpdate = BaseURL + "/facade/open/replenish/replaceVmItemsPrice"
 )
+
+const (
+	Post_AdvertisementMaterialApply   = BaseURL + "/facade/open/materials/sourceMaterialApply"
+	Get_AdvertisementMaterialPage     = BaseURL + "/facade/open/materials/sourceMaterialPage"
+	Get_AdvertisementMaterialDetail   = BaseURL + "/facade/open/materials/sourceMaterialDetail/{id}"
+	Del_AdvertisementMaterialDelete   = BaseURL + "/facade/open/materials/sourceMaterialDelete/{id}"
+	Post_AdvertisementAdAddition      = BaseURL + "/facade/open/materials"
+	Put_AdvertisementAdUpdate         = BaseURL + "/facade/open/materials"
+	Del_AdvertisementAdDelete         = BaseURL + "/facade/open/materials/{id}"
+	Get_AdvertisementAdPage           = BaseURL + "/facade/open/materials/page"
+	Get_AdvertisementAdDetail         = BaseURL + "/facade/open/materials/detail/{id}"
+	Get_AdvertisementAdDetailByVmCode = BaseURL + "/facade/open/materials/detail"
+	Put_AdvertisementAssociatedToVm   = BaseURL + "/facade/open/materials/bind/{id}"
+	Get_AdvertisementAdAssociatedToVm = BaseURL + "/facade/open/materials/updatePromotionStatus/{promotionId}/{status}"
+	Get_AdvertisementVmPromotion      = BaseURL + "/facade/open/materials/getVmPromotion"
+)
