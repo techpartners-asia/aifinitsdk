@@ -169,7 +169,7 @@ func (c *advertisementManageClientImpl) AdPage(request *AdPageRequest) (*AdPageR
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParams(map[string]string{
 		"page":     strconv.Itoa(request.Page),
 		"pageSize": strconv.Itoa(request.PageSize),
-	}).SetResult(&result).Post(aifinitsdk_constants.Get_AdvertisementAdPage)
+	}).SetResult(&result).Get(aifinitsdk_constants.Get_AdvertisementAdPage)
 	if err != nil {
 		return nil, err
 	}
