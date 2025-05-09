@@ -45,8 +45,13 @@ type AdAdditionResponse struct {
 type AdPageResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
-	Data    []Ad   `json:"data"`
+	Data    struct {
+		Total int  `json:"total"`
+		Rows  []Ad `json:"rows"`
+	} `json:"data"`
+	Ok bool `json:"ok"`
 }
+
 type AdDetailResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
@@ -79,6 +84,7 @@ type AdControlStatusResponse struct {
 	Message string `json:"message"`
 	Ok      bool   `json:"ok"`
 }
+
 type GetVmPromotionResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
