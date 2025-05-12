@@ -38,10 +38,10 @@ const (
 )
 
 const (
-	Post_AdvertisementMaterialApply   = BaseURL + "/facade/open/materials/sourceMaterialApply"
-	Get_AdvertisementMaterialPage     = BaseURL + "/facade/open/materials/sourceMaterialPage"
-	Get_AdvertisementMaterialDetail   = BaseURL + "/facade/open/materials/sourceMaterialDetail/{id}"
-	Del_AdvertisementMaterialDelete   = BaseURL + "/facade/open/materials/sourceMaterialDelete/{id}"
+	Post_AdvertisementMaterialApply   = BaseURL + "/facade/open/materials/sourceMaterialsApply"
+	Get_AdvertisementMaterialPage     = BaseURL + "/facade/open/materials/sourceMaterialsPage"
+	Get_AdvertisementMaterialDetail   = BaseURL + "/facade/open/materials/sourceMaterialsDetail/{id}"
+	Del_AdvertisementMaterialDelete   = BaseURL + "/facade/open/materials/sourceMaterialsDelete/{id}"
 	Post_AdvertisementAdAddition      = BaseURL + "/facade/open/materials"
 	Put_AdvertisementAdUpdate         = BaseURL + "/facade/open/materials"
 	Del_AdvertisementAdDelete         = BaseURL + "/facade/open/materials/{id}"
