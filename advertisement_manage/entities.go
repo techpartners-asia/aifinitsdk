@@ -31,11 +31,11 @@ const (
 
 type SourceMaterial struct {
 	Id         int                  `json:"id,omitempty"`
-	FileUrl    string               `json:"file_url,omitempty"`
-	FileType   FileType             `json:"file_type,omitempty"`
+	FileUrl    string               `json:"fileUrl,omitempty"`
+	FileType   FileType             `json:"fileType,omitempty"`
 	Name       string               `json:"name,omitempty"`
 	Status     SourceMaterialStatus `json:"status,omitempty"`
-	CreateTime string               `json:"create_time,omitempty"`
+	CreateTime string               `json:"createTime,omitempty"`
 }
 
 type ImgRel struct {
