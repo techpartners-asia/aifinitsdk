@@ -41,7 +41,10 @@ func (c *advertisementManageClientImpl) MaterialApply(request *SourceMaterialApp
 	}
 
 	var result SourceMaterialApplyResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).Post(aifinitsdk_constants.Post_AdvertisementMaterialApply)
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+		SetBody(request).
+		SetResult(&result).
+		Put(aifinitsdk_constants.Post_AdvertisementMaterialApply)
 	if err != nil {
 		return nil, err
 	}
