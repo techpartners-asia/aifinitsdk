@@ -215,7 +215,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest) (*Get
 		SetQueryParams(map[string]string{
 			"type":      fmt.Sprintf("%d", request.Type),
 			"requestId": request.RequestID,
-		}).SetResult(&getOrderVideoResponse).Post(aifinitsdk_constants.Get_OrderVideo)
+		}).SetResult(&getOrderVideoResponse).Get(aifinitsdk_constants.Get_OrderVideo)
 	if err != nil {
 		return nil, err
 	}
