@@ -231,7 +231,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machi
 	return getOrderVideoResponse, nil
 }
 
-func (c *OperationClientImpl) UpdateGoodsPrice(request *ProductPriceUpdateRequest, machineCode string) (*ProductPriceUpdateResponse, error) {
+func (c *OperationClientImpl) UpdateGoodsPrice(request *UpdateGoodsPriceRequest, machineCode string) (*ProductPriceUpdateResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,

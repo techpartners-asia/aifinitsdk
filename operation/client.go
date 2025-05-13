@@ -26,5 +26,5 @@ type OperationClient interface {
 	GetOrderVideo(request *GetOrderVideoRequest, machineCode string) (*GetOrderVideoResponse, error)
 	// product price update
 	//2.2.3.10
-	UpdateGoodsPrice(request *ProductPriceUpdateRequest, machineCode string) (*ProductPriceUpdateResponse, error)
+	UpdateGoodsPrice(request *UpdateGoodsPriceRequest, machineCode string) (*ProductPriceUpdateResponse, error)
 }

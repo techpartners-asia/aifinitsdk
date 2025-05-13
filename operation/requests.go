@@ -26,7 +26,7 @@ type GetOrderVideoRequest struct {
 	Type      OpenDoorType `json:"type,omitempty"`
 }
 
-type ProductPriceUpdateRequest struct {
+type UpdateGoodsPriceRequest struct {
 	VmCodes []string `json:"vmCodes,omitempty"`
 	Items   []Good   `json:"items,omitempty"`
 }
