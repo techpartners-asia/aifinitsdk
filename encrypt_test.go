@@ -1,4 +1,4 @@
-package aifinitsdk
+package ainfinitsdk
 
 import (
 	"encoding/base64"

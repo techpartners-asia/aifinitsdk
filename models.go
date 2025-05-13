@@ -1,4 +1,4 @@
-package aifinitsdk
+package ainfinitsdk
 
 type Token struct {
 	MerchantCode string `json:"merchant_code"`

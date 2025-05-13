@@ -1,4 +1,4 @@
-package aifinitsdk_operation
+package ainfinitsdk
 
 import (
 	"bytes"
@@ -8,19 +8,46 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/go-playground/validator"
 	"github.com/sirupsen/logrus"
-	aifinitsdk "github.com/techpartners-asia/aifinitsdk"
-	aifinitsdk_constants "github.com/techpartners-asia/aifinitsdk/constants"
 	"resty.dev/v3"
 )
 
+type OperationClient interface {
+	//mashind baraa nemne
+	//2.2.3.11
+	AddGoods(request *AddNewGoodsRequest, machineCode string) (*AddNewGoodsResponse, error)
+	//2.2.3.12
+	DeleteGoods(request *DeleteGoodsRequest, machineCode string) (*DeleteGoodsResponse, error)
+
+	//machine dotorh baraanuudiin jagsaalt
+	//2.2.3.1
+	ListGoods(machineCode string) (*GetSoldGoodsResponse, error)
+	// zaragdsan baraanuudiig niitedni shinechlene
+	//2.2.3.2
+	UpdateGoods(request *UpdateGoodsRequest, machineCode string) (*UpdateSoldGoodsResponse, error)
+	//2.2.3.3
+	OpenDoor(request *OpenDoorRequest, machineCode string) (*OpenDoorResponse, error)
+	// zaragdsan baraag haalga ongoilgoh requesteer avah
+	//2.2.3.4
+	GetSoldGoodsByRequestID(request *GetSoldGoodsByRequestIDRequest, machineCode string) (*SearchOpenDoorResponse, error)
+	//zaragdsan baraanii jagsaalt
+	//2.2.3.6
+	ListOrders(request *ListOrderRequest, machineCode string) (*ListOrderResponse, error)
+	// orderiin video avah
+	//2.2.3.8
+	GetOrderVideo(request *GetOrderVideoRequest, machineCode string) (*GetOrderVideoResponse, error)
+	// product price update
+	//2.2.3.10
+	UpdateGoodsPrice(request *UpdateGoodsPriceRequest, machineCode string) (*ProductPriceUpdateResponse, error)
+}
+
 type OperationClientImpl struct {
-	Client aifinitsdk.Client
+	Client Client
 	Resty  *resty.Client
 }
 
-func NewOperationClientImpl(client aifinitsdk.Client) OperationClient {
+func NewOperationClientImpl(client Client) OperationClient {
 	restyClient := resty.New()
 
 	if client.RestyDebug() {
@@ -73,7 +100,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 		req.SetQueryParam("requestId", request.RequestID)
 	}
 
-	resp, err := req.Put(aifinitsdk_constants.Put_OpenDoor)
+	resp, err := req.Put(Put_OpenDoor)
 
 	if err != nil {
 		return nil, err
@@ -105,7 +132,7 @@ func (c *OperationClientImpl) ListGoods(machineCode string) (*GetSoldGoodsRespon
 	var getSoldGoodsResponse *GetSoldGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
-		SetResult(&getSoldGoodsResponse).Get(aifinitsdk_constants.Get_SoldGoods)
+		SetResult(&getSoldGoodsResponse).Get(Get_SoldGoods)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +166,7 @@ func (c *OperationClientImpl) UpdateGoods(request *UpdateGoodsRequest, machineCo
 	var updateSoldGoodsResponse *UpdateSoldGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
-		SetBody(request).SetResult(&updateSoldGoodsResponse).Post(aifinitsdk_constants.Post_UpdateSoldGoods)
+		SetBody(request).SetResult(&updateSoldGoodsResponse).Post(Post_UpdateSoldGoods)
 	if err != nil {
 		return nil, err
 	}
@@ -176,7 +203,7 @@ func (c *OperationClientImpl) GetSoldGoodsByRequestID(request *GetSoldGoodsByReq
 		SetQueryParams(map[string]string{
 			"type":      fmt.Sprintf("%d", request.Type),
 			"requestId": request.RequestID,
-		}).SetResult(&searchOpenDoorResponse).Get(aifinitsdk_constants.Get_SearchOpenDoor)
+		}).SetResult(&searchOpenDoorResponse).Get(Get_SearchOpenDoor)
 	if err != nil {
 		return nil, err
 	}
@@ -213,7 +240,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machi
 		SetQueryParams(map[string]string{
 			"type":      fmt.Sprintf("%d", request.Type),
 			"requestId": request.RequestID,
-		}).SetResult(&getOrderVideoResponse).Get(aifinitsdk_constants.Get_OrderVideo)
+		}).SetResult(&getOrderVideoResponse).Get(Get_OrderVideo)
 	if err != nil {
 		return nil, err
 	}
@@ -247,7 +274,7 @@ func (c *OperationClientImpl) UpdateGoodsPrice(request *UpdateGoodsPriceRequest,
 	var productPriceUpdateResponse *ProductPriceUpdateResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
-		SetBody(request).SetResult(&productPriceUpdateResponse).Post(aifinitsdk_constants.Post_ProductPriceUpdate)
+		SetBody(request).SetResult(&productPriceUpdateResponse).Post(Post_ProductPriceUpdate)
 	if err != nil {
 		return nil, err
 	}
@@ -281,7 +308,7 @@ func (c *OperationClientImpl) AddGoods(request *AddNewGoodsRequest, machineCode 
 	var addNewGoodsResponse *AddNewGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
-		SetBody(request.Items).SetResult(&addNewGoodsResponse).Put(aifinitsdk_constants.Put_AddNewGoods)
+		SetBody(request.Items).SetResult(&addNewGoodsResponse).Put(Put_AddNewGoods)
 	if err != nil {
 		return nil, err
 	}
@@ -317,7 +344,7 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 		return nil, err
 	}
 
-	url := fmt.Sprintf("%s?code=%s", aifinitsdk_constants.Del_DeleteGoods, machineCode)
+	url := fmt.Sprintf("%s?code=%s", Del_DeleteGoods, machineCode)
 	req, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, err
@@ -359,4 +386,156 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 // ListOrder implements OperationClient.
 func (c *OperationClientImpl) ListOrders(request *ListOrderRequest, machineCode string) (*ListOrderResponse, error) {
 	panic("unimplemented")
+}
+
+type Good struct {
+	ItemCode      string `json:"itemCode,omitempty"`
+	ActualPrice   int    `json:"actualPrice,omitempty"`
+	OriginalPrice int    `json:"originalPrice,omitempty"`
+	Count         int    `json:"count,omitempty"`
+}
+
+type Order struct {
+	TradeRequestId  string `json:"tradeRequestId,omitempty"`
+	OrderCode       string `json:"orderCode,omitempty"`
+	VmCode          string `json:"vmCode,omitempty"`
+	MachineId       int    `json:"machineId,omitempty"`
+	UserCode        string `json:"userCode,omitempty"`
+	HandleStatus    int    `json:"handleStatus,omitempty"`
+	ShopMove        int    `json:"shopMove,omitempty"`
+	TotalFee        int    `json:"totalFee,omitempty"`
+	OpenDoorTime    int64  `json:"openDoorTime,omitempty"`
+	CloseDoorTime   int64  `json:"closeDoorTime,omitempty"`
+	OpenDoorWeight  int    `json:"openDoorWeight,omitempty"`
+	CloseDoorWeight int    `json:"closeDoorWeight,omitempty"`
+	OrderGoodsList  []Good `json:"orderGoodsList,omitempty"`
+}
+
+type OpenDoorType int
+
+const (
+	OpenDoorForShopping      OpenDoorType = 1
+	OpenDoorForReplenishment OpenDoorType = 2
+)
+
+type VideoStatus int
+
+const (
+	VideoStatusPendingUpload     VideoStatus = -1
+	VideoStatusUploadComplete    VideoStatus = 0
+	VideoStatusVideoDoesNotExist VideoStatus = 1
+	VideoStatusNetworkError      VideoStatus = 2
+	VideoStatusUploadInProgress  VideoStatus = 3
+)
+
+type OpenDoorRequest struct {
+	Type           OpenDoorType `json:"type,omitempty" validate:"required"`      // 1: shopping, 2: replenishment
+	RequestID      string       `json:"requestId,omitempty" validate:"required"` // oruulj ogno
+	UserCode       string       `json:"userCode,omitempty"`
+	LocalTimeStamp int64        `json:"localTimestamp,omitempty"`
+}
+
+type UpdateGoodsRequest []Good
+
+type GetSoldGoodsByRequestIDRequest struct {
+	Type      OpenDoorType `json:"type,omitempty"`
+	RequestID string       `json:"requestId,omitempty"`
+}
+
+type ListOrderRequest struct {
+	BeginTime int64 `json:"beginTime,omitempty"`
+	EndTime   int64 `json:"endTime,omitempty"`
+	Page      int   `json:"page,omitempty"`  //default 1
+	Limit     int   `json:"limit,omitempty"` //default 10 max 50
+}
+
+type GetOrderVideoRequest struct {
+	RequestID string       `json:"requestId,omitempty"`
+	Type      OpenDoorType `json:"type,omitempty"`
+}
+
+type UpdateGoodsPriceRequest struct {
+	VmCodes []string `json:"vmCodes,omitempty"`
+	Items   []Good   `json:"items,omitempty"`
+}
+
+type AddNewGoodsRequest struct {
+	Items []Good `json:"items,omitempty"`
+}
+
+type DeleteGoodsRequest struct {
+	ItemCodes []string `json:"itemCodes,omitempty"`
+}
+
+type OpenDoorResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+	Data    struct {
+		OrderCode string `json:"orderCode"`
+	} `json:"data"`
+}
+
+type GetSoldGoodsResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+	Result  []Good `json:"result"`
+	Count   int    `json:"count"`
+}
+
+type SearchOpenDoorData struct {
+	TradeRequestId  string `json:"tradeRequestId"`
+	OrderCode       string `json:"orderCode"`
+	VmCode          string `json:"vmCode"`
+	MachineId       int    `json:"machineId"`
+	HandleStatus    int    `json:"handleStatus"`
+	TotalFee        int    `json:"totalFee"`
+	OpenDoorTime    int64  `json:"openDoorTime"`
+	CloseDoorTime   int64  `json:"closeDoorTime"`
+	OpenDoorWeight  int    `json:"openDoorWeight"`
+	CloseDoorWeight int    `json:"closeDoorWeight"`
+	OrderGoodsList  []Good `json:"orderGoodsList"`
+	ShopMove        int    `json:"shopMove"`
+	ScanCode        string `json:"scanCode"`
+}
+
+type SearchOpenDoorResponse struct {
+	Status  int                `json:"status"`
+	Message string             `json:"message"`
+	Data    SearchOpenDoorData `json:"data"`
+}
+
+type ListOrderResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+	Data    struct {
+		Total int     `json:"total"`
+		Rows  []Order `json:"rows"`
+	} `json:"data"`
+}
+
+type GetOrderVideoResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+	Data    struct {
+		OrderCode   string      `json:"orderCode"`
+		VideoUrl    string      `json:"videoUrl"`
+		VideoURLs   []string    `json:"videoUrls"`
+		VideoStatus VideoStatus `json:"videoStatus"`
+	} `json:"data"`
+}
+
+type ProductPriceUpdateResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
+
+type AddNewGoodsResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
+
+type DeleteGoodsResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+	Ok      *bool  `json:"ok,omitempty"`
 }
