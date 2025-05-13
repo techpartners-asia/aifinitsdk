@@ -94,7 +94,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest) (*OpenDoorRespo
 	return openDoorResponse, nil
 }
 
-func (c *OperationClientImpl) GetSoldGoods() (*GetSoldGoodsResponse, error) {
+func (c *OperationClientImpl) ListGoods() (*GetSoldGoodsResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("device_code", c.DeviceCode).Debug("Getting sold goods")
 	}

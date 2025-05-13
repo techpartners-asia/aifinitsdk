@@ -1,13 +1,15 @@
 package aifinitsdk_operation
 
 type OperationClient interface {
+	//mashind baraa nemne
 	//2.2.3.11
 	AddNewGoods(request *AddNewGoodsRequest) (*AddNewGoodsResponse, error)
 	//2.2.3.12
 	DeleteGoods(request *DeleteGoodsRequest) (*DeleteGoodsResponse, error)
 
+	//machine dotorh baraanuudiin jagsaalt
 	//2.2.3.1
-	GetSoldGoods() (*GetSoldGoodsResponse, error)
+	ListGoods() (*GetSoldGoodsResponse, error)
 	// zaragdsan baraanuudiig niitedni shinechlene
 	//2.2.3.2
 	UpdateSoldGoods(request *UpdateSoldGoodsRequest) (*UpdateSoldGoodsResponse, error)
