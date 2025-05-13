@@ -32,9 +32,9 @@ type SearchOpenDoorData struct {
 }
 
 type SearchOpenDoorResponse struct {
-	Status  int                  `json:"status"`
-	Message string               `json:"message"`
-	Data    []SearchOpenDoorData `json:"data"`
+	Status  int                `json:"status"`
+	Message string             `json:"message"`
+	Data    SearchOpenDoorData `json:"data"`
 }
 
 type ListOrderResponse struct {
