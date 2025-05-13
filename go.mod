@@ -1,4 +1,4 @@
-module github.com/techpartners-asia/ainfinitsdk
+module github.com/techpartners-asia/aifinitsdk
 
 go 1.24.0
 

@@ -25,7 +25,7 @@ A powerful Go SDK for integrating with the Aifinit vending machine platform. Man
 ### Installation
 
 ```bash
-go get github.com/techpartners-asia/ainfinitsdk
+go get github.com/techpartners-asia/aifinitsdk
 ```
 
 ### Basic Usage
@@ -38,7 +38,7 @@ import (
     "os"
     "time"
     
-    "github.com/techpartners-asia/ainfinitsdk"
+    "github.com/techpartners-asia/aifinitsdk"
 )
 
 func main() {
@@ -65,7 +65,7 @@ To enable debug mode and see detailed logs, you need to configure both the clien
 ```go
 import (
     "github.com/sirupsen/logrus"
-    "github.com/techpartners-asia/ainfinitsdk"
+    "github.com/techpartners-asia/aifinitsdk"
 )
 
 func main() {

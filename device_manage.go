@@ -1,4 +1,4 @@
-package ainfinitsdk
+package aifinitsdk
 
 import (
 	"fmt"

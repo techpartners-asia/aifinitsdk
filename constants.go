@@ -1,4 +1,4 @@
-package ainfinitsdk
+package aifinitsdk
 
 const (
 	BaseURL = "https://open.ainfinit.com"
