@@ -178,7 +178,7 @@ func (c *OperationClientImpl) SearchOpenDoor(request *SearchOpenDoorRequest) (*S
 		SetQueryParams(map[string]string{
 			"type":      fmt.Sprintf("%d", request.Type),
 			"requestId": request.RequestID,
-		}).SetResult(&searchOpenDoorResponse).Post(aifinitsdk_constants.Get_SearchOpenDoor)
+		}).SetResult(&searchOpenDoorResponse).Get(aifinitsdk_constants.Get_SearchOpenDoor)
 	if err != nil {
 		return nil, err
 	}
