@@ -15,10 +15,26 @@ type GetSoldGoodsResponse struct {
 	Count   int    `json:"count"`
 }
 
+type SearchOpenDoorData struct {
+	TradeRequestId  string `json:"tradeRequestId"`
+	OrderCode       string `json:"orderCode"`
+	VmCode          string `json:"vmCode"`
+	MachineId       int    `json:"machineId"`
+	HandleStatus    int    `json:"handleStatus"`
+	TotalFee        int    `json:"totalFee"`
+	OpenDoorTime    int64  `json:"openDoorTime"`
+	CloseDoorTime   int64  `json:"closeDoorTime"`
+	OpenDoorWeight  int    `json:"openDoorWeight"`
+	CloseDoorWeight int    `json:"closeDoorWeight"`
+	OrderGoodsList  []Good `json:"orderGoodsList"`
+	ShopMove        int    `json:"shopMove"`
+	ScanCode        string `json:"scanCode"`
+}
+
 type SearchOpenDoorResponse struct {
-	Status  int     `json:"status"`
-	Message string  `json:"message"`
-	Data    []Order `json:"data"`
+	Status  int                  `json:"status"`
+	Message string               `json:"message"`
+	Data    []SearchOpenDoorData `json:"data"`
 }
 
 type ListOrderResponse struct {

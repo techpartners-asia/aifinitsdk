@@ -1,9 +1,10 @@
 package aifinitsdk_operation
 
 type Good struct {
-	ItemCode      string `json:"itemCode"`
-	ActualPrice   int    `json:"actualPrice"`
-	OriginalPrice int    `json:"originalPrice"`
+	ItemCode      string `json:"itemCode,omitempty"`
+	ActualPrice   int    `json:"actualPrice,omitempty"`
+	OriginalPrice int    `json:"originalPrice,omitempty"`
+	Count         int    `json:"count,omitempty"`
 }
 
 type Order struct {
@@ -15,10 +16,10 @@ type Order struct {
 	HandleStatus    int    `json:"handleStatus,omitempty"`
 	ShopMove        int    `json:"shopMove,omitempty"`
 	TotalFee        int    `json:"totalFee,omitempty"`
-	OpenDoorTime    int64  `json:"openDoorTime"`
-	CloseDoorTime   int64  `json:"closeDoorTime"`
-	OpenDoorWeight  int    `json:"openDoorWeight"`
-	CloseDoorWeight int    `json:"closeDoorWeight"`
+	OpenDoorTime    int64  `json:"openDoorTime,omitempty"`
+	CloseDoorTime   int64  `json:"closeDoorTime,omitempty"`
+	OpenDoorWeight  int    `json:"openDoorWeight,omitempty"`
+	CloseDoorWeight int    `json:"closeDoorWeight,omitempty"`
 	OrderGoodsList  []Good `json:"orderGoodsList,omitempty"`
 }
 
