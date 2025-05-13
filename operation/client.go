@@ -17,7 +17,7 @@ type OperationClient interface {
 	OpenDoor(request *OpenDoorRequest) (*OpenDoorResponse, error)
 	// zaragdsan baraag haalga ongoilgoh requesteer avah
 	//2.2.3.4
-	SearchOpenDoorRequest(request *SearchOpenDoorRequest) (*SearchOpenDoorResponse, error)
+	SearchOpenDoor(request *SearchOpenDoorRequest) (*SearchOpenDoorResponse, error)
 	//zaragdsan baraanii jagsaalt
 	//2.2.3.6
 	ListOrder(request *ListOrderRequest) (*ListOrderResponse, error)

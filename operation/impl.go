@@ -362,8 +362,3 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 func (c *OperationClientImpl) ListOrder(request *ListOrderRequest) (*ListOrderResponse, error) {
 	panic("unimplemented")
 }
-
-// SearchOpenDoorRequest implements OperationClient.
-func (c *OperationClientImpl) SearchOpenDoorRequest(request *SearchOpenDoorRequest) (*SearchOpenDoorResponse, error) {
-	panic("unimplemented")
-}
