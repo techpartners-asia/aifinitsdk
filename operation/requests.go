@@ -7,9 +7,9 @@ type OpenDoorRequest struct {
 	LocalTimeStamp int64        `json:"localTimestamp,omitempty"`
 }
 
-type UpdateSoldGoodsRequest []Good
+type UpdateGoodsRequest []Good
 
-type SearchOpenDoorRequest struct {
+type GetSoldGoodsByRequestIDRequest struct {
 	Type      OpenDoorType `json:"type,omitempty"`
 	RequestID string       `json:"requestId,omitempty"`
 }

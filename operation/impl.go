@@ -16,12 +16,11 @@ import (
 )
 
 type OperationClientImpl struct {
-	Client     aifinitsdk.Client
-	Resty      *resty.Client
-	DeviceCode string
+	Client aifinitsdk.Client
+	Resty  *resty.Client
 }
 
-func NewOperationClientImpl(client aifinitsdk.Client, deviceCode string) OperationClient {
+func NewOperationClientImpl(client aifinitsdk.Client) OperationClient {
 	restyClient := resty.New()
 
 	if client.RestyDebug() {
@@ -29,17 +28,16 @@ func NewOperationClientImpl(client aifinitsdk.Client, deviceCode string) Operati
 	}
 
 	return &OperationClientImpl{
-		Client:     client,
-		Resty:      restyClient,
-		DeviceCode: deviceCode,
+		Client: client,
+		Resty:  restyClient,
 	}
 }
 
-func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest) (*OpenDoorResponse, error) {
+func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode string) (*OpenDoorResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
-			"device_code": c.DeviceCode,
+			"device_code": machineCode,
 		}).Debug("Opening door")
 	}
 
@@ -56,7 +54,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest) (*OpenDoorRespo
 
 	var openDoorResponse *OpenDoorResponse
 	req := c.Resty.R().SetHeader("Authorization", signature).
-		SetQueryParam("code", c.DeviceCode).
+		SetQueryParam("code", machineCode).
 		SetResult(&openDoorResponse)
 
 	if request.Type != 0 {
@@ -94,9 +92,9 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest) (*OpenDoorRespo
 	return openDoorResponse, nil
 }
 
-func (c *OperationClientImpl) ListGoods() (*GetSoldGoodsResponse, error) {
+func (c *OperationClientImpl) ListGoods(machineCode string) (*GetSoldGoodsResponse, error) {
 	if c.Client.IsDebug() {
-		logrus.WithField("device_code", c.DeviceCode).Debug("Getting sold goods")
+		logrus.WithField("device_code", machineCode).Debug("Getting sold goods")
 	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
@@ -106,7 +104,7 @@ func (c *OperationClientImpl) ListGoods() (*GetSoldGoodsResponse, error) {
 
 	var getSoldGoodsResponse *GetSoldGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
-		SetQueryParam("code", c.DeviceCode).
+		SetQueryParam("code", machineCode).
 		SetResult(&getSoldGoodsResponse).Get(aifinitsdk_constants.Get_SoldGoods)
 	if err != nil {
 		return nil, err
@@ -125,11 +123,11 @@ func (c *OperationClientImpl) ListGoods() (*GetSoldGoodsResponse, error) {
 	return getSoldGoodsResponse, nil
 }
 
-func (c *OperationClientImpl) UpdateSoldGoods(request *UpdateSoldGoodsRequest) (*UpdateSoldGoodsResponse, error) {
+func (c *OperationClientImpl) UpdateGoods(request *UpdateGoodsRequest, machineCode string) (*UpdateSoldGoodsResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
-			"device_code": c.DeviceCode,
+			"device_code": machineCode,
 		}).Debug("Updating sold goods")
 	}
 
@@ -140,7 +138,7 @@ func (c *OperationClientImpl) UpdateSoldGoods(request *UpdateSoldGoodsRequest) (
 
 	var updateSoldGoodsResponse *UpdateSoldGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
-		SetQueryParam("code", c.DeviceCode).
+		SetQueryParam("code", machineCode).
 		SetBody(request).SetResult(&updateSoldGoodsResponse).Post(aifinitsdk_constants.Post_UpdateSoldGoods)
 	if err != nil {
 		return nil, err
@@ -159,11 +157,11 @@ func (c *OperationClientImpl) UpdateSoldGoods(request *UpdateSoldGoodsRequest) (
 	return updateSoldGoodsResponse, nil
 }
 
-func (c *OperationClientImpl) SearchOpenDoor(request *SearchOpenDoorRequest) (*SearchOpenDoorResponse, error) {
+func (c *OperationClientImpl) GetSoldGoodsByRequestID(request *GetSoldGoodsByRequestIDRequest, machineCode string) (*SearchOpenDoorResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
-			"device_code": c.DeviceCode,
+			"device_code": machineCode,
 		}).Debug("Searching open door")
 	}
 
@@ -174,7 +172,7 @@ func (c *OperationClientImpl) SearchOpenDoor(request *SearchOpenDoorRequest) (*S
 
 	var searchOpenDoorResponse *SearchOpenDoorResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
-		SetQueryParam("code", c.DeviceCode).
+		SetQueryParam("code", machineCode).
 		SetQueryParams(map[string]string{
 			"type":      fmt.Sprintf("%d", request.Type),
 			"requestId": request.RequestID,
@@ -196,11 +194,11 @@ func (c *OperationClientImpl) SearchOpenDoor(request *SearchOpenDoorRequest) (*S
 	return searchOpenDoorResponse, nil
 }
 
-func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest) (*GetOrderVideoResponse, error) {
+func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machineCode string) (*GetOrderVideoResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
-			"device_code": c.DeviceCode,
+			"device_code": machineCode,
 		}).Debug("Getting order video")
 	}
 
@@ -211,7 +209,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest) (*Get
 
 	var getOrderVideoResponse *GetOrderVideoResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
-		SetQueryParam("code", c.DeviceCode).
+		SetQueryParam("code", machineCode).
 		SetQueryParams(map[string]string{
 			"type":      fmt.Sprintf("%d", request.Type),
 			"requestId": request.RequestID,
@@ -233,11 +231,11 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest) (*Get
 	return getOrderVideoResponse, nil
 }
 
-func (c *OperationClientImpl) ProductPriceUpdate(request *ProductPriceUpdateRequest) (*ProductPriceUpdateResponse, error) {
+func (c *OperationClientImpl) UpdateGoodsPrice(request *ProductPriceUpdateRequest, machineCode string) (*ProductPriceUpdateResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
-			"device_code": c.DeviceCode,
+			"device_code": machineCode,
 		}).Debug("Updating product price")
 	}
 
@@ -248,7 +246,7 @@ func (c *OperationClientImpl) ProductPriceUpdate(request *ProductPriceUpdateRequ
 
 	var productPriceUpdateResponse *ProductPriceUpdateResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
-		SetQueryParam("code", c.DeviceCode).
+		SetQueryParam("code", machineCode).
 		SetBody(request).SetResult(&productPriceUpdateResponse).Post(aifinitsdk_constants.Post_ProductPriceUpdate)
 	if err != nil {
 		return nil, err
@@ -267,11 +265,11 @@ func (c *OperationClientImpl) ProductPriceUpdate(request *ProductPriceUpdateRequ
 	return productPriceUpdateResponse, nil
 }
 
-func (c *OperationClientImpl) AddNewGoods(request *AddNewGoodsRequest) (*AddNewGoodsResponse, error) {
+func (c *OperationClientImpl) AddGoods(request *AddNewGoodsRequest, machineCode string) (*AddNewGoodsResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
-			"device_code": c.DeviceCode,
+			"device_code": machineCode,
 		}).Debug("Adding new goods")
 	}
 
@@ -282,7 +280,7 @@ func (c *OperationClientImpl) AddNewGoods(request *AddNewGoodsRequest) (*AddNewG
 
 	var addNewGoodsResponse *AddNewGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
-		SetQueryParam("code", c.DeviceCode).
+		SetQueryParam("code", machineCode).
 		SetBody(request.Items).SetResult(&addNewGoodsResponse).Put(aifinitsdk_constants.Put_AddNewGoods)
 	if err != nil {
 		return nil, err
@@ -301,11 +299,11 @@ func (c *OperationClientImpl) AddNewGoods(request *AddNewGoodsRequest) (*AddNewG
 	return addNewGoodsResponse, nil
 }
 
-func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteGoodsResponse, error) {
+func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCode string) (*DeleteGoodsResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
-			"device_code": c.DeviceCode,
+			"device_code": machineCode,
 		}).Debug("Deleting goods")
 	}
 
@@ -319,7 +317,7 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 		return nil, err
 	}
 
-	url := fmt.Sprintf("%s?code=%s", aifinitsdk_constants.Del_DeleteGoods, c.DeviceCode)
+	url := fmt.Sprintf("%s?code=%s", aifinitsdk_constants.Del_DeleteGoods, machineCode)
 	req, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, err
@@ -359,6 +357,6 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest) (*DeleteG
 }
 
 // ListOrder implements OperationClient.
-func (c *OperationClientImpl) ListOrder(request *ListOrderRequest) (*ListOrderResponse, error) {
+func (c *OperationClientImpl) ListOrders(request *ListOrderRequest, machineCode string) (*ListOrderResponse, error) {
 	panic("unimplemented")
 }
