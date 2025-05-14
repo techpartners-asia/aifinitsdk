@@ -40,7 +40,32 @@ func NewProductClient(client Client) ProductManageClient {
 }
 
 func (c *ProductClient) LastInfo() (*LastInfoResponse, error) {
-	panic("unimplemented")
+	if c.Client.IsDebug() {
+		logrus.Debug("Getting last info")
+	}
+
+	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
+	if err != nil {
+		return nil, err
+	}
+
+	var lastInfo *LastInfoResponse
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&lastInfo).Get(Get_ProductLastInfo)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": fmt.Sprintf("%+v", lastInfo),
+		}).Debug("Got last info successfully")
+	}
+
+	return lastInfo, nil
 }
 
 func (c *ProductClient) ProductList(page, limit int) (*ProductListResponse, error) {
@@ -277,7 +302,7 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 	}
 
 	var updateProductApplication *UpdateProductApplicationResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&updateProductApplication).Put(fmt.Sprintf(Put_UpdateProductAppication, itemCode))
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&updateProductApplication).Put(Put_UpdateProductAppication)
 	if err != nil {
 		return nil, err
 	}

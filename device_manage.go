@@ -11,12 +11,12 @@ import (
 )
 
 type VendingMachineManageClient interface {
-	List(request *ListVendingMachineRequest) (*ListVendingMachineResponse, error)
-	Detail(machineCode string) (*DetailResponse, error)
+	List(request *ListMachineRequest) (*ListMachineResponse, error)
+	Detail(machineCode string) (*DeviceDetailResponse, error)
 	DeviceInfo(machineCode string) (*DeviceInfoResult, error)
-	PeopleFlow(request *PeopleFlowRequest, machineCode string) (*PeopleFlowResponse, error)
-	Update(request *UpdateRequest, machineCode string) (*UpdateResponse, error)
-	Control(request *ControlRequest, machineCode string) (*ControlResponse, error)
+	PeopleFlow(request *DevicePeopleFlowRequest, machineCode string) (*DevicePeopleFlowResponse, error)
+	Update(request *DeviceUpdateRequest, machineCode string) (*DeviceUpdateResponse, error)
+	Control(request *DeviceControlRequest, machineCode string) (*DeviceControlResponse, error)
 
 	Activation(machineCode string)
 	Alarm(machineCode string)
@@ -40,7 +40,7 @@ func NewDeviceClient(client Client) VendingMachineManageClient {
 	}
 }
 
-func (c *vendingMachineManageClient) Update(request *UpdateRequest, machineCode string) (*UpdateResponse, error) {
+func (c *vendingMachineManageClient) Update(request *DeviceUpdateRequest, machineCode string) (*DeviceUpdateResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
@@ -58,7 +58,7 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest, machineCode 
 		return nil, err
 	}
 
-	var result UpdateResponse
+	var result DeviceUpdateResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
 		Put(Put_UpdateVendingMachineInfo)
 	if err != nil {
@@ -78,7 +78,7 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest, machineCode 
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Detail(machineCode string) (*DetailResponse, error) {
+func (c *vendingMachineManageClient) Detail(machineCode string) (*DeviceDetailResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("code", machineCode).Debug("Getting vending machine details")
 	}
@@ -88,7 +88,7 @@ func (c *vendingMachineManageClient) Detail(machineCode string) (*DetailResponse
 		return nil, err
 	}
 
-	var result DetailResponse
+	var result DeviceDetailResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
 		SetQueryParam("code", machineCode).
 		Get(Get_VendingMachineInfo)
@@ -140,7 +140,7 @@ func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfo
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest, machineCode string) (*PeopleFlowResponse, error) {
+func (c *vendingMachineManageClient) PeopleFlow(request *DevicePeopleFlowRequest, machineCode string) (*DevicePeopleFlowResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
@@ -152,7 +152,7 @@ func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest, mach
 		return nil, err
 	}
 
-	var result PeopleFlowResponse
+	var result DevicePeopleFlowResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).
 		Post(Post_VendingMachinePeopleFlow)
 	if err != nil {
@@ -171,7 +171,7 @@ func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest, mach
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) List(request *ListVendingMachineRequest) (*ListVendingMachineResponse, error) {
+func (c *vendingMachineManageClient) List(request *ListMachineRequest) (*ListMachineResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
@@ -183,7 +183,7 @@ func (c *vendingMachineManageClient) List(request *ListVendingMachineRequest) (*
 		return nil, err
 	}
 
-	var result ListVendingMachineResponse
+	var result ListMachineResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
 		SetQueryParam("page", strconv.Itoa(request.Page)).
 		SetQueryParam("limit", strconv.Itoa(request.Limit)).
@@ -206,7 +206,7 @@ func (c *vendingMachineManageClient) List(request *ListVendingMachineRequest) (*
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Control(request *ControlRequest, machineCode string) (*ControlResponse, error) {
+func (c *vendingMachineManageClient) Control(request *DeviceControlRequest, machineCode string) (*DeviceControlResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
@@ -219,7 +219,7 @@ func (c *vendingMachineManageClient) Control(request *ControlRequest, machineCod
 		return nil, err
 	}
 
-	var result ControlResponse
+	var result DeviceControlResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
 		Put(Put_VendingMachineDeviceControl)
 	if err != nil {
@@ -321,20 +321,20 @@ type PeopleFlow struct {
 	AggregateTime string `json:"aggregateTime"`
 }
 
-type ListVendingMachineRequest struct {
+type ListMachineRequest struct {
 	Page   int    `json:"page,omitempty"`
 	Limit  int    `json:"limit,omitempty"`
 	NameOf string `json:"nameOf,omitempty"`
 }
 
-type PeopleFlowRequest struct {
+type DevicePeopleFlowRequest struct {
 	Field          string   `json:"field,omitempty"`
 	StartTimeStamp int64    `json:"startTimestamp,omitempty"`
 	EndTimeStamp   int64    `json:"endTimestamp,omitempty"`
 	Codes          []string `json:"codes,omitempty"`
 }
 
-type UpdateRequest struct {
+type DeviceUpdateRequest struct {
 	Name          string `json:"name,omitempty" validate:"required"`
 	Code          string `json:"code,omitempty"`
 	ScanCode      string `json:"scanCode,omitempty"`
@@ -346,7 +346,7 @@ type UpdateRequest struct {
 	EngineOn      int    `json:"engineOn,omitempty"`
 }
 
-type ControlRequest struct {
+type DeviceControlRequest struct {
 	Volume   int `json:"volume,omitempty"`   // 0 ~ 100
 	AdVolume int `json:"adVolume,omitempty"` // 0 ~ 100
 	Temp     int `json:"temp,omitempty"`     // -30 ~ 20
@@ -358,7 +358,7 @@ type DeviceInfoResult struct {
 	Data    Device `json:"data"`
 }
 
-type ListVendingMachineResponse struct {
+type ListMachineResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
 	Data    struct {
@@ -367,20 +367,20 @@ type ListVendingMachineResponse struct {
 	}
 }
 
-type PeopleFlowResponse struct {
+type DevicePeopleFlowResponse struct {
 	Status  int          `json:"status"`
 	Message string       `json:"message"`
 	Result  []PeopleFlow `json:"result"`
 	Count   int          `json:"count"`
 }
 
-type DetailResponse struct {
-	Status  int        `json:"status"`
-	Message string     `json:"message"`
-	Data    DetailData `json:"data"`
+type DeviceDetailResponse struct {
+	Status  int              `json:"status"`
+	Message string           `json:"message"`
+	Data    DeviceDetailData `json:"data"`
 }
 
-type DetailData struct {
+type DeviceDetailData struct {
 	Code          string `json:"code"`
 	Name          string `json:"name"`
 	ScanCode      string `json:"scanCode"`
@@ -390,12 +390,12 @@ type DetailData struct {
 	UpdateTime    string `json:"updateTime"`
 }
 
-type UpdateResponse struct {
+type DeviceUpdateResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
 }
 
-type ControlResponse struct {
+type DeviceControlResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
 }

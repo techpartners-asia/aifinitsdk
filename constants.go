@@ -3,6 +3,8 @@ package aifinitsdk
 const (
 	BaseURL = "https://open.ainfinit.com"
 )
+
+// Device Manage
 const (
 	Post_DeviceActivation           = BaseURL + "/facade/open/vending_machine/deviceActivation"
 	Get_VendingMachineList          = BaseURL + "/facade/open/vending_machine/infoPage"
@@ -13,6 +15,8 @@ const (
 	Put_VendingMachineDeviceControl = BaseURL + "/facade/open/vending_machine/control"
 	Put_VendingMachineDeviceSetting = BaseURL + "/facade/open/vending_machine/setting"
 )
+
+// Product Manage
 const (
 	Get_ProductLastInfo          = BaseURL + "/facade/open/goods/latestInfo"
 	Get_ProductList              = BaseURL + "/facade/open/goods/page"
