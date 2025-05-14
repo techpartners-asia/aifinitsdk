@@ -11,25 +11,24 @@ import (
 )
 
 type VendingMachineManageClient interface {
-	List(request *ListRequest) (*ListResponse, error)
-	Detail() (*DetailResponse, error)
-	DeviceInfo() (*DeviceInfoResult, error)
-	PeopleFlow(request *PeopleFlowRequest) (*PeopleFlowResponse, error)
-	Update(request *UpdateRequest) (*UpdateResponse, error)
-	Control(request *ControlRequest) (*ControlResponse, error)
+	List(request *ListRequest, machineCode string) (*ListResponse, error)
+	Detail(machineCode string) (*DetailResponse, error)
+	DeviceInfo(machineCode string) (*DeviceInfoResult, error)
+	PeopleFlow(request *PeopleFlowRequest, machineCode string) (*PeopleFlowResponse, error)
+	Update(request *UpdateRequest, machineCode string) (*UpdateResponse, error)
+	Control(request *ControlRequest, machineCode string) (*ControlResponse, error)
 
-	Activation()
-	Alarm()
-	Setting()
+	Activation(machineCode string)
+	Alarm(machineCode string)
+	Setting(machineCode string)
 }
 
 type vendingMachineManageClient struct {
 	Client Client
 	Resty  *resty.Client
-	code   string
 }
 
-func NewDeviceClient(client Client, code string) VendingMachineManageClient {
+func NewDeviceClient(client Client) VendingMachineManageClient {
 	restyClient := resty.New()
 	if client.RestyDebug() {
 		restyClient.SetDebug(true)
@@ -38,15 +37,14 @@ func NewDeviceClient(client Client, code string) VendingMachineManageClient {
 	return &vendingMachineManageClient{
 		Client: client,
 		Resty:  restyClient,
-		code:   code,
 	}
 }
 
-func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResponse, error) {
+func (c *vendingMachineManageClient) Update(request *UpdateRequest, machineCode string) (*UpdateResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
-			"code":    c.code,
+			"code":    machineCode,
 		}).Debug("Updating vending machine")
 	}
 
@@ -61,7 +59,7 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResp
 	}
 
 	var result UpdateResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", c.code).SetBody(request).SetResult(&result).
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
 		Put(Put_UpdateVendingMachineInfo)
 	if err != nil {
 		return nil, err
@@ -80,9 +78,9 @@ func (c *vendingMachineManageClient) Update(request *UpdateRequest) (*UpdateResp
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Detail() (*DetailResponse, error) {
+func (c *vendingMachineManageClient) Detail(machineCode string) (*DetailResponse, error) {
 	if c.Client.IsDebug() {
-		logrus.WithField("code", c.code).Debug("Getting vending machine details")
+		logrus.WithField("code", machineCode).Debug("Getting vending machine details")
 	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
@@ -92,7 +90,7 @@ func (c *vendingMachineManageClient) Detail() (*DetailResponse, error) {
 
 	var result DetailResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
-		SetQueryParam("code", c.code).
+		SetQueryParam("code", machineCode).
 		Get(Get_VendingMachineInfo)
 	if err != nil {
 		return nil, err
@@ -111,9 +109,9 @@ func (c *vendingMachineManageClient) Detail() (*DetailResponse, error) {
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) DeviceInfo() (*DeviceInfoResult, error) {
+func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfoResult, error) {
 	if c.Client.IsDebug() {
-		logrus.WithField("code", c.code).Debug("Getting device info")
+		logrus.WithField("code", machineCode).Debug("Getting device info")
 	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
@@ -123,7 +121,7 @@ func (c *vendingMachineManageClient) DeviceInfo() (*DeviceInfoResult, error) {
 
 	var result DeviceInfoResult
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
-		SetQueryParam("code", c.code).
+		SetQueryParam("code", machineCode).
 		Get(Get_VendingMachineDeviceInfo)
 	if err != nil {
 		return nil, err
@@ -142,7 +140,7 @@ func (c *vendingMachineManageClient) DeviceInfo() (*DeviceInfoResult, error) {
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest) (*PeopleFlowResponse, error) {
+func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest, machineCode string) (*PeopleFlowResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
@@ -174,7 +172,7 @@ func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest) (*Pe
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) List(request *ListRequest) (*ListResponse, error) {
+func (c *vendingMachineManageClient) List(request *ListRequest, machineCode string) (*ListResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
@@ -209,11 +207,11 @@ func (c *vendingMachineManageClient) List(request *ListRequest) (*ListResponse, 
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Control(request *ControlRequest) (*ControlResponse, error) {
+func (c *vendingMachineManageClient) Control(request *ControlRequest, machineCode string) (*ControlResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
-			"code":    c.code,
+			"code":    machineCode,
 		}).Debug("Controlling vending machine")
 	}
 
@@ -223,7 +221,7 @@ func (c *vendingMachineManageClient) Control(request *ControlRequest) (*ControlR
 	}
 
 	var result ControlResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", c.code).SetBody(request).SetResult(&result).
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
 		Put(Put_VendingMachineDeviceControl)
 	if err != nil {
 		return nil, err
@@ -242,9 +240,9 @@ func (c *vendingMachineManageClient) Control(request *ControlRequest) (*ControlR
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Activation() {}
-func (c *vendingMachineManageClient) Alarm()      {}
-func (c *vendingMachineManageClient) Setting()    {}
+func (c *vendingMachineManageClient) Activation(machineCode string) {}
+func (c *vendingMachineManageClient) Alarm(machineCode string)      {}
+func (c *vendingMachineManageClient) Setting(machineCode string)    {}
 
 // Device represents a vending machine device with its status and capabilities
 type Device struct {
