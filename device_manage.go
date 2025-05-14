@@ -11,7 +11,7 @@ import (
 )
 
 type VendingMachineManageClient interface {
-	List(request *ListRequest, machineCode string) (*ListResponse, error)
+	List(request *ListVendingMachineRequest) (*ListVendingMachineResponse, error)
 	Detail(machineCode string) (*DetailResponse, error)
 	DeviceInfo(machineCode string) (*DeviceInfoResult, error)
 	PeopleFlow(request *PeopleFlowRequest, machineCode string) (*PeopleFlowResponse, error)
@@ -158,7 +158,6 @@ func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest, mach
 	if err != nil {
 		return nil, err
 	}
-
 	if resp.IsError() {
 		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
 	}
@@ -172,7 +171,7 @@ func (c *vendingMachineManageClient) PeopleFlow(request *PeopleFlowRequest, mach
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) List(request *ListRequest, machineCode string) (*ListResponse, error) {
+func (c *vendingMachineManageClient) List(request *ListVendingMachineRequest) (*ListVendingMachineResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request": request,
@@ -184,7 +183,7 @@ func (c *vendingMachineManageClient) List(request *ListRequest, machineCode stri
 		return nil, err
 	}
 
-	var result ListResponse
+	var result ListVendingMachineResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
 		SetQueryParam("page", strconv.Itoa(request.Page)).
 		SetQueryParam("limit", strconv.Itoa(request.Limit)).
@@ -322,7 +321,7 @@ type PeopleFlow struct {
 	AggregateTime string `json:"aggregateTime"`
 }
 
-type ListRequest struct {
+type ListVendingMachineRequest struct {
 	Page   int    `json:"page,omitempty"`
 	Limit  int    `json:"limit,omitempty"`
 	NameOf string `json:"nameOf,omitempty"`
@@ -359,7 +358,7 @@ type DeviceInfoResult struct {
 	Data    Device `json:"data"`
 }
 
-type ListResponse struct {
+type ListVendingMachineResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
 	Data    struct {
