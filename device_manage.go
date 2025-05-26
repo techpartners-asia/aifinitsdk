@@ -10,6 +10,20 @@ import (
 	"resty.dev/v3"
 )
 
+// AinfinitError represents an error with the ainfinit tag
+type AinfinitError struct {
+	Err error
+}
+
+func (e *AinfinitError) Error() string {
+	return fmt.Sprintf("[ainfinit] %v", e.Err)
+}
+
+// NewAinfinitError creates a new AinfinitError
+func NewAinfinitError(err error) error {
+	return &AinfinitError{Err: err}
+}
+
 type VendingMachineManageClient interface {
 	List(request *ListMachineRequest) (*ListMachineResponse, error)
 	Detail(machineCode string) (*DeviceDetailResponse, error)
@@ -50,23 +64,23 @@ func (c *vendingMachineManageClient) Update(request *DeviceUpdateRequest, machin
 
 	validate := validator.New()
 	if err := validate.Struct(request); err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result DeviceUpdateResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
 		Put(Put_UpdateVendingMachineInfo)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -85,7 +99,7 @@ func (c *vendingMachineManageClient) Detail(machineCode string) (*DeviceDetailRe
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result DeviceDetailResponse
@@ -93,11 +107,11 @@ func (c *vendingMachineManageClient) Detail(machineCode string) (*DeviceDetailRe
 		SetQueryParam("code", machineCode).
 		Get(Get_VendingMachineInfo)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -116,7 +130,7 @@ func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfo
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result DeviceInfoResult
@@ -124,11 +138,11 @@ func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfo
 		SetQueryParam("code", machineCode).
 		Get(Get_VendingMachineDeviceInfo)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -149,17 +163,17 @@ func (c *vendingMachineManageClient) PeopleFlow(request *DevicePeopleFlowRequest
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result DevicePeopleFlowResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).
 		Post(Post_VendingMachinePeopleFlow)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -180,7 +194,7 @@ func (c *vendingMachineManageClient) List(request *ListMachineRequest) (*ListMac
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result ListMachineResponse
@@ -190,11 +204,11 @@ func (c *vendingMachineManageClient) List(request *ListMachineRequest) (*ListMac
 		SetQueryParam("nameOf", request.NameOf).
 		Get(Get_VendingMachineList)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -216,18 +230,18 @@ func (c *vendingMachineManageClient) Control(request *DeviceControlRequest, mach
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result DeviceControlResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
 		Put(Put_VendingMachineDeviceControl)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {

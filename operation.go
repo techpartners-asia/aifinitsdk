@@ -70,13 +70,13 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	validate := validator.New()
 	err = validate.Struct(request)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var openDoorResponse *OpenDoorResponse
@@ -103,7 +103,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 	resp, err := req.Put(Put_OpenDoor)
 
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
@@ -126,7 +126,7 @@ func (c *OperationClientImpl) ListGoods(machineCode string) (*GetSoldGoodsRespon
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var getSoldGoodsResponse *GetSoldGoodsResponse
@@ -134,7 +134,7 @@ func (c *OperationClientImpl) ListGoods(machineCode string) (*GetSoldGoodsRespon
 		SetQueryParam("code", machineCode).
 		SetResult(&getSoldGoodsResponse).Get(Get_SoldGoods)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
@@ -160,7 +160,7 @@ func (c *OperationClientImpl) UpdateGoods(request *UpdateGoodsRequest, machineCo
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var updateSoldGoodsResponse *UpdateSoldGoodsResponse
@@ -168,7 +168,7 @@ func (c *OperationClientImpl) UpdateGoods(request *UpdateGoodsRequest, machineCo
 		SetQueryParam("code", machineCode).
 		SetBody(request).SetResult(&updateSoldGoodsResponse).Post(Post_UpdateSoldGoods)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
@@ -194,7 +194,7 @@ func (c *OperationClientImpl) GetSoldGoodsByRequestID(request *GetSoldGoodsByReq
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var searchOpenDoorResponse *SearchOpenDoorResponse
@@ -205,7 +205,7 @@ func (c *OperationClientImpl) GetSoldGoodsByRequestID(request *GetSoldGoodsByReq
 			"requestId": request.RequestID,
 		}).SetResult(&searchOpenDoorResponse).Get(Get_SearchOpenDoor)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
@@ -231,7 +231,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machi
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var getOrderVideoResponse *GetOrderVideoResponse
@@ -242,7 +242,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machi
 			"requestId": request.RequestID,
 		}).SetResult(&getOrderVideoResponse).Get(Get_OrderVideo)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
@@ -268,7 +268,7 @@ func (c *OperationClientImpl) UpdateGoodsPrice(request *UpdateGoodsPriceRequest,
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var productPriceUpdateResponse *ProductPriceUpdateResponse
@@ -276,7 +276,7 @@ func (c *OperationClientImpl) UpdateGoodsPrice(request *UpdateGoodsPriceRequest,
 		SetQueryParam("code", machineCode).
 		SetBody(request).SetResult(&productPriceUpdateResponse).Post(Post_ProductPriceUpdate)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
@@ -302,7 +302,7 @@ func (c *OperationClientImpl) AddGoods(request *AddNewGoodsRequest, machineCode 
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var addNewGoodsResponse *AddNewGoodsResponse
@@ -310,7 +310,7 @@ func (c *OperationClientImpl) AddGoods(request *AddNewGoodsRequest, machineCode 
 		SetQueryParam("code", machineCode).
 		SetBody(request.Items).SetResult(&addNewGoodsResponse).Put(Put_AddNewGoods)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
@@ -336,18 +336,18 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	jsonBody, err := json.Marshal(request)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	url := fmt.Sprintf("%s?code=%s", Del_DeleteGoods, machineCode)
 	req, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer(jsonBody))
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	req.Header.Set("Authorization", signature)
@@ -356,13 +356,13 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.StatusCode >= 400 {
@@ -371,7 +371,7 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 
 	var deleteGoodsResponse *DeleteGoodsResponse
 	if err := json.Unmarshal(body, &deleteGoodsResponse); err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if c.Client.IsDebug() {

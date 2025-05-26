@@ -54,7 +54,7 @@ func (c *advertisementManageClientImpl) MaterialApply(request *SourceMaterialApp
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result SourceMaterialApplyResponse
@@ -63,11 +63,11 @@ func (c *advertisementManageClientImpl) MaterialApply(request *SourceMaterialApp
 		SetResult(&result).
 		Post(Post_AdvertisementMaterialApply)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -82,17 +82,17 @@ func (c *advertisementManageClientImpl) MaterialPage(request *SourceMaterialPage
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result SourceMaterialPageResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).Get(Get_AdvertisementMaterialPage)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -107,17 +107,17 @@ func (c *advertisementManageClientImpl) MaterialDetail(materialId string) (*Sour
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result SourceMaterialDetailResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("id", materialId).SetResult(&result).Get(Get_AdvertisementMaterialDetail)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -132,17 +132,17 @@ func (c *advertisementManageClientImpl) MaterialDelete(materialId string) (*Sour
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result SourceMaterialDeleteResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("id", materialId).SetResult(&result).Delete(Del_AdvertisementMaterialDelete)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -157,17 +157,17 @@ func (c *advertisementManageClientImpl) AdAddition(request *AdAdditionRequest) (
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result AdAdditionResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).Post(Post_AdvertisementAdAddition)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -182,7 +182,7 @@ func (c *advertisementManageClientImpl) AdPage(request *AdPageRequest) (*AdPageR
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result AdPageResponse
@@ -191,11 +191,11 @@ func (c *advertisementManageClientImpl) AdPage(request *AdPageRequest) (*AdPageR
 		"pageSize": strconv.Itoa(request.PageSize),
 	}).SetResult(&result).Get(Get_AdvertisementAdPage)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -210,17 +210,17 @@ func (c *advertisementManageClientImpl) AdDetailByAdId(adId int) (*AdDetailRespo
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result AdDetailResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("id", strconv.Itoa(adId)).SetResult(&result).Get(Get_AdvertisementAdDetail)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -235,17 +235,17 @@ func (c *advertisementManageClientImpl) AdDetailByVmCode(vmCode string) (*AdDeta
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result AdDetailResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", vmCode).SetResult(&result).Get(Get_AdvertisementAdDetailByVmCode)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -260,22 +260,22 @@ func (c *advertisementManageClientImpl) AdUpdate(request *AdUpdateRequest) (*AdU
 
 	validate := validator.New()
 	if err := validate.Struct(request); err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result AdUpdateResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).Put(Put_AdvertisementAdUpdate)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -290,17 +290,17 @@ func (c *advertisementManageClientImpl) AdDelete(adId int) (*AdDeleteResponse, e
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result AdDeleteResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("id", strconv.Itoa(adId)).SetResult(&result).Delete(Del_AdvertisementAdDelete)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -315,17 +315,17 @@ func (c *advertisementManageClientImpl) AdAssociatedToVm(adId int, request *AdAs
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result AdAssociatedToVmResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetPathParam("id", strconv.Itoa(adId)).SetResult(&result).Put(Put_AdvertisementAssociatedToVm)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -341,18 +341,18 @@ func (c *advertisementManageClientImpl) ControlAdStatus(promotionId int, status 
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result AdControlStatusResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("promotionId", strconv.Itoa(promotionId)).
 		SetPathParam("status", strconv.Itoa(int(status))).SetResult(&result).Put(Get_AdvertisementAdAssociatedToVm)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil
@@ -367,17 +367,17 @@ func (c *advertisementManageClientImpl) GetVmPromotion(vmCode string) (*GetVmPro
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var result GetVmPromotionResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", vmCode).SetResult(&result).Get(Get_AdvertisementVmPromotion)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, errors.New(resp.String())
+		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
 	return &result, nil

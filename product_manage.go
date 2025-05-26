@@ -46,17 +46,17 @@ func (c *ProductClient) LastInfo() (*LastInfoResponse, error) {
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var lastInfo *LastInfoResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&lastInfo).Get(Get_ProductLastInfo)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -78,17 +78,17 @@ func (c *ProductClient) ProductList(page, limit int) (*ProductListResponse, erro
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var products *ProductListResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&products).Get(Get_ProductList)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -107,17 +107,17 @@ func (c *ProductClient) ProductDetail(itemCode string) (*ProductDetailResponse, 
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var product *ProductDetailResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&product).Get(fmt.Sprintf(Get_ProductDetail, itemCode))
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -136,17 +136,17 @@ func (c *ProductClient) MutualExclusion(request *MutualExclusionRequest) (*Mutua
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var mutualExclusion *MutualExclusionResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&mutualExclusion).Post(Post_ProductMutualExclusion)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -165,10 +165,10 @@ func (c *ProductClient) MutualExclusion(request *MutualExclusionRequest) (*Mutua
 // weightFile - Weight of pictures
 func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequest) (*NewProductApplicationResponse, error) {
 	if request == nil {
-		return nil, fmt.Errorf("request cannot be nil")
+		return nil, NewAinfinitError(fmt.Errorf("request cannot be nil"))
 	}
 	if request.Product == nil {
-		return nil, fmt.Errorf("product cannot be nil")
+		return nil, NewAinfinitError(fmt.Errorf("product cannot be nil"))
 	}
 
 	if c.Client.IsDebug() {
@@ -177,7 +177,7 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var newProductApplication *NewProductApplicationResponse
@@ -186,7 +186,7 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 		SetMultipartField("item", "", "application/json", strings.NewReader(request.Product.String()))
 
 	if len(request.Product.ImgFiles) != len(request.Product.ImgFileNames) {
-		return nil, fmt.Errorf("image files and names must be the same length")
+		return nil, NewAinfinitError(fmt.Errorf("image files and names must be the same length"))
 	}
 
 	for i, img := range request.Product.ImgFiles {
@@ -196,7 +196,7 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 	}
 
 	if len(request.Product.PhysicalImgFiles) != len(request.Product.PhysicalImgFileNames) {
-		return nil, fmt.Errorf("actual image files and names must be the same length")
+		return nil, NewAinfinitError(fmt.Errorf("actual image files and names must be the same length"))
 	}
 
 	for i, img := range request.Product.PhysicalImgFiles {
@@ -211,11 +211,11 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 
 	resp, err := req.SetResult(&newProductApplication).Post(Post_NewProductApplication)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -234,7 +234,7 @@ func (c *ProductClient) ListProductApplication(params *ListProductApplicationPar
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var listProductApplication *ListProductApplicationResponse
@@ -246,11 +246,11 @@ func (c *ProductClient) ListProductApplication(params *ListProductApplicationPar
 		"qrCodes":     params.QrCodes,
 	}).SetResult(&listProductApplication).Get(Get_ProductApplicationList)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -269,17 +269,17 @@ func (c *ProductClient) DetailProductApplication(itemCode string) (*DetailProduc
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var detailProductApplication *DetailProductApplicationResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&detailProductApplication).Get(fmt.Sprintf(Get_ProductApplicationDetail, itemCode))
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -298,17 +298,17 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	var updateProductApplication *UpdateProductApplicationResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&updateProductApplication).Put(Put_UpdateProductAppication)
 	if err != nil {
-		return nil, err
+		return nil, NewAinfinitError(err)
 	}
 
 	if resp.IsError() {
-		return nil, fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String())
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -476,13 +476,13 @@ func (e DeleteGoodsError) Error() string {
 func ConvertDeleteGoodsError(code int, message string) error {
 	switch code {
 	case ErrDeleteGoodsSelfDealerNotExist:
-		return fmt.Errorf("DeleteGoodsSelfDealerNotExist: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("DeleteGoodsSelfDealerNotExist: %d, message: %s", code, message))
 	case ErrDeleteGoodsUnknownGoods:
-		return fmt.Errorf("DeleteGoodsUnknownGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("DeleteGoodsUnknownGoods: %d, message: %s", code, message))
 	case ErrDeleteGoodsNoOperatingPermissions:
-		return fmt.Errorf("DeleteGoodsNoOperatingPermissions: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("DeleteGoodsNoOperatingPermissions: %d, message: %s", code, message))
 	default:
-		return fmt.Errorf("DeleteGoodsError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("DeleteGoodsError: %d, message: %s", code, message))
 	}
 }
 
@@ -505,21 +505,21 @@ func (e AddNewGoodsError) Error() string {
 func ConvertAddNewGoodsError(code int, message string) error {
 	switch code {
 	case ErrAddNewGoodsTooManyGoods:
-		return fmt.Errorf("AddNewGoodsTooManyGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("AddNewGoodsTooManyGoods: %d, message: %s", code, message))
 	case ErrAddNewGoodsDuplicateGoods:
-		return fmt.Errorf("AddNewGoodsDuplicateGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("AddNewGoodsDuplicateGoods: %d, message: %s", code, message))
 	case ErrAddNewGoodsMutuallyExclusiveGoods:
-		return fmt.Errorf("AddNewGoodsMutuallyExclusiveGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("AddNewGoodsMutuallyExclusiveGoods: %d, message: %s", code, message))
 	case ErrAddNewGoodsDownloadedGoods:
-		return fmt.Errorf("AddNewGoodsDownloadedGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("AddNewGoodsDownloadedGoods: %d, message: %s", code, message))
 	case ErrAddNewGoodsSelfDealerNotExist:
-		return fmt.Errorf("AddNewGoodsSelfDealerNotExist: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("AddNewGoodsSelfDealerNotExist: %d, message: %s", code, message))
 	case ErrAddNewGoodsUnknownGoods:
-		return fmt.Errorf("AddNewGoodsUnknownGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("AddNewGoodsUnknownGoods: %d, message: %s", code, message))
 	case ErrAddNewGoodsNoOperatingPermissions:
-		return fmt.Errorf("AddNewGoodsNoOperatingPermissions: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("AddNewGoodsNoOperatingPermissions: %d, message: %s", code, message))
 	default:
-		return fmt.Errorf("AddNewGoodsError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("AddNewGoodsError: %d, message: %s", code, message))
 	}
 }
 
@@ -541,19 +541,19 @@ func (e ProductPriceUpdateError) Error() string {
 func ConvertProductPriceUpdateError(code int, message string) error {
 	switch code {
 	case ErrProductPriceUpdateVendingMachineDoesNotExistTargetGoods:
-		return fmt.Errorf("ProductPriceUpdateVendingMachineDoesNotExistTargetGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("ProductPriceUpdateVendingMachineDoesNotExistTargetGoods: %d, message: %s", code, message))
 	case ErrProductPriceUpdateThereAreDuplicateProducts:
-		return fmt.Errorf("ProductPriceUpdateThereAreDuplicateProducts: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("ProductPriceUpdateThereAreDuplicateProducts: %d, message: %s", code, message))
 	case ErrProductPriceUpdateThereAreDownloadedGoods:
-		return fmt.Errorf("ProductPriceUpdateThereAreDownloadedGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("ProductPriceUpdateThereAreDownloadedGoods: %d, message: %s", code, message))
 	case ErrProductPriceUpdateTheSelfDealerDoesNotExist:
-		return fmt.Errorf("ProductPriceUpdateTheSelfDealerDoesNotExist: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("ProductPriceUpdateTheSelfDealerDoesNotExist: %d, message: %s", code, message))
 	case ErrProductPriceUpdateThereAreUnknownProducts:
-		return fmt.Errorf("ProductPriceUpdateThereAreUnknownProducts: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("ProductPriceUpdateThereAreUnknownProducts: %d, message: %s", code, message))
 	case ErrProductPriceUpdateNoOperatingPermissions:
-		return fmt.Errorf("ProductPriceUpdateNoOperatingPermissions: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("ProductPriceUpdateNoOperatingPermissions: %d, message: %s", code, message))
 	default:
-		return fmt.Errorf("ProductPriceUpdateError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("ProductPriceUpdateError: %d, message: %s", code, message))
 	}
 }
 
@@ -572,13 +572,13 @@ func (e GetOrderVideoError) Error() string {
 func ConvertGetOrderVideoError(code int, message string) error {
 	switch code {
 	case ErrGetOrderVideoSuccess:
-		return fmt.Errorf("GetOrderVideoSuccess: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("GetOrderVideoSuccess: %d, message: %s", code, message))
 	case ErrGetOrderVideoNoOrderOrReplenishmentRecordsFound:
-		return fmt.Errorf("GetOrderVideoNoOrderOrReplenishmentRecordsFound: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("GetOrderVideoNoOrderOrReplenishmentRecordsFound: %d, message: %s", code, message))
 	case ErrGetOrderVideoTheOpeningRequestDoesNotExist:
-		return fmt.Errorf("GetOrderVideoTheOpeningRequestDoesNotExist: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("GetOrderVideoTheOpeningRequestDoesNotExist: %d, message: %s", code, message))
 	default:
-		return fmt.Errorf("GetOrderVideoError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("GetOrderVideoError: %d, message: %s", code, message))
 	}
 }
 
@@ -621,61 +621,61 @@ func (e SearchOpenDoorError) Error() string {
 func ConvertSearchOpenDoorError(code int, message string) error {
 	switch code {
 	case ErrSearchOpenDoorSuccess:
-		return fmt.Errorf("SearchOpenDoorSuccess: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorSuccess: %d, message: %s", code, message))
 	case ErrSearchOpenDoorClosingSuccess:
-		return fmt.Errorf("SearchOpenDoorClosingSuccess: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorClosingSuccess: %d, message: %s", code, message))
 	case ErrSearchOpenDoorLastShoppingNotOver:
-		return fmt.Errorf("SearchOpenDoorLastShoppingNotOver: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorLastShoppingNotOver: %d, message: %s", code, message))
 	case ErrSearchOpenDoorLastReplenishmentNotOver:
-		return fmt.Errorf("SearchOpenDoorLastReplenishmentNotOver: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorLastReplenishmentNotOver: %d, message: %s", code, message))
 	case ErrSearchOpenDoorEquipmentPoweredOff:
-		return fmt.Errorf("SearchOpenDoorEquipmentPoweredOff: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorEquipmentPoweredOff: %d, message: %s", code, message))
 	case ErrSearchOpenDoorEquipmentInOperationMode:
-		return fmt.Errorf("SearchOpenDoorEquipmentInOperationMode: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorEquipmentInOperationMode: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDoorOpenedFailed:
-		return fmt.Errorf("SearchOpenDoorDoorOpenedFailed: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDoorOpenedFailed: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDeviceBackgroundProcess:
-		return fmt.Errorf("SearchOpenDoorDeviceBackgroundProcess: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDeviceBackgroundProcess: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDeviceReceivedMessageTimeout:
-		return fmt.Errorf("SearchOpenDoorDeviceReceivedMessageTimeout: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDeviceReceivedMessageTimeout: %d, message: %s", code, message))
 	case ErrSearchOpenDoorUnknownError:
-		return fmt.Errorf("SearchOpenDoorUnknownError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorUnknownError: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDebuggingInformationIncorrect:
-		return fmt.Errorf("SearchOpenDoorDebuggingInformationIncorrect: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDebuggingInformationIncorrect: %d, message: %s", code, message))
 	case ErrSearchOpenDoorVerificationOfSaleOfPlanningProductsFailed:
-		return fmt.Errorf("SearchOpenDoorVerificationOfSaleOfPlanningProductsFailed: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorVerificationOfSaleOfPlanningProductsFailed: %d, message: %s", code, message))
 	case ErrSearchOpenDoorFailedDoorOpeningEquipmentSerialFailure:
-		return fmt.Errorf("SearchOpenDoorFailedDoorOpeningEquipmentSerialFailure: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorFailedDoorOpeningEquipmentSerialFailure: %d, message: %s", code, message))
 	case ErrSearchOpenDoorEquipmentHeavyFaults:
-		return fmt.Errorf("SearchOpenDoorEquipmentHeavyFaults: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorEquipmentHeavyFaults: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDeviceCameraAllDropped:
-		return fmt.Errorf("SearchOpenDoorDeviceCameraAllDropped: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDeviceCameraAllDropped: %d, message: %s", code, message))
 	case ErrSearchOpenDoorFailedDoorOpeningLocalRecognitionAlgorithmAbnormal:
-		return fmt.Errorf("SearchOpenDoorFailedDoorOpeningLocalRecognitionAlgorithmAbnormal: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorFailedDoorOpeningLocalRecognitionAlgorithmAbnormal: %d, message: %s", code, message))
 	case ErrSearchOpenDoorFailedToOpenTheDoorTheLockWasUnusual:
-		return fmt.Errorf("SearchOpenDoorFailedToOpenTheDoorTheLockWasUnusual: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorFailedToOpenTheDoorTheLockWasUnusual: %d, message: %s", code, message))
 	case ErrSearchOpenDoorEquipmentPowerSupplyStatusError:
-		return fmt.Errorf("SearchOpenDoorEquipmentPowerSupplyStatusError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorEquipmentPowerSupplyStatusError: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDoorLockAbnormalTheDoorIsOpen:
-		return fmt.Errorf("SearchOpenDoorDoorLockAbnormalTheDoorIsOpen: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDoorLockAbnormalTheDoorIsOpen: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDoorLockAbnormalTheDoorIsClosed:
-		return fmt.Errorf("SearchOpenDoorDoorLockAbnormalTheDoorIsClosed: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDoorLockAbnormalTheDoorIsClosed: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDoorLockAbnormalTheDoorIsClosed2:
-		return fmt.Errorf("SearchOpenDoorDoorLockAbnormalTheDoorIsClosed2: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDoorLockAbnormalTheDoorIsClosed2: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDoorLockAbnormalTheDoorIsClosed3:
-		return fmt.Errorf("SearchOpenDoorDoorLockAbnormalTheDoorIsClosed3: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDoorLockAbnormalTheDoorIsClosed3: %d, message: %s", code, message))
 	case ErrSearchOpenDoorEquipmentHasNotReportedTheResults:
-		return fmt.Errorf("SearchOpenDoorEquipmentHasNotReportedTheResults: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorEquipmentHasNotReportedTheResults: %d, message: %s", code, message))
 	case ErrSearchOpenDoorDoorRequestIdDoesNotExist:
-		return fmt.Errorf("SearchOpenDoorDoorRequestIdDoesNotExist: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorDoorRequestIdDoesNotExist: %d, message: %s", code, message))
 	case ErrSearchOpenDoorTypeParameterTypeError:
-		return fmt.Errorf("SearchOpenDoorTypeParameterTypeError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorTypeParameterTypeError: %d, message: %s", code, message))
 	case ErrSearchOpenDoorTooManyOrdersInTheShop:
-		return fmt.Errorf("SearchOpenDoorTooManyOrdersInTheShop: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorTooManyOrdersInTheShop: %d, message: %s", code, message))
 	case ErrSearchOpenDoorNoSearchPermissions:
-		return fmt.Errorf("SearchOpenDoorNoSearchPermissions: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorNoSearchPermissions: %d, message: %s", code, message))
 	default:
-		return fmt.Errorf("SearchOpenDoorError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("SearchOpenDoorError: %d, message: %s", code, message))
 	}
 }
 
@@ -698,21 +698,21 @@ func (e UpdateSoldGoodsError) Error() string {
 func ConvertUpdateSoldGoodsError(code int, message string) error {
 	switch code {
 	case ErrUpdateSoldGoodsTooManyGoods:
-		return fmt.Errorf("UpdateSoldGoodsTooManyGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("UpdateSoldGoodsTooManyGoods: %d, message: %s", code, message))
 	case ErrUpdateSoldGoodsDuplicateGoods:
-		return fmt.Errorf("UpdateSoldGoodsDuplicateGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("UpdateSoldGoodsDuplicateGoods: %d, message: %s", code, message))
 	case ErrUpdateSoldGoodsMutuallyExclusiveGoods:
-		return fmt.Errorf("UpdateSoldGoodsMutuallyExclusiveGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("UpdateSoldGoodsMutuallyExclusiveGoods: %d, message: %s", code, message))
 	case ErrUpdateSoldGoodsDownloadedGoods:
-		return fmt.Errorf("UpdateSoldGoodsDownloadedGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("UpdateSoldGoodsDownloadedGoods: %d, message: %s", code, message))
 	case ErrUpdateSoldGoodsSelfDealerNotExist:
-		return fmt.Errorf("UpdateSoldGoodsSelfDealerNotExist: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("UpdateSoldGoodsSelfDealerNotExist: %d, message: %s", code, message))
 	case ErrUpdateSoldGoodsUnknownGoods:
-		return fmt.Errorf("UpdateSoldGoodsUnknownGoods: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("UpdateSoldGoodsUnknownGoods: %d, message: %s", code, message))
 	case ErrUpdateSoldGoodsNoOperatingPermissions:
-		return fmt.Errorf("UpdateSoldGoodsNoOperatingPermissions: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("UpdateSoldGoodsNoOperatingPermissions: %d, message: %s", code, message))
 	default:
-		return fmt.Errorf("UpdateSoldGoodsError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("UpdateSoldGoodsError: %d, message: %s", code, message))
 	}
 }
 
@@ -735,11 +735,11 @@ func (e GetSoldGoodsError) Error() string {
 func ConvertGetSoldGoodsError(code int, message string) error {
 	switch code {
 	case ErrGetSoldGoodsSelfDealerNotExist:
-		return fmt.Errorf("GetSoldGoodsSelfDealerNotExist: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("GetSoldGoodsSelfDealerNotExist: %d, message: %s", code, message))
 	case ErrGetSoldGoodsSelfDealerNotBelongToMerchant:
-		return fmt.Errorf("GetSoldGoodsSelfDealerNotBelongToMerchant: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("GetSoldGoodsSelfDealerNotBelongToMerchant: %d, message: %s", code, message))
 	default:
-		return fmt.Errorf("GetSoldGoodsError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("GetSoldGoodsError: %d, message: %s", code, message))
 	}
 }
 
@@ -763,22 +763,22 @@ func (e OpenDoorError) Error() string {
 func ConvertOpenDoorError(code int, message string) error {
 	switch code {
 	case ErrOpenDoorSuccess:
-		return fmt.Errorf("OpenDoorSuccess: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorSuccess: %d, message: %s", code, message))
 	case ErrOpenDoorFailed:
-		return fmt.Errorf("OpenDoorFailed: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorFailed: %d, message: %s", code, message))
 	case ErrOpenDoorTimeout:
-		return fmt.Errorf("OpenDoorTimeout: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorTimeout: %d, message: %s", code, message))
 	case ErrOpenDoorUnusualMachinePackage:
-		return fmt.Errorf("OpenDoorUnusualMachinePackage: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorUnusualMachinePackage: %d, message: %s", code, message))
 	case ErrOpenDoorOfflineEquipment:
-		return fmt.Errorf("OpenDoorOfflineEquipment: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorOfflineEquipment: %d, message: %s", code, message))
 	case ErrOpenDoorSelfDealerNotInOperation:
-		return fmt.Errorf("OpenDoorSelfDealerNotInOperation: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorSelfDealerNotInOperation: %d, message: %s", code, message))
 	case ErrOpenDoorTooManyOrdersNotCompleted:
-		return fmt.Errorf("OpenDoorTooManyOrdersNotCompleted: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorTooManyOrdersNotCompleted: %d, message: %s", code, message))
 	case ErrOpenDoorNonBusinessSelfSellerMachine:
-		return fmt.Errorf("OpenDoorNonBusinessSelfSellerMachine: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorNonBusinessSelfSellerMachine: %d, message: %s", code, message))
 	default:
-		return fmt.Errorf("OpenDoorError: %d, message: %s", code, message)
+		return NewAinfinitError(fmt.Errorf("OpenDoorError: %d, message: %s", code, message))
 	}
 }
