@@ -83,6 +83,10 @@ func (c *vendingMachineManageClient) Update(request *DeviceUpdateRequest, machin
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if result.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", result),
@@ -112,6 +116,10 @@ func (c *vendingMachineManageClient) Detail(machineCode string) (*DeviceDetailRe
 
 	if resp.IsError() {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
+	}
+
+	if result.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
 	if c.Client.IsDebug() {
@@ -145,6 +153,10 @@ func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfo
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if result.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", result),
@@ -174,6 +186,10 @@ func (c *vendingMachineManageClient) PeopleFlow(request *DevicePeopleFlowRequest
 	}
 	if resp.IsError() {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
+	}
+
+	if result.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
 	if c.Client.IsDebug() {
@@ -211,6 +227,10 @@ func (c *vendingMachineManageClient) List(request *ListMachineRequest) (*ListMac
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if result.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", result),
@@ -242,6 +262,10 @@ func (c *vendingMachineManageClient) Control(request *DeviceControlRequest, mach
 
 	if resp.IsError() {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
+	}
+
+	if result.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
 	if c.Client.IsDebug() {

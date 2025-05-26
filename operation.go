@@ -110,6 +110,10 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 		return nil, ConvertOpenDoorError(resp.StatusCode(), resp.String())
 	}
 
+	if openDoorResponse.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", openDoorResponse.Status, openDoorResponse.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", openDoorResponse),
@@ -139,6 +143,10 @@ func (c *OperationClientImpl) ListGoods(machineCode string) (*GetSoldGoodsRespon
 
 	if resp.IsError() {
 		return nil, ConvertGetSoldGoodsError(resp.StatusCode(), resp.String())
+	}
+
+	if getSoldGoodsResponse.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", getSoldGoodsResponse.Status, getSoldGoodsResponse.Message))
 	}
 
 	if c.Client.IsDebug() {
@@ -173,6 +181,10 @@ func (c *OperationClientImpl) UpdateGoods(request *UpdateGoodsRequest, machineCo
 
 	if resp.IsError() {
 		return nil, ConvertUpdateSoldGoodsError(resp.StatusCode(), resp.String())
+	}
+
+	if updateSoldGoodsResponse.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", updateSoldGoodsResponse.Status, updateSoldGoodsResponse.Message))
 	}
 
 	if c.Client.IsDebug() {
@@ -212,6 +224,10 @@ func (c *OperationClientImpl) GetSoldGoodsByRequestID(request *GetSoldGoodsByReq
 		return nil, ConvertSearchOpenDoorError(resp.StatusCode(), resp.String())
 	}
 
+	if searchOpenDoorResponse.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", searchOpenDoorResponse.Status, searchOpenDoorResponse.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", searchOpenDoorResponse),
@@ -249,6 +265,10 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machi
 		return nil, ConvertGetOrderVideoError(resp.StatusCode(), resp.String())
 	}
 
+	if getOrderVideoResponse.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", getOrderVideoResponse.Status, getOrderVideoResponse.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", getOrderVideoResponse),
@@ -283,6 +303,10 @@ func (c *OperationClientImpl) UpdateGoodsPrice(request *UpdateGoodsPriceRequest,
 		return nil, ConvertProductPriceUpdateError(resp.StatusCode(), resp.String())
 	}
 
+	if productPriceUpdateResponse.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", productPriceUpdateResponse.Status, productPriceUpdateResponse.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", productPriceUpdateResponse),
@@ -315,6 +339,10 @@ func (c *OperationClientImpl) AddGoods(request *AddNewGoodsRequest, machineCode 
 
 	if resp.IsError() {
 		return nil, ConvertAddNewGoodsError(resp.StatusCode(), resp.String())
+	}
+
+	if addNewGoodsResponse.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", addNewGoodsResponse.Status, addNewGoodsResponse.Message))
 	}
 
 	if c.Client.IsDebug() {
@@ -372,6 +400,10 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 	var deleteGoodsResponse *DeleteGoodsResponse
 	if err := json.Unmarshal(body, &deleteGoodsResponse); err != nil {
 		return nil, NewAinfinitError(err)
+	}
+
+	if deleteGoodsResponse.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", deleteGoodsResponse.Status, deleteGoodsResponse.Message))
 	}
 
 	if c.Client.IsDebug() {

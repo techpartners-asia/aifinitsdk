@@ -59,6 +59,10 @@ func (c *ProductClient) LastInfo() (*LastInfoResponse, error) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if lastInfo.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", lastInfo.Status, lastInfo.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", lastInfo),
@@ -91,6 +95,10 @@ func (c *ProductClient) ProductList(page, limit int) (*ProductListResponse, erro
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if products.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", products.Status, products.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", products),
@@ -120,6 +128,10 @@ func (c *ProductClient) ProductDetail(itemCode string) (*ProductDetailResponse, 
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if product.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", product.Status, product.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", product),
@@ -147,6 +159,10 @@ func (c *ProductClient) MutualExclusion(request *MutualExclusionRequest) (*Mutua
 
 	if resp.IsError() {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
+	}
+
+	if mutualExclusion.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", mutualExclusion.Status, mutualExclusion.Message))
 	}
 
 	if c.Client.IsDebug() {
@@ -218,6 +234,10 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if newProductApplication.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", newProductApplication.Status, newProductApplication.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", newProductApplication),
@@ -253,6 +273,10 @@ func (c *ProductClient) ListProductApplication(params *ListProductApplicationPar
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if listProductApplication.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", listProductApplication.Status, listProductApplication.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", listProductApplication),
@@ -282,6 +306,10 @@ func (c *ProductClient) DetailProductApplication(itemCode string) (*DetailProduc
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
+	if detailProductApplication.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", detailProductApplication.Status, detailProductApplication.Message))
+	}
+
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"response": fmt.Sprintf("%+v", detailProductApplication),
@@ -309,6 +337,10 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 
 	if resp.IsError() {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
+	}
+
+	if updateProductApplication.Status != 200 {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", updateProductApplication.Status, updateProductApplication.Message))
 	}
 
 	if c.Client.IsDebug() {
