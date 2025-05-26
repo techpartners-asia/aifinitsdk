@@ -417,7 +417,46 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 
 // ListOrder implements OperationClient.
 func (c *OperationClientImpl) ListOrders(request *ListOrderRequest, machineCode string) (*ListOrderResponse, error) {
-	panic("unimplemented")
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"request":     request,
+			"device_code": machineCode,
+		}).Debug("Listing orders")
+	}
+
+	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
+	if err != nil {
+		return nil, NewAinfinitError(err)
+	}
+
+	var listOrderResponse *ListOrderResponse
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+		SetQueryParam("code", machineCode).
+		SetQueryParam("beginTime", fmt.Sprintf("%d", request.BeginTime)).
+		SetQueryParam("endTime", fmt.Sprintf("%d", request.EndTime)).
+		SetQueryParam("page", fmt.Sprintf("%d", request.Page)).
+		SetQueryParam("limit", fmt.Sprintf("%d", request.Limit)).
+		SetResult(&listOrderResponse).Get(Get_ListOrders)
+
+	if err != nil {
+		return nil, NewAinfinitError(err)
+	}
+
+	if resp.IsError() {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
+	}
+
+	if !isSuccessStatus(listOrderResponse.Status) {
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", listOrderResponse.Status, listOrderResponse.Message))
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": fmt.Sprintf("%+v", listOrderResponse),
+		}).Debug("Listed orders successfully")
+	}
+
+	return listOrderResponse, nil
 }
 
 type Good struct {

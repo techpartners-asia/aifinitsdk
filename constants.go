@@ -29,8 +29,8 @@ const (
 )
 
 const (
-	Put_OpenDoor = BaseURL + "/open/operation/vending_machine/open"
-
+	Put_OpenDoor         = BaseURL + "/open/operation/vending_machine/open"
+	Get_ListOrders       = BaseURL + "/facade/open/order/page"
 	Put_AddNewGoods      = BaseURL + "/facade/open/replenish/items"
 	Get_SoldGoods        = BaseURL + "/facade/open/replenish/items"
 	Post_UpdateSoldGoods = BaseURL + "/facade/open/replenish/items"
