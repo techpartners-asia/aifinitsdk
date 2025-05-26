@@ -430,14 +430,30 @@ func (c *OperationClientImpl) ListOrders(request *ListOrderRequest, machineCode 
 	}
 
 	var listOrderResponse *ListOrderResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).
-		SetQueryParam("code", machineCode).
-		SetQueryParam("beginTime", fmt.Sprintf("%d", request.BeginTime)).
-		SetQueryParam("endTime", fmt.Sprintf("%d", request.EndTime)).
-		SetQueryParam("page", fmt.Sprintf("%d", request.Page)).
-		SetQueryParam("limit", fmt.Sprintf("%d", request.Limit)).
-		SetResult(&listOrderResponse).Get(Get_ListOrders)
+	query := c.Resty.R().SetHeader("Authorization", signature).
+		SetQueryParam("code", machineCode)
+		// SetQueryParam("beginTime", fmt.Sprintf("%d", request.BeginTime)).
+		// SetQueryParam("endTime", fmt.Sprintf("%d", request.EndTime)).
+		// SetQueryParam("page", fmt.Sprintf("%d", request.Page)).
+		// SetQueryParam("limit", fmt.Sprintf("%d", request.Limit)).
 
+	if request.BeginTime != 0 {
+		query.SetQueryParam("beginTime", fmt.Sprintf("%d", request.BeginTime))
+	}
+
+	if request.EndTime != 0 {
+		query.SetQueryParam("endTime", fmt.Sprintf("%d", request.EndTime))
+	}
+
+	if request.Page != 0 {
+		query.SetQueryParam("page", fmt.Sprintf("%d", request.Page))
+	}
+
+	if request.Limit != 0 {
+		query.SetQueryParam("limit", fmt.Sprintf("%d", request.Limit))
+	}
+
+	resp, err := query.SetResult(&listOrderResponse).Get(Get_ListOrders)
 	if err != nil {
 		return nil, NewAinfinitError(err)
 	}
