@@ -475,7 +475,7 @@ func (c *OperationClientImpl) ListOrders(request *ListOrderRequest, machineCode 
 	return listOrderResponse, nil
 }
 
-type Good struct {
+type Goods struct {
 	ItemCode      string `json:"itemCode,omitempty"`
 	ActualPrice   int    `json:"actualPrice,omitempty"`
 	OriginalPrice int    `json:"originalPrice,omitempty"`
@@ -483,19 +483,19 @@ type Good struct {
 }
 
 type Order struct {
-	TradeRequestId  string `json:"tradeRequestId,omitempty"`
-	OrderCode       string `json:"orderCode,omitempty"`
-	VmCode          string `json:"vmCode,omitempty"`
-	MachineId       int    `json:"machineId,omitempty"`
-	UserCode        string `json:"userCode,omitempty"`
-	HandleStatus    int    `json:"handleStatus,omitempty"`
-	ShopMove        int    `json:"shopMove,omitempty"`
-	TotalFee        int    `json:"totalFee,omitempty"`
-	OpenDoorTime    int64  `json:"openDoorTime,omitempty"`
-	CloseDoorTime   int64  `json:"closeDoorTime,omitempty"`
-	OpenDoorWeight  int    `json:"openDoorWeight,omitempty"`
-	CloseDoorWeight int    `json:"closeDoorWeight,omitempty"`
-	OrderGoodsList  []Good `json:"orderGoodsList,omitempty"`
+	TradeRequestId  string  `json:"tradeRequestId,omitempty"`
+	OrderCode       string  `json:"orderCode,omitempty"`
+	VmCode          string  `json:"vmCode,omitempty"`
+	MachineId       int     `json:"machineId,omitempty"`
+	UserCode        string  `json:"userCode,omitempty"`
+	HandleStatus    int     `json:"handleStatus,omitempty"`
+	ShopMove        int     `json:"shopMove,omitempty"`
+	TotalFee        int     `json:"totalFee,omitempty"`
+	OpenDoorTime    int64   `json:"openDoorTime,omitempty"`
+	CloseDoorTime   int64   `json:"closeDoorTime,omitempty"`
+	OpenDoorWeight  int     `json:"openDoorWeight,omitempty"`
+	CloseDoorWeight int     `json:"closeDoorWeight,omitempty"`
+	OrderGoodsList  []Goods `json:"orderGoodsList,omitempty"`
 }
 
 type OpenDoorType int
@@ -522,7 +522,7 @@ type OpenDoorRequest struct {
 	LocalTimeStamp int64        `json:"localTimestamp,omitempty"`
 }
 
-type UpdateGoodsRequest []Good
+type UpdateGoodsRequest []Goods
 
 type GetSoldGoodsByRequestIDRequest struct {
 	Type      OpenDoorType `json:"type,omitempty"`
@@ -543,11 +543,11 @@ type GetOrderVideoRequest struct {
 
 type UpdateGoodsPriceRequest struct {
 	VmCodes []string `json:"vmCodes,omitempty"`
-	Items   []Good   `json:"items,omitempty"`
+	Items   []Goods  `json:"items,omitempty"`
 }
 
 type AddNewGoodsRequest struct {
-	Items []Good `json:"items,omitempty"`
+	Items []Goods `json:"items,omitempty"`
 }
 
 type DeleteGoodsRequest struct {
@@ -563,26 +563,26 @@ type OpenDoorResponse struct {
 }
 
 type GetSoldGoodsResponse struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
-	Result  []Good `json:"result"`
-	Count   int    `json:"count"`
+	Status  int     `json:"status"`
+	Message string  `json:"message"`
+	Result  []Goods `json:"result"`
+	Count   int     `json:"count"`
 }
 
 type SearchOpenDoorData struct {
-	TradeRequestId  string `json:"tradeRequestId"`
-	OrderCode       string `json:"orderCode"`
-	VmCode          string `json:"vmCode"`
-	MachineId       int    `json:"machineId"`
-	HandleStatus    int    `json:"handleStatus"`
-	TotalFee        int    `json:"totalFee"`
-	OpenDoorTime    int64  `json:"openDoorTime"`
-	CloseDoorTime   int64  `json:"closeDoorTime"`
-	OpenDoorWeight  int    `json:"openDoorWeight"`
-	CloseDoorWeight int    `json:"closeDoorWeight"`
-	OrderGoodsList  []Good `json:"orderGoodsList"`
-	ShopMove        int    `json:"shopMove"`
-	ScanCode        string `json:"scanCode"`
+	TradeRequestId  string  `json:"tradeRequestId"`
+	OrderCode       string  `json:"orderCode"`
+	VmCode          string  `json:"vmCode"`
+	MachineId       int     `json:"machineId"`
+	HandleStatus    int     `json:"handleStatus"`
+	TotalFee        int     `json:"totalFee"`
+	OpenDoorTime    int64   `json:"openDoorTime"`
+	CloseDoorTime   int64   `json:"closeDoorTime"`
+	OpenDoorWeight  int     `json:"openDoorWeight"`
+	CloseDoorWeight int     `json:"closeDoorWeight"`
+	OrderGoodsList  []Goods `json:"orderGoodsList"`
+	ShopMove        int     `json:"shopMove"`
+	ScanCode        string  `json:"scanCode"`
 }
 
 type SearchOpenDoorResponse struct {
