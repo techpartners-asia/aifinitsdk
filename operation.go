@@ -110,7 +110,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 		return nil, ConvertOpenDoorError(resp.StatusCode(), resp.String())
 	}
 
-	if openDoorResponse.Status != 200 {
+	if !isSuccessStatus(openDoorResponse.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", openDoorResponse.Status, openDoorResponse.Message))
 	}
 
@@ -145,7 +145,7 @@ func (c *OperationClientImpl) ListGoods(machineCode string) (*GetSoldGoodsRespon
 		return nil, ConvertGetSoldGoodsError(resp.StatusCode(), resp.String())
 	}
 
-	if getSoldGoodsResponse.Status != 200 {
+	if !isSuccessStatus(getSoldGoodsResponse.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", getSoldGoodsResponse.Status, getSoldGoodsResponse.Message))
 	}
 
@@ -183,7 +183,7 @@ func (c *OperationClientImpl) UpdateGoods(request *UpdateGoodsRequest, machineCo
 		return nil, ConvertUpdateSoldGoodsError(resp.StatusCode(), resp.String())
 	}
 
-	if updateSoldGoodsResponse.Status != 200 {
+	if !isSuccessStatus(updateSoldGoodsResponse.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", updateSoldGoodsResponse.Status, updateSoldGoodsResponse.Message))
 	}
 
@@ -224,7 +224,7 @@ func (c *OperationClientImpl) GetSoldGoodsByRequestID(request *GetSoldGoodsByReq
 		return nil, ConvertSearchOpenDoorError(resp.StatusCode(), resp.String())
 	}
 
-	if searchOpenDoorResponse.Status != 200 {
+	if !isSuccessStatus(searchOpenDoorResponse.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", searchOpenDoorResponse.Status, searchOpenDoorResponse.Message))
 	}
 
@@ -265,7 +265,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machi
 		return nil, ConvertGetOrderVideoError(resp.StatusCode(), resp.String())
 	}
 
-	if getOrderVideoResponse.Status != 200 {
+	if !isSuccessStatus(getOrderVideoResponse.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", getOrderVideoResponse.Status, getOrderVideoResponse.Message))
 	}
 
@@ -303,7 +303,7 @@ func (c *OperationClientImpl) UpdateGoodsPrice(request *UpdateGoodsPriceRequest,
 		return nil, ConvertProductPriceUpdateError(resp.StatusCode(), resp.String())
 	}
 
-	if productPriceUpdateResponse.Status != 200 {
+	if !isSuccessStatus(productPriceUpdateResponse.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", productPriceUpdateResponse.Status, productPriceUpdateResponse.Message))
 	}
 
@@ -341,7 +341,7 @@ func (c *OperationClientImpl) AddGoods(request *AddNewGoodsRequest, machineCode 
 		return nil, ConvertAddNewGoodsError(resp.StatusCode(), resp.String())
 	}
 
-	if addNewGoodsResponse.Status != 200 {
+	if !isSuccessStatus(addNewGoodsResponse.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", addNewGoodsResponse.Status, addNewGoodsResponse.Message))
 	}
 
@@ -402,7 +402,7 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 		return nil, NewAinfinitError(err)
 	}
 
-	if deleteGoodsResponse.Status != 200 {
+	if !isSuccessStatus(deleteGoodsResponse.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", deleteGoodsResponse.Status, deleteGoodsResponse.Message))
 	}
 

@@ -59,7 +59,7 @@ func (c *ProductClient) LastInfo() (*LastInfoResponse, error) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if lastInfo.Status != 200 {
+	if !isSuccessStatus(lastInfo.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", lastInfo.Status, lastInfo.Message))
 	}
 
@@ -95,7 +95,7 @@ func (c *ProductClient) ProductList(page, limit int) (*ProductListResponse, erro
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if products.Status != 200 {
+	if !isSuccessStatus(products.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", products.Status, products.Message))
 	}
 
@@ -128,7 +128,7 @@ func (c *ProductClient) ProductDetail(itemCode string) (*ProductDetailResponse, 
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if product.Status != 200 {
+	if !isSuccessStatus(product.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", product.Status, product.Message))
 	}
 
@@ -161,7 +161,7 @@ func (c *ProductClient) MutualExclusion(request *MutualExclusionRequest) (*Mutua
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if mutualExclusion.Status != 200 {
+	if !isSuccessStatus(mutualExclusion.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", mutualExclusion.Status, mutualExclusion.Message))
 	}
 
@@ -234,7 +234,7 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if newProductApplication.Status != 200 {
+	if !isSuccessStatus(newProductApplication.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", newProductApplication.Status, newProductApplication.Message))
 	}
 
@@ -273,7 +273,7 @@ func (c *ProductClient) ListProductApplication(params *ListProductApplicationPar
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if listProductApplication.Status != 200 {
+	if !isSuccessStatus(listProductApplication.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", listProductApplication.Status, listProductApplication.Message))
 	}
 
@@ -306,7 +306,7 @@ func (c *ProductClient) DetailProductApplication(itemCode string) (*DetailProduc
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if detailProductApplication.Status != 200 {
+	if !isSuccessStatus(detailProductApplication.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", detailProductApplication.Status, detailProductApplication.Message))
 	}
 
@@ -339,7 +339,7 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if updateProductApplication.Status != 200 {
+	if !isSuccessStatus(updateProductApplication.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", updateProductApplication.Status, updateProductApplication.Message))
 	}
 

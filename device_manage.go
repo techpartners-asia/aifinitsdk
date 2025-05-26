@@ -83,7 +83,7 @@ func (c *vendingMachineManageClient) Update(request *DeviceUpdateRequest, machin
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -118,7 +118,7 @@ func (c *vendingMachineManageClient) Detail(machineCode string) (*DeviceDetailRe
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -153,7 +153,7 @@ func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfo
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -188,7 +188,7 @@ func (c *vendingMachineManageClient) PeopleFlow(request *DevicePeopleFlowRequest
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -227,7 +227,7 @@ func (c *vendingMachineManageClient) List(request *ListMachineRequest) (*ListMac
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -264,7 +264,7 @@ func (c *vendingMachineManageClient) Control(request *DeviceControlRequest, mach
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 

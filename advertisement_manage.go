@@ -70,7 +70,7 @@ func (c *advertisementManageClientImpl) MaterialApply(request *SourceMaterialApp
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -99,7 +99,7 @@ func (c *advertisementManageClientImpl) MaterialPage(request *SourceMaterialPage
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -128,7 +128,7 @@ func (c *advertisementManageClientImpl) MaterialDetail(materialId string) (*Sour
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -157,7 +157,7 @@ func (c *advertisementManageClientImpl) MaterialDelete(materialId string) (*Sour
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -186,7 +186,7 @@ func (c *advertisementManageClientImpl) AdAddition(request *AdAdditionRequest) (
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -218,7 +218,7 @@ func (c *advertisementManageClientImpl) AdPage(request *AdPageRequest) (*AdPageR
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -247,7 +247,7 @@ func (c *advertisementManageClientImpl) AdDetailByAdId(adId int) (*AdDetailRespo
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -276,7 +276,7 @@ func (c *advertisementManageClientImpl) AdDetailByVmCode(vmCode string) (*AdDeta
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -310,7 +310,7 @@ func (c *advertisementManageClientImpl) AdUpdate(request *AdUpdateRequest) (*AdU
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -339,7 +339,7 @@ func (c *advertisementManageClientImpl) AdDelete(adId int) (*AdDeleteResponse, e
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -368,7 +368,7 @@ func (c *advertisementManageClientImpl) AdAssociatedToVm(adId int, request *AdAs
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -399,7 +399,7 @@ func (c *advertisementManageClientImpl) ControlAdStatus(promotionId int, status 
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
@@ -428,7 +428,7 @@ func (c *advertisementManageClientImpl) GetVmPromotion(vmCode string) (*GetVmPro
 		return nil, NewAinfinitError(errors.New(resp.String()))
 	}
 
-	if result.Status != 200 {
+	if !isSuccessStatus(result.Status) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
 	}
 
