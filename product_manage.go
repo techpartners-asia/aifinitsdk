@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -198,10 +199,10 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 	var newProductApplication *NewProductApplicationResponse
 	req := c.Resty.R().
 		SetHeader("Authorization", signature).
-		SetHeader("Content-Type", "multipart/form-data").
-		SetMultipartFormData(map[string]string{
-			"item": request.Product.String(),
-		})
+		SetHeader("Content-Type", "multipart/form-data")
+
+	// Add the JSON data as a form field
+	req = req.SetMultipartField("item", "", "application/json", strings.NewReader(request.Product.String()))
 
 	if len(request.Product.ImgFiles) != len(request.Product.ImgFileNames) {
 		return nil, NewAinfinitError(fmt.Errorf("image files and names must be the same length"))
