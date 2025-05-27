@@ -675,7 +675,7 @@ type AdPageResponse struct {
 type AdDetailResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
-	Data    Ad     `json:"data"`
+	Data    *Ad    `json:"data,omitempty"`
 }
 
 type AdUpdateResponse struct {
@@ -708,5 +708,5 @@ type AdControlStatusResponse struct {
 type GetVmPromotionResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
-	Data    Ad     `json:"data"`
+	Data    *Ad    `json:"data,omitempty"`
 }
