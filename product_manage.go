@@ -327,13 +327,48 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 		logrus.WithField("request", request).Debug("Updating product application")
 	}
 
+	if request.Item.Id == 0 {
+		return nil, NewAinfinitError(fmt.Errorf("id cannot be 0"))
+	}
+
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
 		return nil, NewAinfinitError(err)
 	}
 
+	req := c.Resty.R().
+		SetHeader("Authorization", signature).
+		SetHeader("Content-Type", "multipart/form-data")
+
+	// Add the JSON data as a form field
+	req = req.SetMultipartField("item", "", "application/json", strings.NewReader(request.Item.String()))
+
+	if len(request.Item.ImgFiles) != len(request.Item.ImgFileNames) {
+		return nil, NewAinfinitError(fmt.Errorf("image files and names must be the same length"))
+	}
+
+	for i, img := range request.Item.ImgFiles {
+		if img != nil {
+			req = req.SetFileReader("file", request.Item.ImgFileNames[i], img)
+		}
+	}
+
+	if len(request.Item.PhysicalImgFiles) != len(request.Item.PhysicalImgFileNames) {
+		return nil, NewAinfinitError(fmt.Errorf("actual image files and names must be the same length"))
+	}
+
+	for i, img := range request.Item.PhysicalImgFiles {
+		if img != nil {
+			req = req.SetFileReader("files", request.Item.PhysicalImgFileNames[i], img)
+		}
+	}
+
+	if request.Item.WeightFile != nil {
+		req = req.SetFileReader("weightFile", request.Item.WeightFileName, request.Item.WeightFile)
+	}
+
 	var updateProductApplication *UpdateProductApplicationResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&updateProductApplication).Put(Put_UpdateProductAppication)
+	resp, err := req.SetResult(&updateProductApplication).Put(Put_UpdateProductAppication)
 	if err != nil {
 		return nil, NewAinfinitError(err)
 	}
@@ -382,6 +417,29 @@ type Product struct {
 
 func (p *Product) String() string {
 	bytes, err := json.Marshal(p)
+	if err != nil {
+		return ""
+	}
+	return string(bytes)
+}
+
+type UpdateProductApplication struct {
+	Id      int    `json:"id"`
+	Price   int    `json:"price"`
+	Weight  int    `json:"weight"`
+	QrCodes string `json:"qrCodes"`
+
+	ImgFiles     []io.Reader `json:"-"` // product image files
+	ImgFileNames []string    `json:"-"` // product image file names
+
+	PhysicalImgFiles     []io.Reader `json:"-"` // physical image files IMPORTANT: at least 2 and bar code clearly visible
+	PhysicalImgFileNames []string    `json:"-"` // physical image file names IMPORTANT: at least 2 and bar code clearly visible
+	WeightFile           io.Reader   `json:"-"` // docs: weight of pictures
+	WeightFileName       string      `json:"-"` // docs: weight of pictures
+}
+
+func (u *UpdateProductApplication) String() string {
+	bytes, err := json.Marshal(u)
 	if err != nil {
 		return ""
 	}
@@ -442,7 +500,7 @@ type ListProductApplicationParams struct {
 }
 
 type UpdateProductApplicationRequest struct {
-	Item *Product `json:"item,omitempty"`
+	Item *UpdateProductApplication `json:"item,omitempty"`
 }
 
 type ProductListResponse struct {
