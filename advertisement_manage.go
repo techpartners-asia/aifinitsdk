@@ -209,8 +209,8 @@ func (c *advertisementManageClientImpl) AdPage(request *AdPageRequest) (*AdPageR
 
 	var result AdPageResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParams(map[string]string{
-		"page":     strconv.Itoa(request.Page),
-		"pageSize": strconv.Itoa(request.PageSize),
+		"page":      strconv.Itoa(request.Page),
+		"page_size": strconv.Itoa(request.PageSize),
 	}).SetResult(&result).Get(Get_AdvertisementAdPage)
 	if err != nil {
 		return nil, NewAinfinitError(err)
@@ -587,7 +587,7 @@ type SourceMaterialApplyRequest struct {
 
 type SourceMaterialPageRequest struct {
 	Page     int `json:"page,omitempty"`
-	PageSize int `json:"pageSize,omitempty"`
+	PageSize int `json:"page_size,omitempty"`
 }
 
 type AdAdditionRequest struct {
@@ -602,7 +602,7 @@ type AdAdditionRequest struct {
 
 type AdPageRequest struct {
 	Page     int `json:"page,omitempty"`
-	PageSize int `json:"pageSize,omitempty"`
+	PageSize int `json:"page_size,omitempty"`
 }
 
 type AdUpdateRequest struct {
