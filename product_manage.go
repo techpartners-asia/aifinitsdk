@@ -355,21 +355,21 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 // ENTITIES
 
 type Product struct {
-	Id             int      `json:"id"`
-	Name           string   `json:"name"`
-	Price          int      `json:"price"`
-	Weight         int      `json:"weight"`
-	WeightVariance int      `json:"weightVariance"`
-	ImgUrl         string   `json:"imgUrl"`
-	ItemCode       string   `json:"itemCode"`
-	CollType       int      `json:"collType"` // collection type: 1- single, 2- multiple
-	UpdateTime     string   `json:"updateTime"`
-	CreateTime     string   `json:"createTime"`
-	Status         int      `json:"status"`
-	QrCodes        string   `json:"qrCodes"`
-	ItemCodes      []string `json:"itemCodes"`
-	ActualImgs     []string `json:"actualImgs"`
-	WeightFile     string   `json:"weightFile"`
+	Id             int      `json:"id"`             // Unique product ID
+	Name           string   `json:"name"`           // Product name
+	Price          int      `json:"price"`          // Suggested retail price, in cents
+	Weight         int      `json:"weight"`         // Product weight in grams
+	WeightVariance int      `json:"weightVariance"` // Acceptable weight variance in grams
+	ImgUrl         string   `json:"imgUrl"`         // URL to the main product image
+	ItemCode       string   `json:"itemCode"`       // Unique product code
+	CollType       int      `json:"collType"`       // Collection type: 1 - single item, 2 - collection/multiple items
+	UpdateTime     string   `json:"updateTime"`     // Last update time in "YYYY-MM-DD HH:MM:SS" format
+	CreateTime     string   `json:"createTime"`     // Creation time in "YYYY-MM-DD HH:MM:SS" format
+	Status         int      `json:"status"`         // Product status: 1 - available, 2 - unavailable
+	QrCodes        string   `json:"qrCodes"`        // Comma-separated list of barcodes (e.g., "6920180209601,6920180209602")
+	ItemCodes      []string `json:"itemCodes"`      // List of item codes included in this product if it's a collection
+	ActualImgs     []string `json:"actualImgs"`     // List of URLs to actual/real product images
+	WeightFile     string   `json:"weightFile"`     // Path or URL to a file containing detailed weight data (if any)
 }
 
 func (p *Product) String() string {
