@@ -358,21 +358,26 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 // ENTITIES
 
 type Product struct {
-	Id             int      `json:"id"`             // Unique product ID
+	Id             int      `json:"id"`             // Application ID
 	Name           string   `json:"name"`           // Product name
-	Price          int      `json:"price"`          // Suggested retail price, in cents
+	Price          int      `json:"price"`          // Suggested retail price in cents
 	Weight         int      `json:"weight"`         // Product weight in grams
 	WeightVariance int      `json:"weightVariance"` // Acceptable weight variance in grams
 	ImgUrl         string   `json:"imgUrl"`         // URL to the main product image
-	ItemCode       string   `json:"itemCode"`       // Unique product code
+	ItemCode       string   `json:"itemCode"`       // Unique product code (only available after approval)
 	CollType       int      `json:"collType"`       // Collection type: 1 - single item, 2 - collection/multiple items
 	UpdateTime     string   `json:"updateTime"`     // Last update time in "YYYY-MM-DD HH:MM:SS" format
 	CreateTime     string   `json:"createTime"`     // Creation time in "YYYY-MM-DD HH:MM:SS" format
 	Status         int      `json:"status"`         // Product status: 1 - available, 2 - unavailable
-	QrCodes        string   `json:"qrCodes"`        // Comma-separated list of barcodes (e.g., "6920180209601,6920180209602")
+	QrCodes        string   `json:"qrCodes"`        // Product barcode (e.g., "6934024500113")
 	ItemCodes      []string `json:"itemCodes"`      // List of item codes included in this product if it's a collection
 	ActualImgs     []string `json:"actualImgs"`     // List of URLs to actual/real product images
-	WeightFile     string   `json:"weightFile"`     // Path or URL to a file containing detailed weight data (if any)
+	WeightFile     string   `json:"weightFile"`     // Path or URL to a file containing detailed weight data
+	ApplyStatus    int      `json:"applyStatus"`    // Application status: 1 - under review, 2 - approved, 3 - rejected
+	ApplyTime      string   `json:"applyTime"`      // Application submission time in "YYYY-MM-DD HH:MM:SS" format
+	RejectType     string   `json:"rejectType"`     // Rejection type: "1" - name non-compliant, "2" - barcode non-compliant, "3" - display image unclear, "4" - other
+	RejectReason   string   `json:"rejectReason"`   // Rejection reason
+	WeightImgUrl   string   `json:"weightImgUrl"`   // URL to the weight image
 }
 
 func (p *Product) String() string {
