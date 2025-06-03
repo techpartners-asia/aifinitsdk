@@ -1,9 +1,9 @@
 package aifinitsdk
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"strings"
 	"time"
 
@@ -210,7 +210,7 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 
 	for i, img := range request.Product.ImgFiles {
 		if img != nil {
-			req = req.SetFileReader("file", request.Product.ImgFileNames[i], img)
+			req = req.SetFileReader("file", request.Product.ImgFileNames[i], bytes.NewReader(img))
 		}
 	}
 
@@ -220,12 +220,12 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 
 	for i, img := range request.Product.PhysicalImgFiles {
 		if img != nil {
-			req = req.SetFileReader("files", request.Product.PhysicalImgFileNames[i], img)
+			req = req.SetFileReader("files", request.Product.PhysicalImgFileNames[i], bytes.NewReader(img))
 		}
 	}
 
 	if request.Product.WeightFile != nil {
-		req = req.SetFileReader("weightFile", request.Product.WeightFileName, request.Product.WeightFile)
+		req = req.SetFileReader("weightFile", request.Product.WeightFileName, bytes.NewReader(request.Product.WeightFile))
 	}
 
 	resp, err := req.SetResult(&newProductApplication).Post(Post_NewProductApplication)
@@ -349,7 +349,7 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 
 	for i, img := range request.Item.ImgFiles {
 		if img != nil {
-			req = req.SetFileReader("file", request.Item.ImgFileNames[i], img)
+			req = req.SetFileReader("file", request.Item.ImgFileNames[i], bytes.NewReader(img))
 		}
 	}
 
@@ -359,12 +359,12 @@ func (c *ProductClient) UpdateProductApplication(itemCode string, request *Updat
 
 	for i, img := range request.Item.PhysicalImgFiles {
 		if img != nil {
-			req = req.SetFileReader("files", request.Item.PhysicalImgFileNames[i], img)
+			req = req.SetFileReader("files", request.Item.PhysicalImgFileNames[i], bytes.NewReader(img))
 		}
 	}
 
 	if request.Item.WeightFile != nil {
-		req = req.SetFileReader("weightFile", request.Item.WeightFileName, request.Item.WeightFile)
+		req = req.SetFileReader("weightFile", request.Item.WeightFileName, bytes.NewReader(request.Item.WeightFile))
 	}
 
 	var updateProductApplication *UpdateProductApplicationResponse
@@ -429,13 +429,13 @@ type UpdateProductApplication struct {
 	Weight  int    `json:"weight"`
 	QrCodes string `json:"qrCodes"`
 
-	ImgFiles     []io.Reader `json:"-"` // product image files
-	ImgFileNames []string    `json:"-"` // product image file names
+	ImgFiles     [][]byte `json:"-"` // product image files
+	ImgFileNames []string `json:"-"` // product image file names
 
-	PhysicalImgFiles     []io.Reader `json:"-"` // physical image files IMPORTANT: at least 2 and bar code clearly visible
-	PhysicalImgFileNames []string    `json:"-"` // physical image file names IMPORTANT: at least 2 and bar code clearly visible
-	WeightFile           io.Reader   `json:"-"` // docs: weight of pictures
-	WeightFileName       string      `json:"-"` // docs: weight of pictures
+	PhysicalImgFiles     [][]byte `json:"-"` // physical image files IMPORTANT: at least 2 and bar code clearly visible
+	PhysicalImgFileNames []string `json:"-"` // physical image file names IMPORTANT: at least 2 and bar code clearly visible
+	WeightFile           []byte   `json:"-"` // weight image file
+	WeightFileName       string   `json:"-"` // weight image file name
 }
 
 func (u *UpdateProductApplication) String() string {
@@ -452,14 +452,13 @@ type NewProductApplication struct {
 	Weight  int    `json:"weight"`
 	QrCodes string `json:"qrCodes"`
 
-	ImgFiles     []io.Reader `json:"-"` // product image files
-	ImgFileNames []string    `json:"-"` // product image file names
+	ImgFiles     [][]byte `json:"-"` // product image files
+	ImgFileNames []string `json:"-"` // product image file names
 
-	PhysicalImgFiles     []io.Reader `json:"-"` // physical image files IMPORTANT: at least 2 and bar code clearly visible
-	PhysicalImgFileNames []string    `json:"-"` // physical image file names IMPORTANT: at least 2 and bar code clearly visible
-
-	WeightFile     io.Reader `json:"-"` // docs: weight of pictures
-	WeightFileName string    `json:"-"` // docs: weight of pictures
+	PhysicalImgFiles     [][]byte `json:"-"` // physical image files IMPORTANT: at least 2 and bar code clearly visible
+	PhysicalImgFileNames []string `json:"-"` // physical image file names IMPORTANT: at least 2 and bar code clearly visible
+	WeightFile           []byte   `json:"-"` // weight image file
+	WeightFileName       string   `json:"-"` // weight image file name
 }
 
 func (n *NewProductApplication) String() string {
