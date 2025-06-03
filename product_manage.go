@@ -186,6 +186,13 @@ func (c *ProductClient) NewProductApplication(request *NewProductApplicationRequ
 	if request.Product == nil {
 		return nil, NewAinfinitError(fmt.Errorf("product cannot be nil"))
 	}
+	if request.Product.Name == "" {
+		return nil, NewAinfinitError(fmt.Errorf("name cannot be empty"))
+	}
+
+	if request.Product.Price <= 0 {
+		return nil, NewAinfinitError(fmt.Errorf("price must be greater than 0"))
+	}
 
 	if c.Client.IsDebug() {
 		logrus.WithField("request", request).Debug("Creating new product application")
