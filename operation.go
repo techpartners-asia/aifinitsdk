@@ -30,7 +30,7 @@ type OperationClient interface {
 	OpenDoor(request *OpenDoorRequest, machineCode string) (*OpenDoorResponse, error)
 	// zaragdsan baraag haalga ongoilgoh requesteer avah
 	//2.2.3.4
-	GetSoldGoodsByRequestID(request *GetSoldGoodsByRequestIDRequest, machineCode string) (*SearchOpenDoorResponse, error)
+	OpenDoorReqDetail(request *OpenDoorDetailRequest, machineCode string) (*OpenDoorDetailResponse, error)
 	//zaragdsan baraanii jagsaalt
 	//2.2.3.6
 	ListOrders(request *ListOrderRequest, machineCode string) (*ListOrderResponse, error)
@@ -196,7 +196,7 @@ func (c *OperationClientImpl) UpdateGoods(request *UpdateGoodsRequest, machineCo
 	return updateSoldGoodsResponse, nil
 }
 
-func (c *OperationClientImpl) GetSoldGoodsByRequestID(request *GetSoldGoodsByRequestIDRequest, machineCode string) (*SearchOpenDoorResponse, error) {
+func (c *OperationClientImpl) OpenDoorReqDetail(request *OpenDoorDetailRequest, machineCode string) (*OpenDoorDetailResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
@@ -209,7 +209,7 @@ func (c *OperationClientImpl) GetSoldGoodsByRequestID(request *GetSoldGoodsByReq
 		return nil, NewAinfinitError(err)
 	}
 
-	var searchOpenDoorResponse *SearchOpenDoorResponse
+	var searchOpenDoorResponse *OpenDoorDetailResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
 		SetQueryParams(map[string]string{
@@ -524,7 +524,7 @@ type OpenDoorRequest struct {
 
 type UpdateGoodsRequest []Goods
 
-type GetSoldGoodsByRequestIDRequest struct {
+type OpenDoorDetailRequest struct {
 	Type      OpenDoorType `json:"type,omitempty"`
 	RequestID string       `json:"requestId,omitempty"`
 }
@@ -585,7 +585,7 @@ type SearchOpenDoorData struct {
 	ScanCode        string  `json:"scanCode"`
 }
 
-type SearchOpenDoorResponse struct {
+type OpenDoorDetailResponse struct {
 	Status  int                `json:"status"`
 	Message string             `json:"message"`
 	Data    SearchOpenDoorData `json:"data"`
