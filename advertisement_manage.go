@@ -617,7 +617,7 @@ type AdUpdateRequest struct {
 }
 
 type AdAssociatedToVmRequest struct {
-	VmList []string `json:"vmList,omitempty"`
+	VmList []string `json:"vmList,omitempty"` // vmCode that provided from vmdetail
 }
 
 type SourceMaterialApplyResponse struct {
