@@ -22,7 +22,7 @@ type OperationClient interface {
 
 	//machine dotorh baraanuudiin jagsaalt
 	//2.2.3.1
-	ListGoods(machineCode string) (*GetSoldGoodsResponse, error)
+	ListGoods(machineCode string) (*GetMachineGoodsResponse, error)
 	// zaragdsan baraanuudiig niitedni shinechlene
 	//2.2.3.2
 	UpdateGoods(request *UpdateGoodsRequest, machineCode string) (*UpdateSoldGoodsResponse, error)
@@ -123,7 +123,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 	return openDoorResponse, nil
 }
 
-func (c *OperationClientImpl) ListGoods(machineCode string) (*GetSoldGoodsResponse, error) {
+func (c *OperationClientImpl) ListGoods(machineCode string) (*GetMachineGoodsResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("device_code", machineCode).Debug("Getting sold goods")
 	}
@@ -133,7 +133,7 @@ func (c *OperationClientImpl) ListGoods(machineCode string) (*GetSoldGoodsRespon
 		return nil, NewAinfinitError(err)
 	}
 
-	var getSoldGoodsResponse *GetSoldGoodsResponse
+	var getSoldGoodsResponse *GetMachineGoodsResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
 		SetResult(&getSoldGoodsResponse).Get(Get_SoldGoods)
@@ -574,7 +574,7 @@ type OpenDoorResponse struct {
 	} `json:"data"`
 }
 
-type GetSoldGoodsResponse struct {
+type GetMachineGoodsResponse struct {
 	Status  int     `json:"status"`
 	Message string  `json:"message"`
 	Result  []Goods `json:"result"`
