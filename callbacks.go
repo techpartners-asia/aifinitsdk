@@ -84,7 +84,7 @@ const (
 )
 
 // Maintenance Exception Notification
-type MaintenanceExceptionNotification struct {
+type MaintenanceExceptionNotificationCallbackRequest struct {
 	ExCode     MaintenanceExceptionCode   `json:"exCode"`             // Exception code
 	NotifyTime int64                      `json:"notifyTime"`         // Time of exception occurrence or recovery
 	Status     MaintenanceExceptionStatus `json:"status"`             // 0: Triggered, 1: Recovered
@@ -94,7 +94,7 @@ type MaintenanceExceptionNotification struct {
 }
 
 // Operational Exception Notification
-type OperationalExceptionNotification struct {
+type OperationalExceptionNotificationCallbackRequest struct {
 	VmName        string                   `json:"vmName"`                  // Device name
 	VmCode        string                   `json:"vmCode"`                  // Device code
 	RequestID     string                   `json:"requestId,omitempty"`     // Door-open request ID (only for shopping-related alerts)
@@ -137,7 +137,7 @@ const (
 // - For rejected applications: rejectType and rejectReason are required
 
 // Product Application Review Notification
-type ProductApplicationReviewNotification struct {
+type ProductApplicationReviewNotificationCallbackRequest struct {
 	ID           int64                          `json:"id"`                     // New product application ID
 	Status       ProductApplicationReviewStatus `json:"status"`                 // 2: Approved, 3: Rejected
 	ItemCode     string                         `json:"itemCode,omitempty"`     // Product code (present only if approved)
@@ -164,7 +164,7 @@ const (
 )
 
 // Advertisement Online/Offline Notification
-type AdvertisementOnlineNotification struct {
+type AdvertisementOnlineNotificationCallbackRequest struct {
 	ID     int                       `json:"id"`     // Advertisement ID
 	Name   string                    `json:"name"`   // Advertisement name
 	Status AdvertisementOnlineStatus `json:"status"` // 1: Online, 2: Offline
@@ -266,7 +266,7 @@ const (
 )
 
 // Door Open/Close Notification
-type DoorOpenCloseNotification struct {
+type DoorOpenCloseNotificationCallbackRequest struct {
 	OrderCode string `json:"orderCode,omitempty"` // Order number (only for shopping open/close)
 	OpenType  int    `json:"openType"`            // 1: Shopping, 2: Restocking
 	RequestID string `json:"requestId"`           // Door open request ID
