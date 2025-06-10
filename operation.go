@@ -224,7 +224,7 @@ func (c *OperationClientImpl) OpenDoorReqDetail(request *OpenDoorDetailRequest, 
 		return nil, ConvertSearchOpenDoorError(resp.StatusCode(), resp.String())
 	}
 
-	if !isSuccessStatus(searchOpenDoorResponse.Status) {
+	if !isSuccessStatus(int(searchOpenDoorResponse.Status)) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", searchOpenDoorResponse.Status, searchOpenDoorResponse.Message))
 	}
 
@@ -475,6 +475,18 @@ func (c *OperationClientImpl) ListOrders(request *ListOrderRequest, machineCode 
 	return listOrderResponse, nil
 }
 
+type OrderGoods struct {
+	ItemCode  string `json:"itemCode"`  // Product code
+	ItemName  string `json:"itemName"`  // Product name
+	ItemPrice int    `json:"itemPrice"` // Commodity prices
+	Count     int    `json:"count"`     // Quantity of goods
+}
+
+type OrderCallbackResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
+
 type Goods struct {
 	ItemCode      string `json:"itemCode,omitempty"`
 	ActualPrice   int    `json:"actualPrice,omitempty"`
@@ -586,9 +598,9 @@ type SearchOpenDoorData struct {
 }
 
 type OpenDoorDetailResponse struct {
-	Status  int                `json:"status"`
-	Message string             `json:"message"`
-	Data    SearchOpenDoorData `json:"data"`
+	Status  DoorOpenCloseStatus `json:"status"`
+	Message string              `json:"message"`
+	Data    SearchOpenDoorData  `json:"data"`
 }
 
 type ListOrderResponse struct {
@@ -626,3 +638,49 @@ type DeleteGoodsResponse struct {
 	Message string `json:"message"`
 	Ok      *bool  `json:"ok,omitempty"`
 }
+
+// Door Open/Close Status Code
+type DoorOpenCloseStatus int
+
+const (
+	// Success Status Codes
+	DoorOpenCloseStatusOpened DoorOpenCloseStatus = 201 // Door opened successfully
+	DoorOpenCloseStatusClosed DoorOpenCloseStatus = 202 // Door closed successfully
+
+	// Shopping/Restocking Conflict Status Codes
+	DoorOpenCloseStatusShoppingNotFinished   DoorOpenCloseStatus = 2031 // Failed to open - previous shopping not finished
+	DoorOpenCloseStatusRestockingNotFinished DoorOpenCloseStatus = 2032 // Failed to open - previous restocking not finished
+
+	// Device State Status Codes
+	DoorOpenCloseStatusPowerOff          DoorOpenCloseStatus = 2033 // Failed to open - device power off, running on UPS
+	DoorOpenCloseStatusMaintenanceMode   DoorOpenCloseStatus = 2034 // Failed to open - device in maintenance mode
+	DoorOpenCloseStatusBackgroundProcess DoorOpenCloseStatus = 204  // Failed to open - device background process active
+
+	// Timeout and Error Status Codes
+	DoorOpenCloseStatusTimeout      DoorOpenCloseStatus = 503 // Failed to open - device response timeout (20s)
+	DoorOpenCloseStatusNoResult     DoorOpenCloseStatus = 504 // Failed to open - no result reported within 5 minutes
+	DoorOpenCloseStatusUnknownError DoorOpenCloseStatus = 505 // Failed to open - unknown error
+	DoorOpenCloseStatusCalibration  DoorOpenCloseStatus = 506 // Failed to open - calibration error
+
+	// Hardware and Verification Status Codes
+	DoorOpenCloseStatusProductVerification DoorOpenCloseStatus = 5050 // Failed to open - product verification failed
+	DoorOpenCloseStatusSerialPortFault     DoorOpenCloseStatus = 5051 // Failed to open - serial port fault
+	DoorOpenCloseStatusWeightSensorFault   DoorOpenCloseStatus = 5052 // Failed to open - weight sensor fault
+	DoorOpenCloseStatusCamerasOffline      DoorOpenCloseStatus = 5053 // Failed to open - all cameras offline
+	DoorOpenCloseStatusAlgorithmError      DoorOpenCloseStatus = 5054 // Failed to open - local recognition algorithm error
+	DoorOpenCloseStatusDoorLockError       DoorOpenCloseStatus = 5055 // Failed to open - door lock error
+	DoorOpenCloseStatusPowerStatusError    DoorOpenCloseStatus = 5056 // Failed to open - device power status error
+
+	// Door Lock State Status Codes
+	DoorOpenCloseStatusDoorOpenLockOpen     DoorOpenCloseStatus = 5057 // Door lock error - door open + lock open
+	DoorOpenCloseStatusDoorClosedLockOpen   DoorOpenCloseStatus = 5058 // Door lock error - door closed + lock open
+	DoorOpenCloseStatusDoorOpenLockClosed   DoorOpenCloseStatus = 5059 // Door lock error - door open + lock closed
+	DoorOpenCloseStatusDoorClosedLockClosed DoorOpenCloseStatus = 5060 // Door lock error - door closed + lock closed
+
+	// Request Status Codes
+	DoorOpenCloseStatusNoResultYet     DoorOpenCloseStatus = 404   // No result reported by device yet
+	DoorOpenCloseStatusRequestNotFound DoorOpenCloseStatus = 42404 // Request ID does not exist
+	DoorOpenCloseStatusInvalidType     DoorOpenCloseStatus = 40005 // Invalid parameter: type
+	DoorOpenCloseStatusTooManyOrders   DoorOpenCloseStatus = 40526 // Too many shopping orders in progress
+	DoorOpenCloseStatusNoPermission    DoorOpenCloseStatus = 42403 // No permission to query
+)
