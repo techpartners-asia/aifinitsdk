@@ -26,8 +26,8 @@ func NewAinfinitError(err error) error {
 
 type VendingMachineManageClient interface {
 	List(request *ListMachineRequest) (*ListMachineResponse, error)
-	Detail(machineCode string) (*DeviceDetailResponse, error)
-	DeviceInfo(machineCode string) (*DeviceInfoResult, error)
+	DeviceInfo(machineCode string) (*DeviceInfoResponse, error)
+	MachineDetail(machineCode string) (*MachineDetailResponse, error)
 	PeopleFlow(request *DevicePeopleFlowRequest, machineCode string) (*DevicePeopleFlowResponse, error)
 	Update(request *DeviceUpdateRequest, machineCode string) (*DeviceUpdateResponse, error)
 	Control(request *DeviceControlRequest, machineCode string) (*DeviceControlResponse, error)
@@ -96,7 +96,7 @@ func (c *vendingMachineManageClient) Update(request *DeviceUpdateRequest, machin
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Detail(machineCode string) (*DeviceDetailResponse, error) {
+func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfoResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("code", machineCode).Debug("Getting vending machine details")
 	}
@@ -106,7 +106,7 @@ func (c *vendingMachineManageClient) Detail(machineCode string) (*DeviceDetailRe
 		return nil, NewAinfinitError(err)
 	}
 
-	var result DeviceDetailResponse
+	var result DeviceInfoResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
 		SetQueryParam("code", machineCode).
 		Get(Get_VendingMachineInfo)
@@ -131,7 +131,7 @@ func (c *vendingMachineManageClient) Detail(machineCode string) (*DeviceDetailRe
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfoResult, error) {
+func (c *vendingMachineManageClient) MachineDetail(machineCode string) (*MachineDetailResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("code", machineCode).Debug("Getting device info")
 	}
@@ -141,10 +141,10 @@ func (c *vendingMachineManageClient) DeviceInfo(machineCode string) (*DeviceInfo
 		return nil, NewAinfinitError(err)
 	}
 
-	var result DeviceInfoResult
+	var result MachineDetailResponse
 	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetResult(&result).
 		SetQueryParam("code", machineCode).
-		Get(Get_VendingMachineDeviceInfo)
+		Get(Get_VendingMachineDeviceDetail)
 	if err != nil {
 		return nil, NewAinfinitError(err)
 	}
@@ -390,7 +390,7 @@ type DeviceControlRequest struct {
 	Temp     int `json:"temp,omitempty"`     // -30 ~ 20
 	EngineOn int `json:"engineOn,omitempty"` // 0 | 1
 }
-type DeviceInfoResult struct {
+type MachineDetailResponse struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
 	Data    Device `json:"data"`
@@ -412,13 +412,13 @@ type DevicePeopleFlowResponse struct {
 	Count   int          `json:"count"`
 }
 
-type DeviceDetailResponse struct {
-	Status  int              `json:"status"`
-	Message string           `json:"message"`
-	Data    DeviceDetailData `json:"data"`
+type DeviceInfoResponse struct {
+	Status  int            `json:"status"`
+	Message string         `json:"message"`
+	Data    DeviceInfoData `json:"data"`
 }
 
-type DeviceDetailData struct {
+type DeviceInfoData struct {
 	Code          string `json:"code"`
 	Name          string `json:"name"`
 	ScanCode      string `json:"scanCode"`

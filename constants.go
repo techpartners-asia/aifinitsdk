@@ -10,7 +10,7 @@ const (
 	Get_VendingMachineList          = BaseURL + "/facade/open/vending_machine/infoPage"
 	Get_VendingMachineInfo          = BaseURL + "/facade/open/vending_machine/info"
 	Put_UpdateVendingMachineInfo    = BaseURL + "/facade/open/vending_machine/info"
-	Get_VendingMachineDeviceInfo    = BaseURL + "/facade/open/vending_machine/deviceInfo"
+	Get_VendingMachineDeviceDetail  = BaseURL + "/facade/open/vending_machine/deviceInfo"
 	Post_VendingMachinePeopleFlow   = BaseURL + "/facade/open/vending_machine/peopleFlow"
 	Put_VendingMachineDeviceControl = BaseURL + "/facade/open/vending_machine/control"
 	Put_VendingMachineDeviceSetting = BaseURL + "/facade/open/vending_machine/setting"
