@@ -40,22 +40,22 @@ const (
 type MaintenanceExceptionCode int
 
 const (
-	MaintenanceExceptionCodeCameraIssue      MaintenanceExceptionCode = 1   // Camera Issue
-	MaintenanceExceptionCodeHeavySensor      MaintenanceExceptionCode = 128 // Heavy Sensor
-	MaintenanceExceptionCodeUPSPower         MaintenanceExceptionCode = 2   // UPS Power
-	MaintenanceExceptionCodeOverheating      MaintenanceExceptionCode = 0   // Overheating
-	MaintenanceExceptionCodeShelfMalfunction MaintenanceExceptionCode = 0   // Shelf Malfunction
-	MaintenanceExceptionCodeLightCurtain     MaintenanceExceptionCode = 0   // Light Curtain Error
-	MaintenanceExceptionCodePositionShift    MaintenanceExceptionCode = 0   // Position Shift
-	MaintenanceExceptionCodeCardReader       MaintenanceExceptionCode = 0   // Card Reader Issue
-	MaintenanceExceptionCodePowerOff         MaintenanceExceptionCode = 0   // Power Off
-	MaintenanceExceptionCodeTooCold          MaintenanceExceptionCode = 0   // Too Cold (< 3°C)
-	MaintenanceExceptionCodeLockState        MaintenanceExceptionCode = 0   // Lock State Issue
-	MaintenanceExceptionCodeLockModules      MaintenanceExceptionCode = 0   // Lock Modules
-	MaintenanceExceptionCodeNetwork          MaintenanceExceptionCode = 0   // Network
-	MaintenanceExceptionCodeLight            MaintenanceExceptionCode = 0   // Light
-	MaintenanceExceptionCodeSerialConnection MaintenanceExceptionCode = 0   // Serial Connection
-	MaintenanceExceptionCodeDiskSpace        MaintenanceExceptionCode = 0   // Disk Space
+	MaintenanceExceptionCodeCameraIssue      MaintenanceExceptionCode = 1  // Camera Issue
+	MaintenanceExceptionCodeHeavySensor      MaintenanceExceptionCode = 2  // Heavy Sensor
+	MaintenanceExceptionCodeUPSPower         MaintenanceExceptionCode = 3  // UPS Power
+	MaintenanceExceptionCodeOverheating      MaintenanceExceptionCode = 4  // Overheating
+	MaintenanceExceptionCodeShelfMalfunction MaintenanceExceptionCode = 5  // Shelf Malfunction
+	MaintenanceExceptionCodeLightCurtain     MaintenanceExceptionCode = 6  // Light Curtain Error
+	MaintenanceExceptionCodePositionShift    MaintenanceExceptionCode = 7  // Position Shift
+	MaintenanceExceptionCodeCardReader       MaintenanceExceptionCode = 8  // Card Reader Issue
+	MaintenanceExceptionCodePowerOff         MaintenanceExceptionCode = 9  // Power Off
+	MaintenanceExceptionCodeTooCold          MaintenanceExceptionCode = 10 // Too Cold (< 3°C)
+	MaintenanceExceptionCodeLockState        MaintenanceExceptionCode = 11 // Lock State Issue
+	MaintenanceExceptionCodeLockModules      MaintenanceExceptionCode = 12 // Lock Modules
+	MaintenanceExceptionCodeNetwork          MaintenanceExceptionCode = 13 // Network
+	MaintenanceExceptionCodeLight            MaintenanceExceptionCode = 14 // Light
+	MaintenanceExceptionCodeSerialConnection MaintenanceExceptionCode = 15 // Serial Connection
+	MaintenanceExceptionCodeDiskSpace        MaintenanceExceptionCode = 16 // Disk Space
 )
 
 // Operational Exception Type
@@ -220,6 +220,19 @@ const (
 	ProductChangeActionDelete ProductChangeAction = "delete" // Delete product
 )
 
+// String returns the string representation of ProductChangeAction
+func (a ProductChangeAction) String() string {
+	actions := map[ProductChangeAction]string{
+		ProductChangeActionAdd:    "New Product",
+		ProductChangeActionUpdate: "Update Product",
+		ProductChangeActionDelete: "Delete Product",
+	}
+	if action, ok := actions[a]; ok {
+		return action
+	}
+	return "Unknown"
+}
+
 // Product Collection Type
 type ProductCollectionType int
 
@@ -228,6 +241,18 @@ const (
 	ProductCollectionTypeBundle ProductCollectionType = 2 // Bundle
 )
 
+// String returns the string representation of ProductCollectionType
+func (t ProductCollectionType) String() string {
+	types := map[ProductCollectionType]string{
+		ProductCollectionTypeSingle: "Single Item",
+		ProductCollectionTypeBundle: "Bundle",
+	}
+	if t, ok := types[t]; ok {
+		return t
+	}
+	return "Unknown"
+}
+
 // Product Status
 type ProductStatus int
 
@@ -235,6 +260,18 @@ const (
 	ProductStatusListed   ProductStatus = 1 // Listed (available)
 	ProductStatusUnlisted ProductStatus = 2 // Unlisted (unavailable)
 )
+
+// String returns the string representation of ProductStatus
+func (s ProductStatus) String() string {
+	statuses := map[ProductStatus]string{
+		ProductStatusListed:   "Listed (Available)",
+		ProductStatusUnlisted: "Unlisted (Unavailable)",
+	}
+	if status, ok := statuses[s]; ok {
+		return status
+	}
+	return "Unknown"
+}
 
 // Product Change Notification
 type ProductChangeNotificationCallbackRequest struct {
@@ -435,4 +472,139 @@ type DoorOpenCloseResponse struct {
 	Status  int         `json:"status"`  // Status code
 	Message string      `json:"message"` // Status message
 	Data    interface{} `json:"data"`    // Result data (Shopping or Restocking)
+}
+
+// String returns the string representation of AlarmAction
+func (a AlarmAction) String() string {
+	actions := map[AlarmAction]string{
+		AlarmActionClientWarning:      "Maintenance Exception",
+		AlarmActionOperatingException: "Operational Exception",
+	}
+	if action, ok := actions[a]; ok {
+		return action
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of MaintenanceExceptionStatus
+func (s MaintenanceExceptionStatus) String() string {
+	statuses := map[MaintenanceExceptionStatus]string{
+		MaintenanceExceptionStatusTriggered: "Exception Triggered",
+		MaintenanceExceptionStatusRecovered: "Exception Recovered",
+	}
+	if status, ok := statuses[s]; ok {
+		return status
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of MaintenanceExceptionCode
+func (c MaintenanceExceptionCode) String() string {
+	codes := map[MaintenanceExceptionCode]string{
+		MaintenanceExceptionCodeCameraIssue:      "Camera Issue",
+		MaintenanceExceptionCodeHeavySensor:      "Heavy Sensor",
+		MaintenanceExceptionCodeUPSPower:         "UPS Power",
+		MaintenanceExceptionCodeOverheating:      "Overheating",
+		MaintenanceExceptionCodeShelfMalfunction: "Shelf Malfunction",
+		MaintenanceExceptionCodeLightCurtain:     "Light Curtain Error",
+		MaintenanceExceptionCodePositionShift:    "Position Shift",
+		MaintenanceExceptionCodeCardReader:       "Card Reader Issue",
+		MaintenanceExceptionCodePowerOff:         "Power Off",
+		MaintenanceExceptionCodeTooCold:          "Too Cold (< 3°C)",
+		MaintenanceExceptionCodeLockState:        "Lock State Issue",
+		MaintenanceExceptionCodeLockModules:      "Lock Modules",
+		MaintenanceExceptionCodeNetwork:          "Network",
+		MaintenanceExceptionCodeLight:            "Light",
+		MaintenanceExceptionCodeSerialConnection: "Serial Connection",
+		MaintenanceExceptionCodeDiskSpace:        "Disk Space",
+	}
+	if code, ok := codes[c]; ok {
+		return code
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of OperationalExceptionType
+func (t OperationalExceptionType) String() string {
+	types := map[OperationalExceptionType]string{
+		OperationalExceptionTypeWeightAnomaly:       "Abnormal weight change (non-shopping)",
+		OperationalExceptionTypeDoorLockAnomaly:     "Door lock anomaly (non-shopping)",
+		OperationalExceptionTypeUPSPower:            "Switched to UPS power",
+		OperationalExceptionTypeShoppingLockTimeout: "Lock timeout after shopping",
+		OperationalExceptionTypeRestockLockTimeout:  "Lock timeout after restocking",
+		OperationalExceptionTypeShoppingTimeout:     "Shopping session timeout",
+		OperationalExceptionTypeForeignIntrusion:    "Foreign object intrusion",
+		OperationalExceptionTypeInventoryMismatch:   "Inventory mismatch",
+		OperationalExceptionTypeUnauthorizedDoor:    "Door opened without shopping",
+	}
+	if t, ok := types[t]; ok {
+		return t
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of AlarmVideoStatus
+func (s AlarmVideoStatus) String() string {
+	statuses := map[AlarmVideoStatus]string{
+		AlarmVideoStatusNotUploaded:  "Not uploaded",
+		AlarmVideoStatusSuccess:      "Success",
+		AlarmVideoStatusNotFound:     "Not found",
+		AlarmVideoStatusUploadFailed: "Upload failed",
+	}
+	if status, ok := statuses[s]; ok {
+		return status
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of ProductApplicationReviewStatus
+func (s ProductApplicationReviewStatus) String() string {
+	statuses := map[ProductApplicationReviewStatus]string{
+		ProductApplicationReviewStatusApproved: "Approved",
+		ProductApplicationReviewStatusRejected: "Rejected",
+	}
+	if status, ok := statuses[s]; ok {
+		return status
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of ProductApplicationRejectType
+func (t ProductApplicationRejectType) String() string {
+	types := map[ProductApplicationRejectType]string{
+		ProductApplicationRejectTypeNameNonCompliant:    "Name non-compliant",
+		ProductApplicationRejectTypeBarcodeNonCompliant: "Barcode non-compliant",
+		ProductApplicationRejectTypeImageUnclear:        "Image unclear",
+		ProductApplicationRejectTypeOther:               "Other",
+	}
+	if t, ok := types[t]; ok {
+		return t
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of AdvertisementOnlineStatus
+func (s AdvertisementOnlineStatus) String() string {
+	statuses := map[AdvertisementOnlineStatus]string{
+		AdvertisementOnlineStatusOnline:  "Online",
+		AdvertisementOnlineStatusOffline: "Offline",
+	}
+	if status, ok := statuses[s]; ok {
+		return status
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of DoorOpenCloseAction
+func (a DoorOpenCloseAction) String() string {
+	actions := map[DoorOpenCloseAction]string{
+		DoorOpenCloseActionTradeOpen:      "Shopping door open",
+		DoorOpenCloseActionTradeClose:     "Shopping door close",
+		DoorOpenCloseActionReplenishOpen:  "Restocking door open",
+		DoorOpenCloseActionReplenishClose: "Restocking door close",
+	}
+	if action, ok := actions[a]; ok {
+		return action
+	}
+	return "Unknown"
 }
