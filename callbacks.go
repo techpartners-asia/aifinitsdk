@@ -200,6 +200,54 @@ type MaterialReviewNotificationCallbackRequest struct {
 	RejectReason        string                 `json:"rejectReason,omitempty"` // Reason for rejection
 }
 
+// ------------------- 2.2.1.5 ------------------- //
+// Product Change Notification
+//
+// Notifies third-party systems of product changes including new products,
+// product updates, and product deletions.
+//
+// Note: The action parameter in the query determines the type of change:
+// - add: New product added
+// - update: Existing product updated
+// - delete: Product deleted
+
+// Product Change Action Type
+type ProductChangeAction string
+
+const (
+	ProductChangeActionAdd    ProductChangeAction = "add"    // New product
+	ProductChangeActionUpdate ProductChangeAction = "update" // Update product
+	ProductChangeActionDelete ProductChangeAction = "delete" // Delete product
+)
+
+// Product Collection Type
+type ProductCollectionType int
+
+const (
+	ProductCollectionTypeSingle ProductCollectionType = 1 // Single item
+	ProductCollectionTypeBundle ProductCollectionType = 2 // Bundle
+)
+
+// Product Status
+type ProductStatus int
+
+const (
+	ProductStatusListed   ProductStatus = 1 // Listed (available)
+	ProductStatusUnlisted ProductStatus = 2 // Unlisted (unavailable)
+)
+
+// Product Change Notification
+type ProductChangeNotificationCallbackRequest struct {
+	Code      string                `json:"code"`      // Product code
+	CollType  ProductCollectionType `json:"collType"`  // Product collection type: 1 = single item, 2 = bundle
+	ImageUrl  string                `json:"imageUrl"`  // Product image URL
+	ItemCodes []string              `json:"itemCodes"` // Codes of items in the bundle (empty for single items)
+	Name      string                `json:"name"`      // Product name
+	Price     int                   `json:"price"`     // Price in cents
+	Status    ProductStatus         `json:"status"`    // 1 = listed (available), 2 = unlisted (unavailable)
+	Weight    int                   `json:"weight"`    // Weight in grams
+}
+
 // ------------------- 2.2.3.7 ------------------- //
 // Order Settlement Notification
 //
