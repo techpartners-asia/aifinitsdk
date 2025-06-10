@@ -170,6 +170,36 @@ type AdvertisementOnlineNotificationCallbackRequest struct {
 	Status AdvertisementOnlineStatus `json:"status"` // 1: Online, 2: Offline
 }
 
+// ------------------- 2.2.4.5 ------------------- //
+// Material Review Notification
+//
+// After advertising materials are submitted, JiandanGou (Simple Buy) operations personnel will review them.
+// The review result will be sent as a notification.
+//
+// Note: The status field indicates the review result:
+// - 2: Approved - Material has been approved
+// - 3: Rejected - Material has been rejected (rejectReason will be provided)
+
+// Material Review Status
+type MaterialReviewStatus int
+
+const (
+	MaterialReviewStatusApproved MaterialReviewStatus = 2 // Approved
+	MaterialReviewStatusRejected MaterialReviewStatus = 3 // Rejected
+)
+
+// Material Review Source
+type MaterialReviewSource struct {
+	ID int `json:"id"` // Material ID
+}
+
+// Material Review Notification
+type MaterialReviewNotificationCallbackRequest struct {
+	SourceMaterialsList []MaterialReviewSource `json:"sourceMaterialsList"`    // List of advertising materials
+	Status              MaterialReviewStatus   `json:"status"`                 // Review result: 2 = approved, 3 = rejected
+	RejectReason        string                 `json:"rejectReason,omitempty"` // Reason for rejection
+}
+
 // ------------------- 2.2.3.7 ------------------- //
 // Order Settlement Notification
 //
