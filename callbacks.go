@@ -190,6 +190,29 @@ const (
 	HandleStatusCloudFailure HandleStatus = 4 // Cloud recognition failure
 )
 
+// IsFailure checks if the handle status is a failure
+func (h HandleStatus) IsFailure() bool {
+	return h == HandleStatusLocalFailure || h == HandleStatusCloudFailure
+}
+
+// IsSuccess checks if the handle status is a success
+func (h HandleStatus) IsSuccess() bool {
+	return h == HandleStatusLocalSuccess || h == HandleStatusCloudSuccess
+}
+
+func (h HandleStatus) String() string {
+	statuses := map[HandleStatus]string{
+		HandleStatusLocalSuccess: "Local Success",
+		HandleStatusLocalFailure: "Local Failure",
+		HandleStatusCloudSuccess: "Cloud Success",
+		HandleStatusCloudFailure: "Cloud Failure",
+	}
+	if status, ok := statuses[h]; ok {
+		return status
+	}
+	return "Unknown"
+}
+
 type AbnormalReason string
 
 const (
@@ -202,6 +225,23 @@ const (
 	AbnormalReasonVideoError      AbnormalReason = "VIDEO_ERROR"      // Video anomalies
 	AbnormalReasonHardwareEx      AbnormalReason = "HARDWARE_EX"      // Failed algorithmic recognition
 )
+
+func (h AbnormalReason) String() string {
+	reasons := map[AbnormalReason]string{
+		AbnormalReasonCameraEx:        "Camera anomaly",
+		AbnormalReasonGravityEx:       "I don't feel important",
+		AbnormalReasonForeignInvasion: "Invasion of Foreign Objects",
+		AbnormalReasonUnknownItem:     "Unknown Products",
+		AbnormalReasonOther:           "Other",
+		AbnormalReasonUnfriendly:      "Non-friendly operation",
+		AbnormalReasonVideoError:      "Video anomalies",
+		AbnormalReasonHardwareEx:      "Failed algorithmic recognition",
+	}
+	if reason, ok := reasons[h]; ok {
+		return reason
+	}
+	return "Unknown"
+}
 
 type HardwareException string
 
