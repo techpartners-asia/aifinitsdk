@@ -110,7 +110,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 		return nil, ConvertOpenDoorError(resp.StatusCode(), resp.String())
 	}
 
-	if !isSuccessStatus(openDoorResponse.Status) {
+	if !isSuccessStatus(int(openDoorResponse.Status)) {
 		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", openDoorResponse.Status, openDoorResponse.Message))
 	}
 
@@ -567,12 +567,25 @@ type DeleteGoodsRequest struct {
 }
 
 type OpenDoorResponse struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
+	Status  OpenDoorStatus `json:"status"`
+	Message string         `json:"message"`
 	Data    struct {
 		OrderCode string `json:"orderCode"`
 	} `json:"data"`
 }
+
+type OpenDoorStatus int
+
+const (
+	OpenDoorStatusSuccess                    OpenDoorStatus = 200   // Door open request sent successfully
+	OpenDoorStatusInvalidType                OpenDoorStatus = 400   // Invalid type parameter
+	OpenDoorStatusClientTimeout              OpenDoorStatus = 503   // Client message reception timed out
+	OpenDoorStatusPackageError               OpenDoorStatus = 3501  // Vending machine product package error
+	OpenDoorStatusDeviceOffline              OpenDoorStatus = 10416 // Device is offline
+	OpenDoorStatusMachineNotInOperation      OpenDoorStatus = 40525 // Vending machine is not in operation
+	OpenDoorStatusTooManyUncompletedOrders   OpenDoorStatus = 40526 // Too many uncompleted orders on the vending machine
+	OpenDoorStatusMachineNotBelongToMerchant OpenDoorStatus = 40531 // Vending machine does not belong to this merchant
+)
 
 type GetMachineGoodsResponse struct {
 	Status  int     `json:"status"`
