@@ -420,10 +420,17 @@ const (
 	DoorOpenCloseActionReplenishClose DoorOpenCloseAction = "replenish_close" // Restocking door close
 )
 
+type OpenType int
+
+const (
+	OpenTypeShopping   OpenType = 1 // Shopping
+	OpenTypeRestocking OpenType = 2 // Restocking
+)
+
 // Door Open/Close Notification
 type DoorOpenCloseNotificationCallbackRequest struct {
 	OrderCode string              `json:"orderCode,omitempty"` // Order number (only for shopping open/close)
-	OpenType  DoorOpenCloseAction `json:"openType"`            // 1: Shopping, 2: Restocking
+	OpenType  OpenType            `json:"openType"`            // 1: Shopping, 2: Restocking
 	RequestID string              `json:"requestId"`           // Door open request ID
 	Status    DoorOpenCloseStatus `json:"status"`              // Door open/close result (see section 2.2.3.4)
 	VmCode    string              `json:"vmCode"`              // Vending machine code
