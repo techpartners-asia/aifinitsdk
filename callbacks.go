@@ -423,7 +423,7 @@ const (
 // Door Open/Close Notification
 type DoorOpenCloseNotificationCallbackRequest struct {
 	OrderCode string              `json:"orderCode,omitempty"` // Order number (only for shopping open/close)
-	OpenType  int                 `json:"openType"`            // 1: Shopping, 2: Restocking
+	OpenType  DoorOpenCloseAction `json:"openType"`            // 1: Shopping, 2: Restocking
 	RequestID string              `json:"requestId"`           // Door open request ID
 	Status    DoorOpenCloseStatus `json:"status"`              // Door open/close result (see section 2.2.3.4)
 	VmCode    string              `json:"vmCode"`              // Vending machine code
@@ -489,8 +489,8 @@ func (a AlarmAction) String() string {
 // String returns the string representation of MaintenanceExceptionStatus
 func (s MaintenanceExceptionStatus) String() string {
 	statuses := map[MaintenanceExceptionStatus]string{
-		MaintenanceExceptionStatusTriggered: "Exception Triggered",
-		MaintenanceExceptionStatusRecovered: "Exception Recovered",
+		MaintenanceExceptionStatusTriggered: "Exception triggered",
+		MaintenanceExceptionStatusRecovered: "Exception recovered",
 	}
 	if status, ok := statuses[s]; ok {
 		return status
@@ -605,6 +605,46 @@ func (a DoorOpenCloseAction) String() string {
 	}
 	if action, ok := actions[a]; ok {
 		return action
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of MaterialReviewStatus
+func (s MaterialReviewStatus) String() string {
+	statuses := map[MaterialReviewStatus]string{
+		MaterialReviewStatusApproved: "Approved",
+		MaterialReviewStatusRejected: "Rejected",
+	}
+	if status, ok := statuses[s]; ok {
+		return status
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of HardwareException
+func (e HardwareException) String() string {
+	exceptions := map[HardwareException]string{
+		HardwareExceptionCamera:          "Camera is unusual",
+		HardwareExceptionGravity:         "Awesome feeling",
+		HardwareExceptionForeignInvasion: "Invasion of Foreign Objects",
+		HardwareExceptionNetwork:         "Network anomalies",
+		HardwareExceptionCrash:           "Unusual software exit",
+	}
+	if exception, ok := exceptions[e]; ok {
+		return exception
+	}
+	return "Unknown"
+}
+
+// String returns the string representation of ShopMove
+func (m ShopMove) String() string {
+	moves := map[ShopMove]string{
+		ShopMoveDoorNotOpen:      "The door is not open",
+		ShopMoveDoorOpenNoMove:   "The door is open, but no movement",
+		ShopMoveDoorOpenWithMove: "The door is open and there is movement",
+	}
+	if move, ok := moves[m]; ok {
+		return move
 	}
 	return "Unknown"
 }
