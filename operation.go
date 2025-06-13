@@ -107,11 +107,7 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 	}
 
 	if resp.IsError() {
-		return nil, ConvertOpenDoorError(resp.StatusCode(), resp.String())
-	}
-
-	if !isSuccessStatus(int(openDoorResponse.Status)) {
-		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", openDoorResponse.Status, openDoorResponse.Message))
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), openDoorResponse.Status.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -142,11 +138,7 @@ func (c *OperationClientImpl) ListGoods(machineCode string) (*GetMachineGoodsRes
 	}
 
 	if resp.IsError() {
-		return nil, ConvertGetSoldGoodsError(resp.StatusCode(), resp.String())
-	}
-
-	if !isSuccessStatus(getSoldGoodsResponse.Status) {
-		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", getSoldGoodsResponse.Status, getSoldGoodsResponse.Message))
+		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), getSoldGoodsResponse.Status.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -587,11 +579,58 @@ const (
 	OpenDoorStatusMachineNotBelongToMerchant OpenDoorStatus = 40531 // Vending machine does not belong to this merchant
 )
 
+func (s OpenDoorStatus) String() string {
+	switch s {
+	case OpenDoorStatusSuccess:
+		return "Open door request sent successfully"
+	case OpenDoorStatusInvalidType:
+		return "Invalid type parameter"
+	case OpenDoorStatusClientTimeout:
+		return "Client message reception timed out"
+	case OpenDoorStatusPackageError:
+		return "Vending machine product package error"
+	case OpenDoorStatusDeviceOffline:
+		return "Device is offline"
+	case OpenDoorStatusMachineNotInOperation:
+		return "Vending machine is not in operation"
+	case OpenDoorStatusTooManyUncompletedOrders:
+		return "Too many uncompleted orders on the vending machine"
+	case OpenDoorStatusMachineNotBelongToMerchant:
+		return "Vending machine does not belong to this merchant"
+	default:
+		return fmt.Sprintf("Unknown status code: %d", s)
+	}
+}
+
 type GetMachineGoodsResponse struct {
-	Status  int     `json:"status"`
-	Message string  `json:"message"`
-	Result  []Goods `json:"result"`
-	Count   int     `json:"count"`
+	Status  GetMachineGoodsError `json:"status"`
+	Message string               `json:"message"`
+	Result  []Goods              `json:"result"`
+	Count   int                  `json:"count"`
+}
+
+type GetMachineGoodsError int
+
+const (
+	GetMachineGoodsErrorSuccess                       GetMachineGoodsError = 200   // Success
+	GetMachineGoodsErrorFailed                        GetMachineGoodsError = 400   // Failed
+	GetMachineGoodsErrorSelfDealerNotExist            GetMachineGoodsError = 40506 // The self-dealer does not exist
+	GetMachineGoodsErrorSelfDealerNotBelongToMerchant GetMachineGoodsError = 40531 // The self-dealer does not belong to the merchant
+)
+
+func (e GetMachineGoodsError) String() string {
+	switch e {
+	case GetMachineGoodsErrorSuccess:
+		return "Success"
+	case GetMachineGoodsErrorFailed:
+		return "Failed"
+	case GetMachineGoodsErrorSelfDealerNotExist:
+		return "The self-dealer does not exist"
+	case GetMachineGoodsErrorSelfDealerNotBelongToMerchant:
+		return "The self-dealer does not belong to the merchant"
+	default:
+		return fmt.Sprintf("Unknown status code: %d", e)
+	}
 }
 
 type SearchOpenDoorData struct {

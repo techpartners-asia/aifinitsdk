@@ -1045,26 +1045,3 @@ func (e OpenDoorError) String() string {
 		return fmt.Sprintf("OpenDoorError: %d", e)
 	}
 }
-
-func ConvertOpenDoorError(code int, message string) error {
-	switch code {
-	case ErrOpenDoorSuccess:
-		return NewAinfinitError(fmt.Errorf("OpenDoorSuccess: %d, message: %s", code, message))
-	case ErrOpenDoorFailed:
-		return NewAinfinitError(fmt.Errorf("OpenDoorFailed: %d, message: %s", code, message))
-	case ErrOpenDoorTimeout:
-		return NewAinfinitError(fmt.Errorf("OpenDoorTimeout: %d, message: %s", code, message))
-	case ErrOpenDoorUnusualMachinePackage:
-		return NewAinfinitError(fmt.Errorf("OpenDoorUnusualMachinePackage: %d, message: %s", code, message))
-	case ErrOpenDoorOfflineEquipment:
-		return NewAinfinitError(fmt.Errorf("OpenDoorOfflineEquipment: %d, message: %s", code, message))
-	case ErrOpenDoorSelfDealerNotInOperation:
-		return NewAinfinitError(fmt.Errorf("OpenDoorSelfDealerNotInOperation: %d, message: %s", code, message))
-	case ErrOpenDoorTooManyOrdersNotCompleted:
-		return NewAinfinitError(fmt.Errorf("OpenDoorTooManyOrdersNotCompleted: %d, message: %s", code, message))
-	case ErrOpenDoorNonBusinessSelfSellerMachine:
-		return NewAinfinitError(fmt.Errorf("OpenDoorNonBusinessSelfSellerMachine: %d, message: %s", code, message))
-	default:
-		return NewAinfinitError(fmt.Errorf("OpenDoorError: %d, message: %s", code, message))
-	}
-}
