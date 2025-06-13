@@ -422,11 +422,11 @@ const (
 
 // Door Open/Close Notification
 type DoorOpenCloseNotificationCallbackRequest struct {
-	OrderCode string `json:"orderCode,omitempty"` // Order number (only for shopping open/close)
-	OpenType  int    `json:"openType"`            // 1: Shopping, 2: Restocking
-	RequestID string `json:"requestId"`           // Door open request ID
-	Status    int    `json:"status"`              // Door open/close result (see section 2.2.3.4)
-	VmCode    string `json:"vmCode"`              // Vending machine code
+	OrderCode string              `json:"orderCode,omitempty"` // Order number (only for shopping open/close)
+	OpenType  int                 `json:"openType"`            // 1: Shopping, 2: Restocking
+	RequestID string              `json:"requestId"`           // Door open request ID
+	Status    DoorOpenCloseStatus `json:"status"`              // Door open/close result (see section 2.2.3.4)
+	VmCode    string              `json:"vmCode"`              // Vending machine code
 }
 
 // ------------------- 2.2.3.4 ------------------- //
