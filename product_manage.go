@@ -577,6 +577,19 @@ func (e DeleteGoodsError) Error() string {
 	return fmt.Sprintf("DeleteGoodsError: %d", e)
 }
 
+func (e DeleteGoodsError) String() string {
+	switch int(e) {
+	case ErrDeleteGoodsSelfDealerNotExist:
+		return "Self dealer does not exist"
+	case ErrDeleteGoodsUnknownGoods:
+		return "Unknown goods"
+	case ErrDeleteGoodsNoOperatingPermissions:
+		return "No operating permissions"
+	default:
+		return fmt.Sprintf("DeleteGoodsError: %d", e)
+	}
+}
+
 func ConvertDeleteGoodsError(code int, message string) error {
 	switch code {
 	case ErrDeleteGoodsSelfDealerNotExist:
@@ -604,6 +617,27 @@ const (
 
 func (e AddNewGoodsError) Error() string {
 	return fmt.Sprintf("AddNewGoodsError: %d", e)
+}
+
+func (e AddNewGoodsError) String() string {
+	switch int(e) {
+	case ErrAddNewGoodsTooManyGoods:
+		return "Too many goods"
+	case ErrAddNewGoodsDuplicateGoods:
+		return "Duplicate goods"
+	case ErrAddNewGoodsMutuallyExclusiveGoods:
+		return "Mutually exclusive goods"
+	case ErrAddNewGoodsDownloadedGoods:
+		return "Downloaded goods"
+	case ErrAddNewGoodsSelfDealerNotExist:
+		return "Self dealer does not exist"
+	case ErrAddNewGoodsUnknownGoods:
+		return "Unknown goods"
+	case ErrAddNewGoodsNoOperatingPermissions:
+		return "No operating permissions"
+	default:
+		return fmt.Sprintf("AddNewGoodsError: %d", e)
+	}
 }
 
 func ConvertAddNewGoodsError(code int, message string) error {
@@ -642,6 +676,25 @@ func (e ProductPriceUpdateError) Error() string {
 	return fmt.Sprintf("ProductPriceUpdateError: %d", e)
 }
 
+func (e ProductPriceUpdateError) String() string {
+	switch int(e) {
+	case ErrProductPriceUpdateVendingMachineDoesNotExistTargetGoods:
+		return "Vending machine does not exist target goods"
+	case ErrProductPriceUpdateThereAreDuplicateProducts:
+		return "There are duplicate products"
+	case ErrProductPriceUpdateThereAreDownloadedGoods:
+		return "There are downloaded goods"
+	case ErrProductPriceUpdateTheSelfDealerDoesNotExist:
+		return "The self dealer does not exist"
+	case ErrProductPriceUpdateThereAreUnknownProducts:
+		return "There are unknown products"
+	case ErrProductPriceUpdateNoOperatingPermissions:
+		return "No operating permissions"
+	default:
+		return fmt.Sprintf("ProductPriceUpdateError: %d", e)
+	}
+}
+
 func ConvertProductPriceUpdateError(code int, message string) error {
 	switch code {
 	case ErrProductPriceUpdateVendingMachineDoesNotExistTargetGoods:
@@ -671,6 +724,19 @@ const (
 
 func (e GetOrderVideoError) Error() string {
 	return fmt.Sprintf("GetOrderVideoError: %d", e)
+}
+
+func (e GetOrderVideoError) String() string {
+	switch int(e) {
+	case ErrGetOrderVideoSuccess:
+		return "Success"
+	case ErrGetOrderVideoNoOrderOrReplenishmentRecordsFound:
+		return "No order or replenishment records found"
+	case ErrGetOrderVideoTheOpeningRequestDoesNotExist:
+		return "The opening request does not exist"
+	default:
+		return fmt.Sprintf("GetOrderVideoError: %d", e)
+	}
 }
 
 func ConvertGetOrderVideoError(code int, message string) error {
@@ -720,6 +786,67 @@ const (
 
 func (e SearchOpenDoorError) Error() string {
 	return fmt.Sprintf("SearchOpenDoorError: %d", e)
+}
+
+func (e SearchOpenDoorError) String() string {
+	switch int(e) {
+	case ErrSearchOpenDoorSuccess:
+		return "Open door success"
+	case ErrSearchOpenDoorClosingSuccess:
+		return "Closing success"
+	case ErrSearchOpenDoorLastShoppingNotOver:
+		return "Last shopping not over"
+	case ErrSearchOpenDoorLastReplenishmentNotOver:
+		return "Last replenishment not over"
+	case ErrSearchOpenDoorEquipmentPoweredOff:
+		return "Equipment powered off"
+	case ErrSearchOpenDoorEquipmentInOperationMode:
+		return "Equipment in operation mode"
+	case ErrSearchOpenDoorDoorOpenedFailed:
+		return "Door opened failed"
+	case ErrSearchOpenDoorDeviceBackgroundProcess:
+		return "Device background process"
+	case ErrSearchOpenDoorDeviceReceivedMessageTimeout:
+		return "Device received message timeout"
+	case ErrSearchOpenDoorUnknownError:
+		return "Unknown error"
+	case ErrSearchOpenDoorDebuggingInformationIncorrect:
+		return "Debugging information incorrect"
+	case ErrSearchOpenDoorVerificationOfSaleOfPlanningProductsFailed:
+		return "Verification of sale of planning products failed"
+	case ErrSearchOpenDoorFailedDoorOpeningEquipmentSerialFailure:
+		return "Failed door opening equipment serial failure"
+	case ErrSearchOpenDoorEquipmentHeavyFaults:
+		return "Equipment heavy faults"
+	case ErrSearchOpenDoorDeviceCameraAllDropped:
+		return "Device camera all dropped"
+	case ErrSearchOpenDoorFailedDoorOpeningLocalRecognitionAlgorithmAbnormal:
+		return "Failed door opening local recognition algorithm abnormal"
+	case ErrSearchOpenDoorFailedToOpenTheDoorTheLockWasUnusual:
+		return "Failed to open the door, the lock was unusual"
+	case ErrSearchOpenDoorEquipmentPowerSupplyStatusError:
+		return "Equipment power supply status error"
+	case ErrSearchOpenDoorDoorLockAbnormalTheDoorIsOpen:
+		return "Door lock abnormal, the door is open"
+	case ErrSearchOpenDoorDoorLockAbnormalTheDoorIsClosed:
+		return "Door lock abnormal, the door is closed"
+	case ErrSearchOpenDoorDoorLockAbnormalTheDoorIsClosed2:
+		return "Door lock abnormal, the door is closed (2)"
+	case ErrSearchOpenDoorDoorLockAbnormalTheDoorIsClosed3:
+		return "Door lock abnormal, the door is closed (3)"
+	case ErrSearchOpenDoorEquipmentHasNotReportedTheResults:
+		return "Equipment has not reported the results"
+	case ErrSearchOpenDoorDoorRequestIdDoesNotExist:
+		return "Door request ID does not exist"
+	case ErrSearchOpenDoorTypeParameterTypeError:
+		return "Type parameter type error"
+	case ErrSearchOpenDoorTooManyOrdersInTheShop:
+		return "Too many orders in the shop"
+	case ErrSearchOpenDoorNoSearchPermissions:
+		return "No search permissions"
+	default:
+		return fmt.Sprintf("SearchOpenDoorError: %d", e)
+	}
 }
 
 func ConvertSearchOpenDoorError(code int, message string) error {
@@ -799,6 +926,27 @@ func (e UpdateSoldGoodsError) Error() string {
 	return fmt.Sprintf("UpdateSoldGoodsError: %d", e)
 }
 
+func (e UpdateSoldGoodsError) String() string {
+	switch int(e) {
+	case ErrUpdateSoldGoodsTooManyGoods:
+		return "Too many goods"
+	case ErrUpdateSoldGoodsDuplicateGoods:
+		return "Duplicate goods"
+	case ErrUpdateSoldGoodsMutuallyExclusiveGoods:
+		return "Mutually exclusive goods"
+	case ErrUpdateSoldGoodsDownloadedGoods:
+		return "Downloaded goods"
+	case ErrUpdateSoldGoodsSelfDealerNotExist:
+		return "Self dealer does not exist"
+	case ErrUpdateSoldGoodsUnknownGoods:
+		return "Unknown goods"
+	case ErrUpdateSoldGoodsNoOperatingPermissions:
+		return "No operating permissions"
+	default:
+		return fmt.Sprintf("UpdateSoldGoodsError: %d", e)
+	}
+}
+
 func ConvertUpdateSoldGoodsError(code int, message string) error {
 	switch code {
 	case ErrUpdateSoldGoodsTooManyGoods:
@@ -836,6 +984,17 @@ func (e GetSoldGoodsError) Error() string {
 	return fmt.Sprintf("GetSoldGoodsError: %d", e)
 }
 
+func (e GetSoldGoodsError) String() string {
+	switch int(e) {
+	case ErrGetSoldGoodsSelfDealerNotExist:
+		return "Self dealer does not exist"
+	case ErrGetSoldGoodsSelfDealerNotBelongToMerchant:
+		return "Self dealer not belong to merchant"
+	default:
+		return fmt.Sprintf("GetSoldGoodsError: %d", e)
+	}
+}
+
 func ConvertGetSoldGoodsError(code int, message string) error {
 	switch code {
 	case ErrGetSoldGoodsSelfDealerNotExist:
@@ -862,6 +1021,29 @@ const (
 
 func (e OpenDoorError) Error() string {
 	return fmt.Sprintf("OpenDoorError: %d", e)
+}
+
+func (e OpenDoorError) String() string {
+	switch int(e) {
+	case ErrOpenDoorSuccess:
+		return "Open door success"
+	case ErrOpenDoorFailed:
+		return "Open door failed"
+	case ErrOpenDoorTimeout:
+		return "Open door timeout"
+	case ErrOpenDoorUnusualMachinePackage:
+		return "Unusual machine package"
+	case ErrOpenDoorOfflineEquipment:
+		return "Offline equipment"
+	case ErrOpenDoorSelfDealerNotInOperation:
+		return "Self dealer not in operation"
+	case ErrOpenDoorTooManyOrdersNotCompleted:
+		return "Too many orders not completed"
+	case ErrOpenDoorNonBusinessSelfSellerMachine:
+		return "Non-business self seller machine"
+	default:
+		return fmt.Sprintf("OpenDoorError: %d", e)
+	}
 }
 
 func ConvertOpenDoorError(code int, message string) error {
