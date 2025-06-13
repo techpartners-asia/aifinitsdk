@@ -642,6 +642,67 @@ type DeleteGoodsResponse struct {
 // Door Open/Close Status Code
 type DoorOpenCloseStatus int
 
+func (s DoorOpenCloseStatus) String() string {
+	switch s {
+	case DoorOpenCloseStatusOpened:
+		return "Door opened successfully"
+	case DoorOpenCloseStatusClosed:
+		return "Door closed successfully"
+	case DoorOpenCloseStatusShoppingNotFinished:
+		return "Failed to open - previous shopping not finished"
+	case DoorOpenCloseStatusRestockingNotFinished:
+		return "Failed to open - previous restocking not finished"
+	case DoorOpenCloseStatusPowerOff:
+		return "Failed to open - device power off, running on UPS"
+	case DoorOpenCloseStatusMaintenanceMode:
+		return "Failed to open - device in maintenance mode"
+	case DoorOpenCloseStatusBackgroundProcess:
+		return "Failed to open - device background process active"
+	case DoorOpenCloseStatusTimeout:
+		return "Failed to open - device response timeout (20s)"
+	case DoorOpenCloseStatusNoResult:
+		return "Failed to open - no result reported within 5 minutes"
+	case DoorOpenCloseStatusUnknownError:
+		return "Failed to open - unknown error"
+	case DoorOpenCloseStatusCalibration:
+		return "Failed to open - calibration error"
+	case DoorOpenCloseStatusProductVerification:
+		return "Failed to open - product verification failed"
+	case DoorOpenCloseStatusSerialPortFault:
+		return "Failed to open - serial port fault"
+	case DoorOpenCloseStatusWeightSensorFault:
+		return "Failed to open - weight sensor fault"
+	case DoorOpenCloseStatusCamerasOffline:
+		return "Failed to open - all cameras offline"
+	case DoorOpenCloseStatusAlgorithmError:
+		return "Failed to open - local recognition algorithm error"
+	case DoorOpenCloseStatusDoorLockError:
+		return "Failed to open - door lock error"
+	case DoorOpenCloseStatusPowerStatusError:
+		return "Failed to open - device power status error"
+	case DoorOpenCloseStatusDoorOpenLockOpen:
+		return "Door lock error - door open + lock open"
+	case DoorOpenCloseStatusDoorClosedLockOpen:
+		return "Door lock error - door closed + lock open"
+	case DoorOpenCloseStatusDoorOpenLockClosed:
+		return "Door lock error - door open + lock closed"
+	case DoorOpenCloseStatusDoorClosedLockClosed:
+		return "Door lock error - door closed + lock closed"
+	case DoorOpenCloseStatusNoResultYet:
+		return "No result reported by device yet"
+	case DoorOpenCloseStatusRequestNotFound:
+		return "Request ID does not exist"
+	case DoorOpenCloseStatusInvalidType:
+		return "Invalid parameter: type"
+	case DoorOpenCloseStatusTooManyOrders:
+		return "Too many shopping orders in progress"
+	case DoorOpenCloseStatusNoPermission:
+		return "No permission to query"
+	default:
+		return fmt.Sprintf("Unknown status code: %d", s)
+	}
+}
+
 const (
 	// Success Status Codes
 	DoorOpenCloseStatusOpened DoorOpenCloseStatus = 201 // Door opened successfully
