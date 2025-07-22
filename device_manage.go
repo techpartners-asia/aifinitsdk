@@ -25,7 +25,7 @@ func NewAinfinitError(err error) error {
 }
 
 type VendingMachineManageClient interface {
-	Activation(request *DeviceActivationRequest) error
+	Activation(machineCode string, request *DeviceActivationRequest) error
 	List(request *ListMachineRequest) (*ListMachineResponse, error)
 	DeviceInfo(machineCode string) (*DeviceInfoResponse, error)
 	MachineDetail(machineCode string) (*MachineDetailResponse, error)
@@ -277,7 +277,7 @@ func (c *vendingMachineManageClient) Control(request *DeviceControlRequest, mach
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Activation(request *DeviceActivationRequest) error {
+func (c *vendingMachineManageClient) Activation(machineCode string, request *DeviceActivationRequest) error {
 	if c.Client.IsDebug() {
 		logrus.WithField("request", request).Debug("Activating vending machine")
 	}
@@ -288,7 +288,7 @@ func (c *vendingMachineManageClient) Activation(request *DeviceActivationRequest
 	}
 
 	var result DeviceActivationResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
 		Post(Post_DeviceActivation)
 	if err != nil {
 		return NewAinfinitError(err)
