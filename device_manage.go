@@ -25,7 +25,7 @@ func NewAinfinitError(err error) error {
 }
 
 type VendingMachineManageClient interface {
-	Activation(machineCode string, request *DeviceActivationRequest) error
+	Activation(machineCode string, request *DeviceActivationRequest) (*DeviceActivationResponse, error)
 	List(request *ListMachineRequest) (*ListMachineResponse, error)
 	DeviceInfo(machineCode string) (*DeviceInfoResponse, error)
 	MachineDetail(machineCode string) (*MachineDetailResponse, error)
@@ -277,29 +277,21 @@ func (c *vendingMachineManageClient) Control(request *DeviceControlRequest, mach
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Activation(machineCode string, request *DeviceActivationRequest) error {
+func (c *vendingMachineManageClient) Activation(machineCode string, request *DeviceActivationRequest) (*DeviceActivationResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithField("request", request).Debug("Activating vending machine")
 	}
 
 	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
 	if err != nil {
-		return NewAinfinitError(err)
+		return nil, NewAinfinitError(err)
 	}
 
 	var result DeviceActivationResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
+	_, err = c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
 		Post(Post_DeviceActivation)
 	if err != nil {
-		return NewAinfinitError(err)
-	}
-
-	if resp.IsError() {
-		return NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
-	}
-
-	if !isSuccessStatus(result.Status) {
-		return NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
+		return nil, NewAinfinitError(err)
 	}
 
 	if c.Client.IsDebug() {
@@ -308,7 +300,7 @@ func (c *vendingMachineManageClient) Activation(machineCode string, request *Dev
 		}).Debug("Activated vending machine successfully")
 	}
 
-	return nil
+	return &result, nil
 }
 func (c *vendingMachineManageClient) Alarm(machineCode string)   {}
 func (c *vendingMachineManageClient) Setting(machineCode string) {}
