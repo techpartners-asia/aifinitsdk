@@ -25,6 +25,7 @@ func NewAinfinitError(err error) error {
 }
 
 type VendingMachineManageClient interface {
+	Activation(request *DeviceActivationRequest) error
 	List(request *ListMachineRequest) (*ListMachineResponse, error)
 	DeviceInfo(machineCode string) (*DeviceInfoResponse, error)
 	MachineDetail(machineCode string) (*MachineDetailResponse, error)
@@ -32,7 +33,6 @@ type VendingMachineManageClient interface {
 	Update(request *DeviceUpdateRequest, machineCode string) (*DeviceUpdateResponse, error)
 	Control(request *DeviceControlRequest, machineCode string) (*DeviceControlResponse, error)
 
-	Activation(machineCode string)
 	Alarm(machineCode string)
 	Setting(machineCode string)
 }
@@ -277,9 +277,53 @@ func (c *vendingMachineManageClient) Control(request *DeviceControlRequest, mach
 	return &result, nil
 }
 
-func (c *vendingMachineManageClient) Activation(machineCode string) {}
-func (c *vendingMachineManageClient) Alarm(machineCode string)      {}
-func (c *vendingMachineManageClient) Setting(machineCode string)    {}
+func (c *vendingMachineManageClient) Activation(request *DeviceActivationRequest) error {
+	if c.Client.IsDebug() {
+		logrus.WithField("request", request).Debug("Activating vending machine")
+	}
+
+	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
+	if err != nil {
+		return NewAinfinitError(err)
+	}
+
+	var result DeviceActivationResponse
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).
+		Post(Post_DeviceActivation)
+	if err != nil {
+		return NewAinfinitError(err)
+	}
+
+	if resp.IsError() {
+		return NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), resp.String()))
+	}
+
+	if !isSuccessStatus(result.Status) {
+		return NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": fmt.Sprintf("%+v", result),
+		}).Debug("Activated vending machine successfully")
+	}
+
+	return nil
+}
+func (c *vendingMachineManageClient) Alarm(machineCode string)   {}
+func (c *vendingMachineManageClient) Setting(machineCode string) {}
+
+type DeviceActivationRequest struct {
+	Name          string `json:"name"`
+	Location      string `json:"location"`
+	ScanCode      string `json:"scanCode"`
+	ContactNumber string `json:"contactNumber"`
+}
+
+type DeviceActivationResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
 
 // Device represents a vending machine device with its status and capabilities
 type Device struct {
