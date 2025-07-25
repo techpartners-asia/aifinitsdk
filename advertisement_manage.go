@@ -303,7 +303,7 @@ func (c *advertisementManageClientImpl) AdUpdate(request *AdUpdateRequest) (*AdU
 	}
 
 	var result AdUpdateResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request).SetResult(&result).Put(Put_AdvertisementAdUpdate)
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetBody(request.Ad).SetResult(&result).Put(Put_AdvertisementAdUpdate)
 	if err != nil {
 		return nil, NewAinfinitError(err)
 	}
