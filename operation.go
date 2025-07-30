@@ -100,14 +100,10 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 		req.SetQueryParam("requestId", request.RequestID)
 	}
 
-	resp, err := req.Put(Put_OpenDoor)
+	_, err = req.Put(Put_OpenDoor)
 
 	if err != nil {
 		return nil, NewAinfinitError(err)
-	}
-
-	if resp.IsError() {
-		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), openDoorResponse.Status.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -130,15 +126,11 @@ func (c *OperationClientImpl) ListGoods(machineCode string) (*GetMachineGoodsRes
 	}
 
 	var getSoldGoodsResponse *GetMachineGoodsResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+	_, err = c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
 		SetResult(&getSoldGoodsResponse).Get(Get_SoldGoods)
 	if err != nil {
 		return nil, NewAinfinitError(err)
-	}
-
-	if resp.IsError() {
-		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", resp.StatusCode(), getSoldGoodsResponse.Status.String()))
 	}
 
 	if c.Client.IsDebug() {
@@ -164,19 +156,11 @@ func (c *OperationClientImpl) UpdateGoods(request *UpdateGoodsRequest, machineCo
 	}
 
 	var updateSoldGoodsResponse *UpdateSoldGoodsResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+	_, err = c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
 		SetBody(request).SetResult(&updateSoldGoodsResponse).Post(Post_UpdateSoldGoods)
 	if err != nil {
 		return nil, NewAinfinitError(err)
-	}
-
-	if resp.IsError() {
-		return nil, ConvertUpdateSoldGoodsError(resp.StatusCode(), resp.String())
-	}
-
-	if !isSuccessStatus(updateSoldGoodsResponse.Status) {
-		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", updateSoldGoodsResponse.Status, updateSoldGoodsResponse.Message))
 	}
 
 	if c.Client.IsDebug() {
@@ -202,7 +186,7 @@ func (c *OperationClientImpl) OpenDoorReqDetail(request *OpenDoorDetailRequest, 
 	}
 
 	var searchOpenDoorResponse *OpenDoorDetailResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+	_, err = c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
 		SetQueryParams(map[string]string{
 			"type":      fmt.Sprintf("%d", request.Type),
@@ -210,14 +194,6 @@ func (c *OperationClientImpl) OpenDoorReqDetail(request *OpenDoorDetailRequest, 
 		}).SetResult(&searchOpenDoorResponse).Get(Get_SearchOpenDoor)
 	if err != nil {
 		return nil, NewAinfinitError(err)
-	}
-
-	if resp.IsError() {
-		return nil, ConvertSearchOpenDoorError(resp.StatusCode(), resp.String())
-	}
-
-	if !isSuccessStatus(int(searchOpenDoorResponse.Status)) {
-		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", searchOpenDoorResponse.Status, searchOpenDoorResponse.Message))
 	}
 
 	if c.Client.IsDebug() {
@@ -243,7 +219,7 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machi
 	}
 
 	var getOrderVideoResponse *GetOrderVideoResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).
+	_, err = c.Resty.R().SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
 		SetQueryParams(map[string]string{
 			"type":      fmt.Sprintf("%d", request.Type),
@@ -251,14 +227,6 @@ func (c *OperationClientImpl) GetOrderVideo(request *GetOrderVideoRequest, machi
 		}).SetResult(&getOrderVideoResponse).Get(Get_OrderVideo)
 	if err != nil {
 		return nil, NewAinfinitError(err)
-	}
-
-	if resp.IsError() {
-		return nil, ConvertGetOrderVideoError(resp.StatusCode(), resp.String())
-	}
-
-	if !isSuccessStatus(getOrderVideoResponse.Status) {
-		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", getOrderVideoResponse.Status, getOrderVideoResponse.Message))
 	}
 
 	if c.Client.IsDebug() {
