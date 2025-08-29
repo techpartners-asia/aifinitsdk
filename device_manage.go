@@ -35,6 +35,7 @@ type VendingMachineManageClient interface {
 
 	Alarm(machineCode string)
 	Setting(request SettingRequest, machineCode string) (*SettingResponse, error)
+	RefrigerationControl(request RefrigerationControlRequest, machineCode string) (*RefrigerationControlResponse, error)
 }
 
 type vendingMachineManageClient struct {
@@ -334,6 +335,52 @@ func (c *vendingMachineManageClient) Setting(request SettingRequest, machineCode
 
 	return &result, nil
 
+}
+
+func (c *vendingMachineManageClient) RefrigerationControl(request RefrigerationControlRequest, machineCode string) (*RefrigerationControlResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("request", request).Debug("RefrigerationControl requested")
+	}
+
+	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
+	if err != nil {
+		return nil, NewAinfinitError(err)
+	}
+
+	var result RefrigerationControlResponse
+	_, err = c.Resty.R().SetHeader("Authorization", signature).SetQueryParams(map[string]string{
+		"vmCode":      request.VmCode,
+		"comprEnable": strconv.Itoa(request.ComprEnable),
+		"temp":        strconv.Itoa(request.Temp),
+		"tempMode":    strconv.Itoa(request.TempMode),
+	}).SetBody(request).SetResult(&result).
+		Put(Put_DeviceSetting)
+	if err != nil {
+		return nil, NewAinfinitError(err)
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": fmt.Sprintf("%+v", result),
+		}).Debug("Setting vending machine successfully")
+	}
+
+	return &result, nil
+
+}
+
+type RefrigerationControlRequest struct {
+	VmCode      string `json:"replVideoUploadFlag"` // Restocking video upload, 0 = No, 1 = Yes
+	ComprEnable int    `json:"comprEnable"`         // thermostat switch: 1 on, 0 off
+	Temp        int    `json:"temp"`                // refrigeration:(-28~-18), heating (30-50)
+	TempMode    int    `json:"tempMode"`            // 0: normal temp, 10: refrigeration, 11: refrigeration energy saving, 20: heating mode, 21: heating energy saving
+
+}
+
+type RefrigerationControlResponse struct {
+	Status  uint   `json:"status"`
+	Message string `json:"message"`
+	Ok      bool   `json:"ok"`
 }
 
 type SettingRequest struct {
