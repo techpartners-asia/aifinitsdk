@@ -6,6 +6,7 @@ const (
 
 // Device Manage
 const (
+	Put_DeviceSetting               = BaseURL + "/facade/open/vending_machine/setting"
 	Post_DeviceActivation           = BaseURL + "/facade/open/vending_machine/bind"
 	Get_VendingMachineList          = BaseURL + "/facade/open/vending_machine/infoPage"
 	Get_VendingMachineInfo          = BaseURL + "/facade/open/vending_machine/info"

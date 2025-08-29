@@ -314,8 +314,13 @@ func (c *vendingMachineManageClient) Setting(request SettingRequest, machineCode
 		return nil, NewAinfinitError(err)
 	}
 
+	info, err := c.DeviceInfo(machineCode)
+	if err != nil {
+		return nil, err
+	}
+
 	var result SettingResponse
-	_, err = c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
+	_, err = c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("scanCode", machineCode).SetQueryParam("deviseSn", info.Data.ScanCode).SetBody(request).SetResult(&result).
 		Post(Post_DeviceActivation)
 	if err != nil {
 		return nil, NewAinfinitError(err)
