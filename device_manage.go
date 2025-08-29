@@ -34,7 +34,7 @@ type VendingMachineManageClient interface {
 	Control(request *DeviceControlRequest, machineCode string) (*DeviceControlResponse, error)
 
 	Alarm(machineCode string)
-	Setting(machineCode string)
+	Setting(request SettingRequest, machineCode string) (*SettingResponse, error)
 }
 
 type vendingMachineManageClient struct {
@@ -302,8 +302,43 @@ func (c *vendingMachineManageClient) Activation(machineCode string, request *Dev
 
 	return &result, nil
 }
-func (c *vendingMachineManageClient) Alarm(machineCode string)   {}
-func (c *vendingMachineManageClient) Setting(machineCode string) {}
+func (c *vendingMachineManageClient) Alarm(machineCode string) {}
+
+func (c *vendingMachineManageClient) Setting(request SettingRequest, machineCode string) (*SettingResponse, error) {
+	if c.Client.IsDebug() {
+		logrus.WithField("request", request).Debug("Setting vending machine")
+	}
+
+	signature, err := c.Client.GetSignature(time.Now().UnixMilli())
+	if err != nil {
+		return nil, NewAinfinitError(err)
+	}
+
+	var result SettingResponse
+	_, err = c.Resty.R().SetHeader("Authorization", signature).SetQueryParam("code", machineCode).SetBody(request).SetResult(&result).
+		Post(Post_DeviceActivation)
+	if err != nil {
+		return nil, NewAinfinitError(err)
+	}
+
+	if c.Client.IsDebug() {
+		logrus.WithFields(logrus.Fields{
+			"response": fmt.Sprintf("%+v", result),
+		}).Debug("Setting vending machine successfully")
+	}
+
+	return &result, nil
+
+}
+
+type SettingRequest struct {
+	ReplVideoUploadFlag uint `json:"replVideoUploadFlag"` // Restocking video upload, 0 = No, 1 = Yes
+}
+
+type SettingResponse struct {
+	Status  uint   `json:"status"`
+	Message string `json:"message"`
+}
 
 type DeviceActivationRequest struct {
 	Name          string `json:"name"`
