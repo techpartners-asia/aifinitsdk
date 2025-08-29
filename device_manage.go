@@ -354,7 +354,7 @@ func (c *vendingMachineManageClient) RefrigerationControl(request RefrigerationC
 		"temp":        strconv.Itoa(request.Temp),
 		"tempMode":    strconv.Itoa(request.TempMode),
 	}).SetBody(request).SetResult(&result).
-		Put(Put_DeviceSetting)
+		Put(Put_DeviceCoolingCommand)
 	if err != nil {
 		return nil, NewAinfinitError(err)
 	}
