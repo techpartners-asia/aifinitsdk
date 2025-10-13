@@ -14,8 +14,8 @@ import (
 type AdvertisementManageClient interface {
 	MaterialApply(request *SourceMaterialApplyRequest) (*SourceMaterialApplyResponse, error)
 	MaterialPage(request *SourceMaterialPageRequest) (*SourceMaterialPageResponse, error)
-	MaterialDetail(materialId string) (*SourceMaterialDetailResponse, error)
-	MaterialDelete(materialId string) (*SourceMaterialDeleteResponse, error)
+	MaterialDetail(materialId int) (*SourceMaterialDetailResponse, error)
+	MaterialDelete(materialId int) (*SourceMaterialDeleteResponse, error)
 
 	AdAddition(request *AdAdditionRequest) (*AdAdditionResponse, error)
 	AdPage(request *AdPageRequest) (*AdPageResponse, error)
@@ -108,10 +108,10 @@ func (c *advertisementManageClientImpl) MaterialPage(request *SourceMaterialPage
 	return &result, nil
 }
 
-func (c *advertisementManageClientImpl) MaterialDetail(materialId string) (*SourceMaterialDetailResponse, error) {
+func (c *advertisementManageClientImpl) MaterialDetail(materialId int) (*SourceMaterialDetailResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"materialId": materialId,
+			"materialId": strconv.Itoa(materialId),
 		}).Debug("Getting source material detail")
 	}
 
@@ -121,7 +121,7 @@ func (c *advertisementManageClientImpl) MaterialDetail(materialId string) (*Sour
 	}
 
 	var result SourceMaterialDetailResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("id", materialId).SetResult(&result).Get(Get_AdvertisementMaterialDetail)
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("id", strconv.Itoa(materialId)).SetResult(&result).Get(Get_AdvertisementMaterialDetail)
 	if err != nil {
 		return nil, NewAinfinitError(err)
 	}
@@ -137,10 +137,10 @@ func (c *advertisementManageClientImpl) MaterialDetail(materialId string) (*Sour
 	return &result, nil
 }
 
-func (c *advertisementManageClientImpl) MaterialDelete(materialId string) (*SourceMaterialDeleteResponse, error) {
+func (c *advertisementManageClientImpl) MaterialDelete(materialId int) (*SourceMaterialDeleteResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"materialId": materialId,
+			"materialId": strconv.Itoa(materialId),
 		}).Debug("Deleting source material")
 	}
 
@@ -150,7 +150,7 @@ func (c *advertisementManageClientImpl) MaterialDelete(materialId string) (*Sour
 	}
 
 	var result SourceMaterialDeleteResponse
-	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("id", materialId).SetResult(&result).Delete(Del_AdvertisementMaterialDelete)
+	resp, err := c.Resty.R().SetHeader("Authorization", signature).SetPathParam("id", strconv.Itoa(materialId)).SetResult(&result).Delete(Del_AdvertisementMaterialDelete)
 	if err != nil {
 		return nil, NewAinfinitError(err)
 	}
@@ -230,7 +230,7 @@ func (c *advertisementManageClientImpl) AdPage(request *AdPageRequest) (*AdPageR
 func (c *advertisementManageClientImpl) AdDetailByAdId(adId int) (*AdDetailResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"adId": adId,
+			"adId": strconv.Itoa(adId),
 		}).Debug("Getting ad detail by ad id")
 	}
 
@@ -322,7 +322,7 @@ func (c *advertisementManageClientImpl) AdUpdate(request *AdUpdateRequest) (*AdU
 func (c *advertisementManageClientImpl) AdDelete(adId int) (*AdDeleteResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"adId": adId,
+			"adId": strconv.Itoa(adId),
 		}).Debug("Deleting ad")
 	}
 
@@ -351,7 +351,7 @@ func (c *advertisementManageClientImpl) AdDelete(adId int) (*AdDeleteResponse, e
 func (c *advertisementManageClientImpl) AdAssociatedToVm(adId int, request *AdAssociatedToVmRequest) (*AdAssociatedToVmResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"adId": adId,
+			"adId": strconv.Itoa(adId),
 		}).Debug("Getting ad associated to vm")
 	}
 
@@ -380,7 +380,7 @@ func (c *advertisementManageClientImpl) AdAssociatedToVm(adId int, request *AdAs
 func (c *advertisementManageClientImpl) ControlAdStatus(promotionId int, status AdStatus) (*AdControlStatusResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
-			"promotionId": promotionId,
+			"promotionId": strconv.Itoa(promotionId),
 			"status":      status,
 		}).Debug("Controlling ad status")
 	}
