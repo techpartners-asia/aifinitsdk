@@ -439,42 +439,35 @@ func (c *advertisementManageClientImpl) GetVmPromotion(vmCode string) (*GetVmPro
 
 func (c *advertisementManageClientImpl) MediaReviewNotify() {}
 
-type SourceMaterialStatus int
-
 type FileType int
-
-type BusinessType int
-
-type AdStatus int
-
-const (
-	SourceMaterialStatusUnderReview SourceMaterialStatus = 1
-	SourceMaterialStatusApproved    SourceMaterialStatus = 2
-	SourceMaterialStatusRejected    SourceMaterialStatus = 3
-)
 
 const (
 	FileTypeImageResource FileType = 1
 	FileTypeVideoResource FileType = 2
 )
 
+type BusinessType int
+
 const (
 	BusinessTypePublicService BusinessType = 1
 	BusinessTypeCommercial    BusinessType = 2
 )
 
+type AdStatus int
+
 const (
-	AdStatusEnabled  AdStatus = 1
-	AdStatusDisabled AdStatus = 2
+	AdStatusUnderReview AdStatus = 1 // Under review
+	AdStatusApproved    AdStatus = 2 // Approved
+	AdStatusRejected    AdStatus = 3 // Rejected
 )
 
 type SourceMaterial struct {
-	Id         int                  `json:"id,omitempty"`
-	FileUrl    string               `json:"fileUrl,omitempty"`
-	FileType   FileType             `json:"fileType,omitempty"`
-	Name       string               `json:"name,omitempty"`
-	Status     SourceMaterialStatus `json:"status,omitempty"`
-	CreateTime string               `json:"createTime,omitempty"`
+	Id         int      `json:"id,omitempty"`
+	FileUrl    string   `json:"fileUrl,omitempty"`
+	FileType   FileType `json:"fileType,omitempty"`
+	Name       string   `json:"name,omitempty"`
+	Status     int      `json:"status,omitempty"`
+	CreateTime string   `json:"createTime,omitempty"`
 }
 
 type ImgRel struct {
