@@ -48,7 +48,7 @@ type OperationClientImpl struct {
 }
 
 func NewOperationClientImpl(client Client) OperationClient {
-	restyClient := resty.New()
+	restyClient := client.GetRestyClient()
 
 	if client.RestyDebug() {
 		restyClient.SetDebug(true)

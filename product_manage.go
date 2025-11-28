@@ -28,7 +28,7 @@ type ProductClient struct {
 }
 
 func NewProductClient(client Client) ProductManageClient {
-	restyClient := resty.New()
+	restyClient := client.GetRestyClient()
 	if client.RestyDebug() {
 		restyClient.SetDebug(true)
 	}

@@ -3,6 +3,8 @@ package aifinitsdk
 import (
 	"encoding/base64"
 	"encoding/json"
+
+	"resty.dev/v3"
 )
 
 type Config struct {
@@ -15,6 +17,7 @@ type Client interface {
 	IsDebug() bool
 	RestyDebug() bool
 	SetConfig(config Config)
+	GetRestyClient() *resty.Client
 }
 
 type client struct {
@@ -22,14 +25,23 @@ type client struct {
 	secretKey    string
 	encryptUtil  *EncryptUtil
 	Config       *Config
+	RestyClient  *resty.Client
 }
 
-func New(credentials Crendetials) Client {
+func New(credentials Crendetials, restyClient *resty.Client) Client {
+	if restyClient == nil {
+		restyClient = resty.New()
+	}
 	return &client{
 		merchantCode: credentials.MerchantCode,
 		secretKey:    credentials.SecretKey,
 		encryptUtil:  NewEncryptUtil(credentials.MerchantCode, credentials.SecretKey),
+		RestyClient:  restyClient,
 	}
+}
+
+func (c *client) GetRestyClient() *resty.Client {
+	return c.RestyClient
 }
 
 func (c *client) SetConfig(config Config) {

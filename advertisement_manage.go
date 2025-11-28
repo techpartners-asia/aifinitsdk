@@ -37,7 +37,7 @@ type advertisementManageClientImpl struct {
 }
 
 func NewAdvertisementManageClient(client Client) AdvertisementManageClient {
-	restyClient := resty.New()
+	restyClient := client.GetRestyClient()
 	if client.RestyDebug() {
 		restyClient.SetDebug(true)
 	}

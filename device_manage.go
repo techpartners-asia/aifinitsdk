@@ -44,7 +44,7 @@ type vendingMachineManageClient struct {
 }
 
 func NewDeviceClient(client Client) VendingMachineManageClient {
-	restyClient := resty.New()
+	restyClient := client.GetRestyClient()
 	if client.RestyDebug() {
 		restyClient.SetDebug(true)
 	}

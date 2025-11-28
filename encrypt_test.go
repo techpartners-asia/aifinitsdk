@@ -31,7 +31,7 @@ func TestSignature(t *testing.T) {
 		MerchantCode: "merchant",
 		SecretKey:    "4UafmbIJroNY2lXX",
 	}
-	client := New(crendentials)
+	client := New(crendentials, nil)
 	signature, err := client.GetSignature(1557218157315)
 	if err != nil {
 		t.Fatal(err)
