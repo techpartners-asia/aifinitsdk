@@ -550,15 +550,15 @@ const (
 func (s OpenDoorStatus) String() string {
 	switch s {
 	case OpenDoorStatusSuccess:
-		return "Open door request sent successfully"
+		return "Хаалга онгойлгох хүсэлт амжилттай илгээгдлээ"
 	case OpenDoorStatusInvalidType:
-		return "Invalid type parameter"
+		return "Буруу төрлийн параметр оруулсан байна"
 	case OpenDoorStatusClientTimeout:
-		return "Client message reception timed out"
+		return "Клиентын мессеж хүлээн авах хугацаа дууссан байна"
 	case OpenDoorStatusPackageError:
-		return "Vending machine product package error"
+		return "Бүтээгдэхүүн дээр савалгааны алдаа гарсан байна"
 	case OpenDoorStatusDeviceOffline:
-		return "Device is offline"
+		return "Төхөөрөмжын холболт тасарсан байна"
 	case OpenDoorStatusMachineNotInOperation:
 		return "Vending machine is not in operation"
 	case OpenDoorStatusTooManyUncompletedOrders:

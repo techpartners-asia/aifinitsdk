@@ -402,7 +402,7 @@ func (c *advertisementManageClientImpl) ControlAdStatus(promotionId int, status 
 	}
 
 	if !isSuccessStatus(result.Status) {
-		return nil, NewAinfinitError(fmt.Errorf("status: %d, message: %s", result.Status, result.Message))
+		return nil, ConvertAdvertisementError(result.Status, result.Message)
 	}
 
 	return &result, nil
@@ -512,6 +512,7 @@ const (
 	ErrCodeAdvertisementNotFound     = 4450
 	ErrCodeAdvertisementNotAllowed   = 4451
 	ErrCodeAdvertisementInvalidInput = 4452
+	ErrCodeAdRemoveNotAllowed        = 4446
 )
 
 const (
@@ -569,6 +570,8 @@ func ConvertAdvertisementError(code int, message string) error {
 		return fmt.Errorf("AdvertisementNotAllowed: %d, message: %s", code, message)
 	case ErrCodeAdvertisementInvalidInput:
 		return fmt.Errorf("AdvertisementInvalidInput: %d, message: %s", code, message)
+	case ErrCodeAdRemoveNotAllowed:
+		return fmt.Errorf("AdRemoveNotAllowed: %d, message: %s", code, message)
 	default:
 		return fmt.Errorf("AdvertisementError: %d, message: %s", code, message)
 	}
@@ -610,7 +613,8 @@ type AdUpdateRequest struct {
 }
 
 type AdAssociatedToVmRequest struct {
-	VmList []string `json:"vmList,omitempty"` // vmCode that provided from vmdetail
+	VmList       []string `json:"vmList,omitempty"`       // vmCode that provided from vmdetail
+	ScanCodeList []string `json:"scanCodeList,omitempty"` // ScanCodeList
 }
 
 type SourceMaterialApplyResponse struct {
