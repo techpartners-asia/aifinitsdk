@@ -409,9 +409,9 @@ type Device struct {
 	// Code is the unique identifier for the vending machine
 	Code string `json:"code"`
 	// BytesTotal represents total storage space in MB
-	BytesTotal int `json:"bytesTotal"`
+	BytesTotal float64 `json:"bytesTotal"`
 	// BytesFree represents available storage space in MB
-	BytesFree int `json:"bytesFree"`
+	BytesFree float64 `json:"bytesFree"`
 	// ClientVersion represents the current version of the client software
 	ClientVersion string `json:"clientVersion"`
 	// CameraCount represents the number of available cameras
@@ -431,15 +431,15 @@ type Device struct {
 	// NetworkInfo contains information about network connections
 	NetworkInfo struct {
 		// Mobile represents 4G connection status (1: connected, 0: disconnected)
-		Mobile int `json:"mobile"`
+		Mobile int64 `json:"mobile"`
 		// Wifi represents WiFi connection status (1: connected, 0: disconnected)
-		Wifi int `json:"wifi"`
+		Wifi int64 `json:"wifi"`
 		// Etherne represents ethernet connection status (1: connected, 0: disconnected)
-		Etherne int `json:"ethernet"`
+		Etherne int64 `json:"ethernet"`
 		// SignalWifi represents WiFi signal strength
-		SignalWifi int `json:"signalWifi"`
+		SignalWifi float64 `json:"signalWifi"`
 		// SignalMobile represents 4G signal strength
-		SignalMobile int `json:"signalMobile"`
+		SignalMobile float64 `json:"signalMobile"`
 	} `json:"networkInfo"`
 	// CardInfo contains information about the SIM card
 	CardInfo struct {
@@ -455,17 +455,17 @@ type Device struct {
 	// PowerStatus represents the power source (1: mains power, 2: UPS)
 	PowerStatus int `json:"powerStatus"`
 	// DeviceUpdateTimestamp represents the last heartbeat timestamp
-	DeviceUpdateTimestamp int64 `json:"deviceUpdateTimestamp"`
+	DeviceUpdateTimestamp float64 `json:"deviceUpdateTimestamp"`
 	// OnlineStatus represents the network status (1: online, 0: offline, calculated based on heartbeat timestamp)
-	OnlineStatus int `json:"onlineStatus"`
+	OnlineStatus float64 `json:"onlineStatus"`
 	// Temperature represents the current temperature
-	Temperature int `json:"temperature"`
+	Temperature float64 `json:"temperature"`
 	// TargetTemp represents the target temperature setting
-	TargetTemp int `json:"targetTemp"`
+	TargetTemp float64 `json:"targetTemp"`
 	// Volume represents the current volume level
-	Volume int `json:"volume"`
+	Volume float64 `json:"volume"`
 	// EngineOn represents the compressor status (1: on, 0: off)
-	EngineOn int `json:"engineOn"`
+	EngineOn float64 `json:"engineOn"`
 }
 
 type VendingMachine struct {
