@@ -384,9 +384,9 @@ type OrderCallbackRequest struct {
 	HandleStatus    HandleStatus      `json:"handleStatus"`              // Identification of processing status
 	AbnormalReasons []AbnormalReason  `json:"abnormalReasons,omitempty"` // Artificial handling of abnormal causes
 	OpenDoorTime    int64             `json:"openDoorTime"`              // Opening the door time stamp
-	OpenDoorWeight  int               `json:"openDoorWeight"`            // Total weight of the door
+	OpenDoorWeight  float64               `json:"openDoorWeight"`            // Total weight of the door
 	CloseDoorTime   int64             `json:"closeDoorTime"`             // Closed time stamp
-	CloseDoorWeight int               `json:"closeDoorWeight"`           // Total closing weight
+	CloseDoorWeight float64               `json:"closeDoorWeight"`           // Total closing weight
 	HardwareEx      HardwareException `json:"hardwareEx,omitempty"`      // Hardware exception
 	ShopMove        ShopMove          `json:"shopMove"`                  // Door movement status
 	VideoUrl        string            `json:"videoUrl,omitempty"`        // Shopping video address
@@ -456,11 +456,11 @@ type DoorOpenCloseShoppingResult struct {
 	UserCode        string       `json:"userCode"`        // User code
 	HandleStatus    int          `json:"handleStatus"`    // Handle status
 	ShopMove        int          `json:"shopMove"`        // Shop movement status
-	TotalFee        int          `json:"totalFee"`        // Total fee
+	TotalFee        float64          `json:"totalFee"`        // Total fee
 	OpenDoorTime    int64        `json:"openDoorTime"`    // Door open time
 	CloseDoorTime   int64        `json:"closeDoorTime"`   // Door close time
-	OpenDoorWeight  int          `json:"openDoorWeight"`  // Weight when door opened
-	CloseDoorWeight int          `json:"closeDoorWeight"` // Weight when door closed
+	OpenDoorWeight  float64          `json:"openDoorWeight"`  // Weight when door opened
+	CloseDoorWeight float64          `json:"closeDoorWeight"` // Weight when door closed
 	OrderGoodsList  []OrderGoods `json:"orderGoodsList"`  // List of ordered goods
 }
 
@@ -470,8 +470,8 @@ type DoorOpenCloseRestockingResult struct {
 	VmCode          string `json:"vmCode"`          // Vending machine code
 	OpenDoorTime    int64  `json:"openDoorTime"`    // Door open time
 	CloseDoorTime   int64  `json:"closeDoorTime"`   // Door close time
-	OpenDoorWeight  int    `json:"openDoorWeight"`  // Weight when door opened
-	CloseDoorWeight int    `json:"closeDoorWeight"` // Weight when door closed
+	OpenDoorWeight  float64    `json:"openDoorWeight"`  // Weight when door opened
+	CloseDoorWeight float64    `json:"closeDoorWeight"` // Weight when door closed
 }
 
 // Door Open/Close Response
