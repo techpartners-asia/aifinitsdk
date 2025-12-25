@@ -454,10 +454,10 @@ func (u *UpdateProductApplication) String() string {
 }
 
 type NewProductApplication struct {
-	Name    string `json:"name"`
-	Price   int    `json:"price"`
-	Weight  int    `json:"weight"`
-	QrCodes string `json:"qrCodes"`
+	Name    string  `json:"name"`
+	Price   float64 `json:"price"`
+	Weight  float64 `json:"weight"`
+	QrCodes string  `json:"qrCodes"`
 
 	ImgFiles     [][]byte `json:"-"` // product image files
 	ImgFileNames []string `json:"-"` // product image file names
