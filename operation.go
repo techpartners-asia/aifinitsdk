@@ -2,6 +2,7 @@ package aifinitsdk
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -27,7 +28,7 @@ type OperationClient interface {
 	//2.2.3.2
 	UpdateGoods(request *UpdateGoodsRequest, machineCode string) (*UpdateSoldGoodsResponse, error)
 	//2.2.3.3
-	OpenDoor(request *OpenDoorRequest, machineCode string) (*OpenDoorResponse, error)
+	OpenDoor(ctx context.Context, request *OpenDoorRequest, machineCode string) (*OpenDoorResponse, error)
 	// zaragdsan baraag haalga ongoilgoh requesteer avah
 	//2.2.3.4
 	OpenDoorReqDetail(request *OpenDoorDetailRequest, machineCode string) (*OpenDoorDetailResponse, error)
@@ -60,7 +61,7 @@ func NewOperationClientImpl(client Client) OperationClient {
 	}
 }
 
-func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode string) (*OpenDoorResponse, error) {
+func (c *OperationClientImpl) OpenDoor(ctx context.Context, request *OpenDoorRequest, machineCode string) (*OpenDoorResponse, error) {
 	if c.Client.IsDebug() {
 		logrus.WithFields(logrus.Fields{
 			"request":     request,
@@ -80,7 +81,8 @@ func (c *OperationClientImpl) OpenDoor(request *OpenDoorRequest, machineCode str
 	}
 
 	var openDoorResponse *OpenDoorResponse
-	req := c.Resty.R().SetHeader("Authorization", signature).
+	req := c.Resty.R().SetContext(ctx).
+		SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
 		SetResult(&openDoorResponse)
 
@@ -436,10 +438,10 @@ func (c *OperationClientImpl) ListOrders(request *ListOrderRequest, machineCode 
 }
 
 type OrderGoods struct {
-	ItemCode  string `json:"itemCode"`  // Product code
-	ItemName  string `json:"itemName"`  // Product name
-	ItemPrice float64    `json:"itemPrice"` // Commodity prices
-	Count     int    `json:"count"`     // Quantity of goods
+	ItemCode  string  `json:"itemCode"`  // Product code
+	ItemName  string  `json:"itemName"`  // Product name
+	ItemPrice float64 `json:"itemPrice"` // Commodity prices
+	Count     int     `json:"count"`     // Quantity of goods
 }
 
 type OrderCallbackResponse struct {
@@ -448,10 +450,10 @@ type OrderCallbackResponse struct {
 }
 
 type Goods struct {
-	ItemCode      string `json:"itemCode,omitempty"`
-	ActualPrice   float64    `json:"actualPrice,omitempty"`
-	OriginalPrice float64    `json:"originalPrice,omitempty"`
-	Count         int    `json:"count,omitempty"`
+	ItemCode      string  `json:"itemCode,omitempty"`
+	ActualPrice   float64 `json:"actualPrice,omitempty"`
+	OriginalPrice float64 `json:"originalPrice,omitempty"`
+	Count         int     `json:"count,omitempty"`
 }
 
 type Order struct {
@@ -462,11 +464,11 @@ type Order struct {
 	UserCode        string  `json:"userCode,omitempty"`
 	HandleStatus    int     `json:"handleStatus,omitempty"`
 	ShopMove        int     `json:"shopMove,omitempty"`
-	TotalFee        float64     `json:"totalFee,omitempty"`
+	TotalFee        float64 `json:"totalFee,omitempty"`
 	OpenDoorTime    int64   `json:"openDoorTime,omitempty"`
 	CloseDoorTime   int64   `json:"closeDoorTime,omitempty"`
-	OpenDoorWeight  float64     `json:"openDoorWeight,omitempty"`
-	CloseDoorWeight float64     `json:"closeDoorWeight,omitempty"`
+	OpenDoorWeight  float64 `json:"openDoorWeight,omitempty"`
+	CloseDoorWeight float64 `json:"closeDoorWeight,omitempty"`
 	OrderGoodsList  []Goods `json:"orderGoodsList,omitempty"`
 }
 
@@ -607,11 +609,11 @@ type SearchOpenDoorData struct {
 	VmCode          string  `json:"vmCode"`
 	MachineId       int     `json:"machineId"`
 	HandleStatus    int     `json:"handleStatus"`
-	TotalFee        float64     `json:"totalFee"`
+	TotalFee        float64 `json:"totalFee"`
 	OpenDoorTime    int64   `json:"openDoorTime"`
 	CloseDoorTime   int64   `json:"closeDoorTime"`
-	OpenDoorWeight  float64     `json:"openDoorWeight"`
-	CloseDoorWeight float64     `json:"closeDoorWeight"`
+	OpenDoorWeight  float64 `json:"openDoorWeight"`
+	CloseDoorWeight float64 `json:"closeDoorWeight"`
 	OrderGoodsList  []Goods `json:"orderGoodsList"`
 	ShopMove        int     `json:"shopMove"`
 	ScanCode        string  `json:"scanCode"`
