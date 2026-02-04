@@ -26,9 +26,10 @@ type client struct {
 	encryptUtil  *EncryptUtil
 	Config       *Config
 	RestyClient  *resty.Client
+	BaseURL      string
 }
 
-func New(credentials Crendetials, restyClient *resty.Client) Client {
+func New(credentials Crendetials, restyClient *resty.Client, baseUrl string) Client {
 	if restyClient == nil {
 		restyClient = resty.New()
 	}
@@ -37,6 +38,7 @@ func New(credentials Crendetials, restyClient *resty.Client) Client {
 		secretKey:    credentials.SecretKey,
 		encryptUtil:  NewEncryptUtil(credentials.MerchantCode, credentials.SecretKey),
 		RestyClient:  restyClient,
+		BaseURL:      baseUrl,
 	}
 }
 

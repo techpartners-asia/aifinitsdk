@@ -1,7 +1,7 @@
 package aifinitsdk
 
 const (
-	BaseURL = "https://open.ainfinit.com"
+	BaseURL = "https://ainfinit.mtm.mn"
 )
 
 // Device Manage
