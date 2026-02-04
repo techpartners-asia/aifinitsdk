@@ -48,14 +48,15 @@ func main() {
         SecretKey:    os.Getenv("SECRET_KEY"),
     }
     
-    client := ainfinitsdk.New(credentials)
-    
-    // Get signature for authentication
-    signature, err := client.GetSignature(time.Now().UnixMilli())
-    if err != nil {
-        panic(err)
-    }
-}
+    client := ainfinitsdk.New(credentials, nil, "")
+```
+
+### Custom Base URL
+
+You can provide a custom base URL when initializing the client:
+
+```go
+    client := ainfinitsdk.New(credentials, nil, "https://your-custom-api.com")
 ```
 
 ### Debug Mode
@@ -78,7 +79,7 @@ func main() {
         SecretKey:    os.Getenv("SECRET_KEY"),
     }
     
-    client := ainfinitsdk.New(credentials)
+    client := ainfinitsdk.New(credentials, nil, "")
     
     // Enable debug mode for the client
     client.SetConfig(ainfinitsdk.Config{
@@ -104,7 +105,7 @@ credentials := ainfinitsdk.Crendetials{
     MerchantCode: "your_merchant_code",
     SecretKey:    "your_secret_key",
 }
-client := ainfinitsdk.New(credentials)
+client := ainfinitsdk.New(credentials, nil, "")
 
 // Get signature for authentication
 timestamp := time.Now().UnixMilli()

@@ -33,6 +33,13 @@ func New(credentials Crendetials, restyClient *resty.Client, baseUrl string) Cli
 	if restyClient == nil {
 		restyClient = resty.New()
 	}
+
+	if baseUrl == "" {
+		baseUrl = DefaultBaseURL
+	}
+
+	restyClient.SetBaseURL(baseUrl)
+
 	return &client{
 		merchantCode: credentials.MerchantCode,
 		secretKey:    credentials.SecretKey,
