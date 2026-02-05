@@ -1,12 +1,8 @@
 package aifinitsdk
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"time"
 
 	"github.com/go-playground/validator"
@@ -329,39 +325,20 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 		return nil, NewAinfinitError(err)
 	}
 
-	jsonBody, err := json.Marshal(request)
-	if err != nil {
-		return nil, NewAinfinitError(err)
-	}
-
-	url := fmt.Sprintf("%s?code=%s", Del_DeleteGoods, machineCode)
-	req, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer(jsonBody))
-	if err != nil {
-		return nil, NewAinfinitError(err)
-	}
-
-	req.Header.Set("Authorization", signature)
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, NewAinfinitError(err)
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, NewAinfinitError(err)
-	}
-
-	if resp.StatusCode >= 400 {
-		return nil, ConvertDeleteGoodsError(resp.StatusCode, string(body))
-	}
-
 	var deleteGoodsResponse *DeleteGoodsResponse
-	if err := json.Unmarshal(body, &deleteGoodsResponse); err != nil {
+	resp, err := c.Resty.R().
+		SetHeader("Authorization", signature).
+		SetQueryParam("code", machineCode).
+		SetBody(request).
+		SetResult(&deleteGoodsResponse).
+		Delete(Del_DeleteGoods)
+
+	if err != nil {
 		return nil, NewAinfinitError(err)
+	}
+
+	if resp.IsError() {
+		return nil, ConvertDeleteGoodsError(resp.StatusCode(), resp.String())
 	}
 
 	if !isSuccessStatus(deleteGoodsResponse.Status) {
