@@ -329,9 +329,7 @@ func (c *OperationClientImpl) DeleteGoods(request *DeleteGoodsRequest, machineCo
 	resp, err := c.Resty.R().
 		SetHeader("Authorization", signature).
 		SetQueryParam("code", machineCode).
-		SetBody(map[string]any{
-			"itemCodes": request.ItemCodes,
-		}).
+		SetBody(request).
 		SetResult(&deleteGoodsResponse).
 		Delete(Del_DeleteGoods)
 
