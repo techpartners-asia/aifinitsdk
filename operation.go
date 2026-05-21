@@ -430,7 +430,10 @@ type Goods struct {
 	ItemCode      string  `json:"itemCode,omitempty"`
 	ActualPrice   float64 `json:"actualPrice,omitempty"`
 	OriginalPrice float64 `json:"originalPrice,omitempty"`
-	Count         int     `json:"count,omitempty"`
+	// Count is intentionally not omitempty: Ainfinit silently rejects
+	// AddGoods/UpdateGoods items when the field is missing from the JSON,
+	// which would otherwise drop every zero-stock item from sync.
+	Count int `json:"count"`
 }
 
 type Order struct {
